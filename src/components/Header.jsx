@@ -5,7 +5,8 @@ import { I18N_KEYS } from "../i18n/key";
 import NotificationItem from "./NotificationItem";
 
 
-import { TbPhotoQuestion } from "react-icons/tb";
+import { TbPhotoQuestion, TbLogout, TbLogin } from "react-icons/tb";
+import { FaUserCircle, FaPen  } from "react-icons/fa";
 import { GoSun, GoSearch, GoMoon, GoBellFill, GoPlus, GoChevronDown } from "react-icons/go";
 import Button from "./Button";
 import Input from "./Input";
