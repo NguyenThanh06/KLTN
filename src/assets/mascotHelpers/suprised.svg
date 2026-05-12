@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Helper" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 99.21 99.21">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fbf6f2;
+        stroke: #a7dd6e;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-miterlimit: 10;
+        stroke-width: 5px;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke: #fbb03b;
+        stroke-linecap: round;
+      }
+
+      .cls-3 {
+        fill: #81be3f;
+      }
+    </style>
+  </defs>
+  <g id="suprised">
+    <line class="cls-2" x1="66.14" y1="18.62" x2="69.63" y2="8.16"/>
+    <line class="cls-2" x1="83.17" y1="30.84" x2="93.04" y2="25.91"/>
+    <line class="cls-2" x1="75.92" y1="23.54" x2="82.78" y2="14.9"/>
+    <circle class="cls-1" cx="49.1" cy="60.11" r="35.1"/>
+    <ellipse class="cls-3" cx="49.1" cy="68.41" rx="6.4" ry="7.44"/>
+    <circle class="cls-3" cx="60.09" cy="53.97" r="5.46"/>
+    <circle class="cls-3" cx="38.12" cy="53.97" r="5.46"/>
+  </g>
+</svg>

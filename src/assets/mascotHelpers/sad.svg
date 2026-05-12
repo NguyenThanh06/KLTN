@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Helper" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 99.21 99.21">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-width: 4px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #81be3f;
+        stroke-linecap: round;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        stroke-width: 3px;
+      }
+
+      .cls-3 {
+        fill: #fbf6f2;
+        stroke: #a7dd6e;
+        stroke-width: 5px;
+      }
+
+      .cls-4 {
+        fill: #6fd2ff;
+      }
+    </style>
+  </defs>
+  <g id="sad">
+    <circle class="cls-3" cx="49.1" cy="60.21" r="35.1"/>
+    <path class="cls-2" d="M61.24,77.85c-3.03,0-3.03-1.98-6.06-1.98s-3.03,1.98-6.07,1.98-3.04-1.98-6.07-1.98-3.04,1.98-6.07,1.98"/>
+    <line class="cls-1" x1="67.78" y1="64.85" x2="54.57" y2="63.23"/>
+    <line class="cls-1" x1="30.43" y1="64.82" x2="43.64" y2="63.21"/>
+    <path class="cls-4" d="M87.71,41.69c0,6.19-5.02,11.21-11.21,11.21s-11.21-5.02-11.21-11.21,5.02-20.69,11.21-20.69,11.21,14.5,11.21,20.69Z"/>
+  </g>
+</svg>
