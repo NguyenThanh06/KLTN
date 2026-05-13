@@ -1,20 +1,36 @@
-import { createContext, useContext, useState, useEffect, Children } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
-    useEffect (() => {
-        //Ktra token khi mới load app
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-            // userAccount = api.chidokhongbietnua....
-            // setUser({
-            //      id: ...
-            //      username: ...
-            //});
+    // Kiểm tra trạng thái đăng nhập khi vừa load app
+    useEffect(() => {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+            setUser(JSON.parse(savedUser));
         }
-        setIsLoading(false);
+        setLoading(false);
     }, []);
-}
+
+    const login = (userData) => {
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+    };
+
+    const logout = () => {
+        setUser(null);
+        localStorage.removeItem('user');
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, loading }}>
+            {!loading && children}
+        </AuthContext.Provider>
+    );
+};
+
+// Custom Hook để dùng ở mọi nơi cho gọn
+export const useAuth = () => useContext(AuthContext);

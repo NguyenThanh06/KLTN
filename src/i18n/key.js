@@ -26,7 +26,9 @@ export const I18N_KEYS = {
         common_headerButton_post: "common_headerButton_post",
         common_headerButton_verify: "common_headerButton_verify",
         common_headerTitle_notifications: "common_headerTitle_notifications",
+        common_headerButton_user: "common_headerButton_user",
         common_headerButton_profile: "common_headerButton_profile",
+        common_headerButton_login: "common_headerButton_login",
         common_headerButton_logout: "common_headerButton_logout",
 
         common_headerDesc_noNotifications: "common_headerDesc_noNotifications",
@@ -38,6 +40,11 @@ export const I18N_KEYS = {
         common_notificationDesc_typeCmt: "common_notificationDesc_typeCmt",
         common_notificationDesc_typeCmtRep: "common_notificationDesc_typeCmtRep",
         common_notificationDesc_typeBaoCao: "common_notificationDesc_typeBaoCao",
+
+        common_footerDesc_eyesonly: "common_footerDesc_eyesonly",
+        common_footerButton_about: "common_footerButton_about",
+        common_footerButton_privacy: "common_footerButton_privacy",
+        common_footerButton_terms: "common_footerButton_terms",
     },
     LOGIN:{
         COMMON:{
@@ -90,6 +97,9 @@ export const I18N_KEYS = {
                 login_handleLogin_helper_error_wrongLogin: "login_handleLogin_helper_error_wrongLogin",
                 login_handleLogin_modalTitle_accountLocked: "login_handleLogin_modalTitle_accountLocked",
                 login_handleLogin_modalDesc_accountLocked: "login_handleLogin_modalDesc_accountLocked",
+                login_handleLogin_modalTitle_accountDeactivated: "login_handleLogin_modalTitle_accountDeactivated",
+                login_handleLogin_modalDesc_accountDeactivated: "login_handleLogin_modalDesc_accountDeactivated",
+                login_handleLogin_helper_success_login: "login_handleLogin_helper_success_login",
             },
         },
     },
@@ -109,6 +119,7 @@ export const I18N_KEYS = {
             signup_formButton_signupSubmit: "signup_formButton_signupSubmit",
             signup_text_isAMember: "signup_text_isAMember",
             signup_button_toLoginPage: "signup_button_toLoginPage",
+            signup_text_success_signup: "signup_text_success_signup",
         },
         HANDLE:{
             SIGNUP:{

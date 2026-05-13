@@ -84,7 +84,9 @@ i18n
                     common_headerButton_post: "Đăng bài",
                     common_headerButton_verify: "Xác thực ảnh",
                     common_headerTitle_notifications: "Thông báo",
-                    common_headerButton_profile: "Hồ sơ",
+                    common_headerButton_user: "Trang của tôi",
+                    common_headerButton_profile: "Chỉnh sửa hồ sơ",
+                    common_headerButton_login: "Đăng nhập",
                     common_headerButton_logout: "Đăng xuất",
                     
                     //Notification things
@@ -98,6 +100,11 @@ i18n
                     common_notificationDesc_typeCmtRep: "mới được ai trả lời chi nơi ơ này blah",
                     common_notificationDesc_typeBaoCao: "làm ai đó hơi bị khó chịu xong họ báo cáo blah",
 
+                    //Footer
+                    common_footerDesc_eyesonly: "Cộng đồng tranh ảnh tạo ra bởi hai đứa sinh viên ngầu quãi đạn.",
+                    common_footerButton_about: "Về chúng mình",
+                    common_footerButton_privacy: "Quyền riêng tư",
+                    common_footerButton_terms: "Điều khoản",
 
 
                     //Signup Page
@@ -116,6 +123,7 @@ i18n
                     signup_formButton_signupSubmit: "Đăng ký",
                     signup_text_isAMember: "Bạn đã có tài khoản?",
                     signup_button_toLoginPage: "Mình sẽ giúp bạn đăng nhập blah!",
+                    signup_text_success_signup: "ĐĂNG KÝ THÀNH CÔNG!",
 
                         //Handle Signup
                     signup_handleSignup_input_error_nullEmail: "Email bị để trống blah",
@@ -134,7 +142,7 @@ i18n
 
                         //Handle Verify Account
                     signup_handleVerifyAccount_modalTitle_accountUnverified: "Chỉ còn một bước thôi blah",
-                    signup_handleVerifyAccount_modalDesc_accountUnverified: "Mình cần gửi một mã xác thực đến email bạn vừa đăng ký trước khi chúng ta tạo tài khoản blah.",
+                    signup_handleVerifyAccount_modalDesc_accountUnverified: "Mình cần gửi một mã xác thực đến email {{email}} bạn vừa đăng ký trước khi chúng ta tạo tài khoản blah.",
                     signup_handleVerifyAccount_modalButton_sendVerifyCode: "Gửi mã xác thực",
                     signup_handleVerifyAccount_modalTitle_enterVerifyCode: "Nhập mã xác thực blah",
                     signup_handleVerifyAccount_modalDesc_enterVerifyCode: "Nhập mã xác thực vô đây blah",
@@ -167,7 +175,7 @@ i18n
                     login_handleResetPassword_input_error_typeMismatchEmail: "Không phải email blah",
                     login_handleResetPassword_helper_error_emailNotExist: "Email không có trong CSDL blah",
                     login_handleResetPassword_modalTitle_enterOTP: "Nhập cái OTP blah",
-                    login_handleResetPassword_modalDesc_enterOTP: "Nhập 6 cái số vô blah",
+                    login_handleResetPassword_modalDesc_enterOTP: "Mã OTP gửi qua email {{email}} rồi ơ, nhập 6 cái số vô blah",
                     login_handleResetPassword_modalButton_resendOTP: "Gửi lại mã",
                     login_handleResetPassword_modalButton_resetPassword: "Cấp lại mật khẩu",
                     login_handleResetPassword_input_error_nullOTP: "OTP mà để trống rứa đó ơ hớ? blah",
@@ -179,7 +187,7 @@ i18n
 
                         // Handle Verify Account
                     login_handleVerifyAccount_modalTitle_accountUnverified: "Tài khoản chưa được xác thực",
-                    login_handleVerifyAccount_modalDesc_accountUnverified: "Mình cần gửi một mã xác thực đến email của bạn trước khi chúng ta đăng nhập vào tài khoản.",
+                    login_handleVerifyAccount_modalDesc_accountUnverified: "Mình cần gửi một mã xác thực đến email {{email}} của bạn trước khi chúng ta đăng nhập vào tài khoản.",
                     login_handleVerifyAccount_modalButton_sendVerifyCode: "Gửi mã xác thực",
                     login_handleVerifyAccount_modalTitle_enterVerifyCode: "Nhập mã xác thực blah",
                     login_handleVerifyAccount_modalDesc_enterVerifyCode: "Nhập mã xác thực vô đây blah",
@@ -199,12 +207,9 @@ i18n
                     login_handleLogin_helper_error_wrongLogin: "Ấy, hình như thông tin bị lệch đâu đó rồi. Xem lại thử coi nha?",
                     login_handleLogin_modalTitle_accountLocked: "Tài khoản đang tạm thời chưa sử dụng được",
                     login_handleLogin_modalDesc_accountLocked: "Ối, có vẻ tài khoản của bạn hiện đang được xem xét. Mình cần kiểm tra vài hoạt động để giúp đảm bảo không gian chung trở nên dễ chịu hơn. Bạn hãy liên hệ mình qua email "+CONTACT_EMAIL+" để được mình hỗ trợ nha.",
-                    
-
-                    // Home
-                    ERROR_LOGIN_accountDeactivated: "Mình muốn nhắc rằng đã {{daysDeactivated}} ngày rồi kể từ khi bạn quyết định vô hiệu hóa tài khoản. Nếu cứ thế này tròn 30 ngày thì chúng ta buộc phải nói lời tạm biệt đó. Nhưng nè, bạn đổi ý thì cứ tự nhiên chỉnh lại nhé!",
-                        //Success
-                        welcome: "Chào {{displayName}}!",
+                    login_handleLogin_modalTitle_accountDeactivated: "Tài khoản hiện đang trong trạng thái vô hiệu hóa blah",
+                    login_handleLogin_modalDesc_accountDeactivated: "Mình muốn nhắc rằng đã {{daysDeactivated}} ngày rồi kể từ khi bạn quyết định vô hiệu hóa tài khoản. Nếu cứ thế này tròn 30 ngày thì chúng ta buộc phải nói lời tạm biệt đó. Nhưng nè, bạn đổi ý thì cứ tự nhiên chỉnh lại nhé!",
+                    login_handleLogin_helper_success_login: "Chào, {{tenHienThi}}!",
                     }
             }
         }

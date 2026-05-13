@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18N_KEYS } from '../i18n/key';
 import normalHelper from "../assets/mascotHelpers/normal.svg";
@@ -8,14 +8,43 @@ import sadHelper from "../assets/mascotHelpers/sad.svg";
 import curiousHelper from "../assets/mascotHelpers/curious.svg";
 import alertHelper from "../assets/mascotHelpers/alert.svg";
 
-const MascotHelper = ({ errorStack = [], isInputFocusing = false, onClearError }) => {
+const MascotHelper = forwardRef(({ errorStack = [], isInputFocusing = false, onClearError, onClearAllErrors }, ref) => {
   const { t } = useTranslation();
   const [currentMood, setCurrentMood] = useState('normal');
   const [isJumping, setIsJumping] = useState(false);
+  const [tempMoodActive, setTempMoodActive] = useState(false); // Flag chặn useEffect khi đang setMood tạm thời
   
   const prevErrorCount = useRef(errorStack.length);
+  const timeoutRef = useRef(null);
+
+  //Làm cái set mood
+  useImperativeHandle(ref, () => ({
+    setMood: (mood, duration = 1000) => {
+      // Dọn dẹp timeout cũ nếu có để tránh chồng chéo
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      
+      const previousMood = currentMood;
+      setTempMoodActive(true); // Bật flag tạm dừng logic tự động
+      setCurrentMood(mood);
+      
+      // Nếu là mood tích cực thì cho nhảy một cái cho vui
+      if (mood === 'happy' || mood === 'suprised') {
+        setIsJumping(true);
+        setTimeout(() => setIsJumping(false), 500);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        setTempMoodActive(false); // Trả lại quyền điều khiển cho useEffect
+        // Logic tự động bên dưới sẽ tự đưa về mood đúng dựa trên errorStack
+      }, duration);
+    }
+  }));
+
 
   useEffect(() => {
+    // Nếu đang trong thời gian setMood thủ công từ ngoài, không chạy logic tự động
+    if (tempMoodActive) return;
+
     const currentCount = errorStack.length;
     const prevCount = prevErrorCount.current;
 
@@ -49,7 +78,7 @@ const MascotHelper = ({ errorStack = [], isInputFocusing = false, onClearError }
     }
 
     prevErrorCount.current = currentCount;
-  }, [errorStack.length, isInputFocusing]); // Theo dõi cả 2 sự kiện cùng lúc
+  }, [errorStack.length, isInputFocusing, tempMoodActive]); // Theo dõi cả 2 sự kiện cùng lúc
 
   // Map mood với file ảnh
   const mascotImages = {
@@ -81,14 +110,20 @@ const MascotHelper = ({ errorStack = [], isInputFocusing = false, onClearError }
             
             {/* Nội dung lỗi */}
             <p className="font-body text-xs italic leading-relaxed wrap-break-word pr-2">
-                {t(`${err.code}`, { defaultValue: t(I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError) })}
+                {Array.isArray(err.code) 
+                    ? t(err.code[0], { ...err.code[1], defaultValue: t(I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError) })
+                    : t(`${err.code}`, { defaultValue: t(I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError) })
+                }
             </p>
             </div>
         ))}
         </div>
 
       {/* Mascot Icon với hiệu ứng nhảy */}
-      <div className={`pointer-events-auto transition-all ${isJumping ? 'animate-mascot-jump' : 'animate-float'}`}>
+      <div 
+        onClick={onClearAllErrors}
+        title="Clear all notifications"
+        className={`pointer-events-auto transition-all ${isJumping ? 'animate-mascot-jump' : 'animate-float'}`}>
         <img 
           src={mascotImages[currentMood]} 
           alt="Mascot"
@@ -97,6 +132,6 @@ const MascotHelper = ({ errorStack = [], isInputFocusing = false, onClearError }
       </div>
     </div>
   );
-};
+});
 
 export default MascotHelper;

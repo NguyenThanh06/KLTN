@@ -77,7 +77,7 @@ export default function Input({
             {/* Label */}
             {label && (
                 <label htmlFor={id} className="font-heading font-medium block text-sm/6 text-text-shade-300 mb-2">
-                    {t(label)}
+                    {Array.isArray(label) ? t(...label) : t(label)}
                     {optional && (
                         <span className="text-shadow-accent-200 text-xs font-light ml-2" title="optional">{t(I18N_KEYS.COMMON.common_input_label_optional)}</span>
                     )}
@@ -97,7 +97,7 @@ export default function Input({
                     {...rest} // Trải hết props: type, name, value, onChange, placeholder...
                     onInvalid={handleInvalid}
                     onInput={handleInput}
-                    placeholder={t(placeholder)}
+                    placeholder={Array.isArray(placeholder) ? t(...placeholder) : t(placeholder)}
                     className={`
                         [input::-webkit-search-cancel-button]:appearance-none [input::-webkit-search-decoration]:appearance-none
                         block w-full rounded-xl bg-bg-shade-50 py-1.5 text-base text-text-shade-900 
@@ -122,7 +122,7 @@ export default function Input({
             {/* Helper Text (Dòng mô tả dưới) */}
             {helperText && !hasError && (
                 <p className="mt-1.5 text-xs text-text-shade-200 italic font-body px-1">
-                    {t(helperText)}
+                    {Array.isArray(helperText) ? t(...helperText) : t(helperText)}
                 </p>
             )}
 
@@ -131,7 +131,7 @@ export default function Input({
                 <div className={`absolute top-full right-0 mt-4 mr-2 z-50 pointer-events-none ${isClosing ? 'animate-popup-exit' : 'animate-popup-appear-and-float'}`}>
                     <div className="absolute -top-2 right-6 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-10 border-accent"></div>
                     <div className="bg-accent-200 text-main-text px-4 py-1.5 rounded-full border-2 border-accent text-xs shadow-[3px_3px_0px_0px] shadow-accent max-w-44 sm:max-w-60">
-                        <span className="block wrap-break-words italic leading-relaxed font-body">{t(errorMessage)}</span>
+                        <span className="block wrap-break-words italic leading-relaxed font-body">{Array.isArray(errorMessage) ? t(...errorMessage) : t(errorMessage)}</span>
                     </div>
                 </div>
             )}

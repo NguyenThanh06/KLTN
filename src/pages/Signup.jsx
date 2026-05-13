@@ -318,12 +318,14 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
             if (isAllValid) {
                 try {
                     //await api.signup({ email: formData.email, tenHienThi: formData.tenHienThi, username: formData.username, password: formData.password });
+                    //Làm cho hắn mất cái form đăng ký đã nờ
+                    nextStep();
                     //Chừ là verify tài khoản
                     setGlobalModal({
                         isOpen: true,
                         type: "one-button",
                         title: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalTitle_accountUnverified,
-                        description: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalDesc_accountUnverified,
+                        description: [I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalDesc_accountUnverified, {email: formData.email}],
                         primaryBtnText: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_sendVerifyCode,
                         primaryBtnType: "submit",
                         onPrimaryAction: async() => { //Gửi mã vô email lấy nơi formData
@@ -399,18 +401,6 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
             // 4. Cập nhật vào state
             setFormData({ ...formData, username: value });
         };
-
-        const handlePasswordChange = (e) => {
-            //Kiểm tra độ dài cái mk
-            setFormData({...formData, password: e.target.value});
-            let length = formData.password.length;
-            if (length < 6){
-
-            }
-            else{
-
-            }
-        }
 
     return (
         <PageContainer setHelperFocusState = {setHelperFocusState} headerType='simple'>
@@ -506,26 +496,45 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
                                     </>
                                 )}
                                 
-                                <div className='flex justify-between gap-3 mt-6'>
-                                    {/* Nút quay lại với step > 1 */}
-                                    {step > 1 ? (
+                                {step <= finalStep ? (
+                                    <div className='flex justify-between gap-3 mt-6'>
+                                        {/* Nút quay lại với step > 1 */}
+                                        {step > 1 ? (
+                                            <Button
+                                                variant='outline'
+                                                onClick={() => prevStep()}
+                                            >
+                                                {t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_prevStep)}
+                                            </Button>
+                                        ) : (
+                                            <div /> /* Giữ chỗ để nút Tiếp theo vẫn nằm bên phải */
+                                        )}
+                                        
+                                        {/* Nút Tiếp theo hoặc đăng ký luôn */}
                                         <Button
-                                            variant='outline'
-                                            onClick={() => prevStep()}
+                                            type= "submit"
                                         >
-                                            {t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_prevStep)}
+                                            {step === finalStep ? t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_signupSubmit) : t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_nextStep)}
                                         </Button>
-                                    ) : (
-                                        <div /> /* Giữ chỗ để nút Tiếp theo vẫn nằm bên phải */
-                                    )}
-                                    
-                                    {/* Nút Tiếp theo hoặc đăng ký luôn */}
-                                    <Button
-                                        type= "submit"
-                                    >
-                                        {step === finalStep ? t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_signupSubmit) : t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_nextStep)}
-                                    </Button>
-                                </div>
+                                    </div>
+                                )
+                                :
+                                (
+                                    <div className="flex-col justify-center items-center gap-4 p-4 rounded-2xl animate-float">
+                                        {/* Icon Checkmark hình tròn */}
+                                        <div className="rounded-full flex items-center justify-center">
+                                            <CiCircleCheck className='text-sub-text text-6xl'/>
+                                        </div>
+
+                                        {/* Nội dung chữ */}
+                                        <div className="flex-grow">
+                                            <h4 className="text-sm text-center font-bold text-sub-text leading-none mt-5 mb-1">
+                                            {t(I18N_KEYS.SIGNUP.COMMON.signup_text_success_signup)}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                )}
+                                
                                 
                             </form>
 

@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useErrorHandler } from '../hooks/useErrorHandler';
+import { useAuth } from '../context/AuthContext';
 
 import PageContainer from '../components/PageContainer';
 import Input from "../components/Input";
 import Button from "../components/Button";
 
+import { MOCK_USER_DATA_1 } from '../data/mockUser1';
+import { MOCK_USER_DATA_2 } from '../data/mockUser2';
+import { MOCK_USER_DATA_3 } from '../data/mockUser3';
 
-export default function Login( { setGlobalModal, addHelperError, setHelperFocusState } ){
+
+export default function Login( { setGlobalModal, addHelperError, setHelperFocusState, triggerMascotMood } ){
+    const { login, user } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [resetPasswordFormData, setResetPasswordFormData] = useState({email: '', otp: ''})
     const [verifyCode, setVerifyCode] = useState('');
@@ -58,7 +69,7 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                     isOpen: true,
                     type: "input",
                     title: I18N_KEYS.LOGIN.HANDLE.RESET_PASSWORD.login_handleResetPassword_modalTitle_enterOTP,
-                    description: I18N_KEYS.LOGIN.HANDLE.RESET_PASSWORD.login_handleResetPassword_modalDesc_enterOTP,
+                    description: [I18N_KEYS.LOGIN.HANDLE.RESET_PASSWORD.login_handleResetPassword_modalDesc_enterOTP, { email: resetPasswordFormData.email }],
                     primaryBtnText: I18N_KEYS.LOGIN.HANDLE.RESET_PASSWORD.login_handleResetPassword_modalButton_resetPassword,
                     primaryBtnType: "submit",
                     inputProps: {
@@ -258,6 +269,16 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                     title: I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalTitle_success_accountVerified,
                     description: I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalDesc_success_accountVerified,
                 });
+                
+                //Đợi miếng cho đọc thông báo rồi vô
+                await delay(1000);
+                login(MOCK_USER_DATA_3);
+                addHelperError({
+                    id: Date.now(),
+                    code: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_helper_success_login, {tenHienThi: user.tenHienThi}],
+                })
+                navigate(from, { replace: true });
+
             } catch (error) {
                 const errorData = error.response?.data;
                 const result = handleError(errorData);
@@ -294,13 +315,79 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
         const handleLogin = async (e) => {
             e.preventDefault();
             try {
-                // Gửi về backend ở đây
                 // const response = await ...
+                // login(bỏ cái thông tin user vô);
+
+                // Cái thông báo chào
+                // addHelperError({
+                //     id: Date.now(),
+                //     code: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_helper_success_login, {tenHienThi: user.tenHienThi}],
+                // })
+
+                // Nếu mà kiểm tra tài khoản đã vô hiệu hóa thì coi hiện cái modal dưới ni:
+                // setGlobalModal({
+                //     isOpen: true,
+                //     type: "info",
+                //     title: I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalTitle_accountDeactivated,
+                //     description: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalDesc_accountDeactivated, { daysDeactivated: Math.floor((Date.now() - new Date(user.ngayVoHieuHoa)) / 86400000)} ],
+                // })
+
+                // navigate(from, { replace: true });
+
+
+
+
+                //Nháp nháp mấy cái mock user test, thành xóa hoặc coi tham khảo
+                const email = formData.email;
+                switch (email){
+                    case "abc@xyz.com":
+                        login(MOCK_USER_DATA_1);
+                        addHelperError({
+                            id: Date.now(),
+                            code: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_helper_success_login, {tenHienThi: user.tenHienThi}],
+                        })
+                        setGlobalModal({
+                                isOpen: true,
+                                type: "info",
+                                title: I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalTitle_accountDeactivated,
+                                description: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalDesc_accountDeactivated, { daysDeactivated: Math.floor((Date.now() - new Date(user.ngayVoHieuHoa)) / 86400000)} ],
+                            })
+                        navigate(from, { replace: true });
+                        break;
+                    case "def@xyz.com":
+                        throw {
+                            response: {
+                                data: {
+                                    status: 400,
+                                    code: "ACCOUNT_LOCKED",
+                                }
+                            }
+                        };
+                    case "ghi@xyz.com":
+                        throw {
+                            response: {
+                                data: {
+                                    status: 400,
+                                    code: "ACCOUNT_UNVERIFIED",
+                                }
+                            }
+                        };
+                    default:
+                        throw {
+                            response: {
+                                data: {
+                                    status: 400,
+                                    code: "WRONG_LOGIN",
+                                }
+                            }
+                        };
+                }
             }
             catch (error) {
                 const errorData = error.response?.data;
                 const result = handleError(errorData);
                 if (result && !result.handled) {
+                    
                     switch (result.code){
                         case "NULL_EMAIL":
                             addHelperError({
@@ -327,6 +414,7 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                             })
                             break;
                         case "ACCOUNT_LOCKED": //Tài khoản bị khóa
+                            triggerMascotMood('sad');
                             setGlobalModal({
                                 isOpen: true,
                                 type: "info",
@@ -336,11 +424,12 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                             break;
 
                         case "ACCOUNT_UNVERIFIED": //Tài khoản chưa xác thực
+                            triggerMascotMood('suprised');
                             setGlobalModal({
                                 isOpen: true,
                                 type: "one-button",
                                 title: I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalTitle_accountUnverified,
-                                description: I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalDesc_accountUnverified,
+                                description: [I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalDesc_accountUnverified, {email: formData.email}],
                                 primaryBtnText: I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalButton_sendVerifyCode,
                                 primaryBtnType: "submit",
                                 onPrimaryAction: async() => { //Gửi mã vô email lấy nơi formData
@@ -413,7 +502,7 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                                     placeholder="••••••••" 
                                     required
                                     errorEmpty={I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_input_error_nullPassword} 
-                                    autocomplete="current-password"
+                                    autoComplete="current-password"
                                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                                 />
                                 

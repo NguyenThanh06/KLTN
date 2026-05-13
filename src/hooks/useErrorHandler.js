@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { I18N_KEYS } from '../i18n/key';
 
-export const useErrorHandler = (setModalConfig, addToErrorStack) => {
+export const useErrorHandler = (setGlobalModal, addHelperError) => {
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const handleError = useCallback((errorResponse) => {
     const { status, code } = errorResponse;
@@ -17,17 +19,18 @@ export const useErrorHandler = (setModalConfig, addToErrorStack) => {
       // 403: Đã đăng nhập nhưng không có quyền vào chỗ này.
       if (status === 403) {
         //Ni chắc là đẩy về Home + đưa modal thông báo
-        navigate('/home', { 
-          state: { 
-            showForbiddenModal: true, 
-            reason: "403" 
-          } 
+        setGlobalModal({
+          isOpen: true,
+          type: 'info',
+          title: t(I18N_KEYS.GLOBAL_ERROR.ERROR_403_title),
+          description: t(I18N_KEYS.GLOBAL_ERROR.ERROR_403_desc),
         });
+        navigate("/", { replace: true });
         return { handled: true };
       }
 
       if (status === 500) {
-        setModalConfig({
+        setGlobalModal({
           isOpen: true,
           type: 'info',
           title: t(I18N_KEYS.GLOBAL_ERROR.ERROR_500_title),
@@ -40,9 +43,8 @@ export const useErrorHandler = (setModalConfig, addToErrorStack) => {
     return {
       handled: false, 
       code: code,
-      message: message
     };
-  }, [setModalConfig, addToErrorStack]);
+  }, [setGlobalModal, addHelperError, t]);
 
   return { handleError };
 };

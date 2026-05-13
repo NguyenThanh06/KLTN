@@ -1,7 +1,16 @@
+import { motion, scale } from "framer-motion";
+
 import patternBgImg from "../assets/seamless-bg.png";
 import Header from "../components/Header";
+import Footer from "./Footer";
 
 export default function PageContainer({setHelperFocusState, children, headerType="full"}){
+    //Hàm chuyển trang mượt mượt
+    const animations = {
+        initial: { opacity: 0, y: 10 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: -10 },
+    };
     // Hàm kiểm tra xem có phải đang focus vào input/textarea không
     const handleFocusChange = (e) => {
         const isInput = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
@@ -14,7 +23,14 @@ export default function PageContainer({setHelperFocusState, children, headerType
     };
 
     return(
-        <div className="relative min-h-screen w-full bg-main-bg transition-colors duration-500" 
+        <motion.div
+            variants={animations}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+        >
+            <div className="relative min-h-screen w-full bg-main-bg transition-colors duration-500" 
                 onFocusCapture={(e) => handleFocusChange(e)} 
                 onBlurCapture={(e) => handleFocusChange(e)}
                 >
@@ -30,6 +46,8 @@ export default function PageContainer({setHelperFocusState, children, headerType
                     ></div>
                     <Header variant={headerType}/>
                     {children}
-        </div>
+                    <Footer/>
+            </div>
+        </motion.div>
     );
 }
