@@ -278,3 +278,29 @@
 .animate-modal-pulse {
   animation: modalPulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+
+
+
+/* Phần chống leak ảnh FE */
+/* Chặn in ấn */
+@media print {
+  body {
+    display: none !important;
+  }
+}
+
+/* Class bảo mật đặc biệt */
+.security-blur {
+  filter: blur(40px) contrast(150%) brightness(30%);
+  transition: filter 0.2s ease-in-out;
+  pointer-events: none; /* Không cho click vào nội dung khi đang bị mờ */
+  user-select: none;
+}
+
+/* Bọc hình */
+.anti-capture-layer {
+  mix-blend-mode: difference; /* Hoặc exclusion */
+  isolation: isolate;
+}
+/* Hết phần chống leak */

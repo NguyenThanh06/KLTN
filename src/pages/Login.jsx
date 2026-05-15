@@ -9,9 +9,9 @@ import PageContainer from '../components/PageContainer';
 import Input from "../components/Input";
 import Button from "../components/Button";
 
-import { MOCK_USER_DATA_1 } from '../data/mockUser1';
-import { MOCK_USER_DATA_2 } from '../data/mockUser2';
-import { MOCK_USER_DATA_3 } from '../data/mockUser3';
+import { MOCK_USER_DATA_1 } from '../data/User/mockUser1';
+import { MOCK_USER_DATA_2 } from '../data/User/mockUser2';
+import { MOCK_USER_DATA_3 } from '../data/User/mockUser3';
 
 
 export default function Login( { setGlobalModal, addHelperError, setHelperFocusState, triggerMascotMood } ){

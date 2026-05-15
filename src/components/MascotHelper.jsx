@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { I18N_KEYS } from '../i18n/key';
 import normalHelper from "../assets/mascotHelpers/normal.svg";
 import happyHelper from "../assets/mascotHelpers/happy.svg";
-import suprisedHelper from "../assets/mascotHelpers/suprised.svg";
+import surprisedHelper from "../assets/mascotHelpers/surprised.svg";
 import sadHelper from "../assets/mascotHelpers/sad.svg";
 import curiousHelper from "../assets/mascotHelpers/curious.svg";
 import alertHelper from "../assets/mascotHelpers/alert.svg";
@@ -28,7 +28,7 @@ const MascotHelper = forwardRef(({ errorStack = [], isInputFocusing = false, onC
       setCurrentMood(mood);
       
       // Nếu là mood tích cực thì cho nhảy một cái cho vui
-      if (mood === 'happy' || mood === 'suprised') {
+      if (mood === 'happy' || mood === 'surprised') {
         setIsJumping(true);
         setTimeout(() => setIsJumping(false), 500);
       }
@@ -54,7 +54,7 @@ const MascotHelper = forwardRef(({ errorStack = [], isInputFocusing = false, onC
     } 
     // ƯU TIÊN 2: Logic khi có lỗi mới phát sinh (0 -> 1)
     else if (currentCount > prevCount && prevCount === 0) {
-      setCurrentMood('suprised');
+      setCurrentMood('surprised');
       setIsJumping(true);
       setTimeout(() => setIsJumping(false), 500);
       setTimeout(() => setCurrentMood('alert'), 1000);
@@ -69,8 +69,8 @@ const MascotHelper = forwardRef(({ errorStack = [], isInputFocusing = false, onC
     // ƯU TIÊN 4: Trạng thái duy trì (Nếu có lỗi thì alert, không thì Normal)
     else {
       if (currentCount > 0) {
-        // Chỉ về Alert nếu không phải đang trong giai đoạn 'suprised'
-        if (currentMood !== 'suprised') setCurrentMood('alert');
+        // Chỉ về Alert nếu không phải đang trong giai đoạn 'surprised'
+        if (currentMood !== 'surprised') setCurrentMood('alert');
       } else {
         // Chỉ về Normal nếu không phải đang trong giai đoạn 'happy'
         if (currentMood !== 'happy') setCurrentMood('normal');
@@ -84,7 +84,7 @@ const MascotHelper = forwardRef(({ errorStack = [], isInputFocusing = false, onC
   const mascotImages = {
     normal: normalHelper,
     happy: happyHelper,
-    suprised: suprisedHelper,
+    surprised: surprisedHelper,
     sad: sadHelper,
     curious: curiousHelper,
     alert: alertHelper,

@@ -22,6 +22,11 @@ export const I18N_KEYS = {
     COMMON:{
         common_input_label_optional: "common_input_label_optional",
 
+        common_ageStatus_modalTitle: "common_ageStatus_modalTitle",
+        common_ageStatus_modalDesc: "common_ageStatus_modalDesc",
+        common_ageStatus_modalButton_under18: "common_ageStatus_modalButton_under18",
+        common_ageStatus_modalButton_above18: "common_ageStatus_modalButton_above18",
+
         common_headerPlaceholder_search: "common_headerPlaceholder_search",
         common_headerButton_post: "common_headerButton_post",
         common_headerButton_verify: "common_headerButton_verify",
@@ -45,6 +50,8 @@ export const I18N_KEYS = {
         common_footerButton_about: "common_footerButton_about",
         common_footerButton_privacy: "common_footerButton_privacy",
         common_footerButton_terms: "common_footerButton_terms",
+
+        common_security_catSentinel_dialogue: "common_security_catSentinel_dialogue",
     },
     LOGIN:{
         COMMON:{
@@ -154,5 +161,14 @@ export const I18N_KEYS = {
                 signup_handleVerifyAccount_modalButton_success_accountVerified: "signup_handleVerifyAccount_modalButton_success_accountVerified",
             },
         },
-    }
+    },
+    HOME: {
+        COMMON: {
+            home_heroSectionTitle: "home_heroSectionTitle",
+            home_heroSectionDesc: "home_heroSectionDesc",
+            home_heroSectionFormPlaceholder: "home_heroSectionFormPlaceholder",
+            home_postSection_title_randomSection: "home_postSection_title_randomSection",
+            home_postSection_desc_randomSection: "home_postSection_desc_randomSection",
+        },
+    },
 }

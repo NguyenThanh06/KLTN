@@ -527,7 +527,7 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
                                         </div>
 
                                         {/* Nội dung chữ */}
-                                        <div className="flex-grow">
+                                        <div className="grow">
                                             <h4 className="text-sm text-center font-bold text-sub-text leading-none mt-5 mb-1">
                                             {t(I18N_KEYS.SIGNUP.COMMON.signup_text_success_signup)}
                                             </h4>

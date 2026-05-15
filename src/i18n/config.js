@@ -79,6 +79,12 @@ i18n
                     //Input things
                     common_input_label_optional: "(không bắt buộc)",
 
+                    //Age Status Modal
+                    common_ageStatus_modalTitle: "Ây yo hỏi tuổi cái blah",
+                    common_ageStatus_modalDesc: "Chọn dưới 18 thì sẽ blur mấy ảnh 18+ đi, mà tắt cái modal ni thì tí hắn hỏi lại đó blah",
+                    common_ageStatus_modalButton_under18: "Em chưa 18",
+                    common_ageStatus_modalButton_above18: "Mình đủ 18 rồi",
+
                     //Header
                     common_headerPlaceholder_search: "Tìm kiếm...",
                     common_headerButton_post: "Đăng bài",
@@ -105,6 +111,9 @@ i18n
                     common_footerButton_about: "Về chúng mình",
                     common_footerButton_privacy: "Quyền riêng tư",
                     common_footerButton_terms: "Điều khoản",
+
+                    //Security
+                    common_security_catSentinel_dialogue: "Vuốt ve em {{remaningPets}} cái nữa đi!",
 
 
                     //Signup Page
@@ -210,6 +219,16 @@ i18n
                     login_handleLogin_modalTitle_accountDeactivated: "Tài khoản hiện đang trong trạng thái vô hiệu hóa blah",
                     login_handleLogin_modalDesc_accountDeactivated: "Mình muốn nhắc rằng đã {{daysDeactivated}} ngày rồi kể từ khi bạn quyết định vô hiệu hóa tài khoản. Nếu cứ thế này tròn 30 ngày thì chúng ta buộc phải nói lời tạm biệt đó. Nhưng nè, bạn đổi ý thì cứ tự nhiên chỉnh lại nhé!",
                     login_handleLogin_helper_success_login: "Chào, {{tenHienThi}}!",
+
+
+
+                    // Home Page
+                        //Common
+                    home_heroSectionTitle: "Hôm nay bạn muốn xem gì?",
+                    home_heroSectionDesc: "Cùng khám phá một góc nhỏ của kho tàng nghệ thuật nhân loại nào! blah",
+                    home_heroSectionFormPlaceholder: "Thử nhập thẻ tag, tên bài viết, mô tả hay tên tác giả xem... blah",
+                    home_postSection_title_randomSection: "Khám phá ngẫu hứng blah",
+                    home_postSection_desc_randomSection: "Cái ni lên random chơ không theo cái thứ tự mô hết blah",
                     }
             }
         }
