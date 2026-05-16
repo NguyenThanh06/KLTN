@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Helper" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 99.21 99.21">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fbf6f2;
+        stroke: #a7dd6e;
+        stroke-width: 5px;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke: #81be3f;
+        stroke-linecap: round;
+        stroke-width: 2.16px;
+      }
+
+      .cls-3 {
+        fill: #81be3f;
+      }
+    </style>
+  </defs>
+  <g id="curious">
+    <circle class="cls-1" cx="49.1" cy="60.04" r="35.1"/>
+    <circle class="cls-3" cx="52.09" cy="50.89" r="5.46"/>
+    <circle class="cls-3" cx="30.12" cy="50.89" r="5.46"/>
+    <g>
+      <path class="cls-2" d="M41.6,70.69c-2.38,0-4.31-1.44-4.31-3.21s1.93-3.21,4.31-3.21"/>
+      <path class="cls-2" d="M41.6,64.28c-2.38,0-4.31-1.44-4.31-3.21s1.93-3.21,4.31-3.21"/>
+    </g>
+  </g>
+</svg>
