@@ -28,7 +28,7 @@ const PostGrid = ({ posts = [] , isUnder18, isAlertActive, visitorIP, isTabBlurr
           >
             {columnPosts.map((post) => (
               <PostThumbnailCard 
-                  key={post.postID} 
+                  key={post.postId} 
                   post={post} 
                   isUnder18={isUnder18}
                   isAlertActive={isAlertActive} 

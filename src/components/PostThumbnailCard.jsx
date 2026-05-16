@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import CatSentinel from './CatSentinel';
 
 const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, isTabBlurred, clearAlert }) => {
-  const { postID, tieuDe, lstKTEOFile, hanCheHienThi } = post;
+  const { postId, tieuDe, imageUrls, hanCheHienThi } = post;
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false); // Trạng thái video có trong vùng nhìn không
-  const isMultiple = lstKTEOFile?.length > 1;
+  const isMultiple = imageUrls?.length > 1;
   const isLocked = isUnder18 && hanCheHienThi === 1;
 
   // Hàm vẽ một frame hiện tại của video lên canvas
@@ -60,7 +60,7 @@ const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, isTabBlu
     };
 
     if (isVisible && !isLocked) {
-      video.play().catch(() => {});
+      video.play().catch(() => { });
       renderLoop();
     } else {
       video.pause();
@@ -75,13 +75,13 @@ const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, isTabBlu
 
   return (
     <>
-      <Link 
-          to= {`/post/${postID}`}
-          className="cursor-pointer group  flex flex-col w-full">
+      <Link
+        to={`/post/${postId}`}
+        className="cursor-pointer group  flex flex-col w-full">
         <div className="relative w-full overflow-hidden rounded-xl bg-text-shade-900 shadow-xl ">
           <video
             ref={videoRef}
-            src={lstKTEOFile[0].link}
+            src={`http://localhost:8080/uploads/posts/${imageUrls[0].link}`}
             loop
             muted
             playsInline
@@ -89,32 +89,32 @@ const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, isTabBlu
             onLoadedData={() => drawFrame(videoRef.current, canvasRef.current)}
             className="hidden"
           />
-          
+
           <canvas
             ref={canvasRef}
-            width={lstKTEOFile[0].width}
-            height={lstKTEOFile[0].height}
+            width={imageUrls[0].width}
+            height={imageUrls[0].height}
             className={`block w-full h-auto transition-transform duration-500 group-hover:scale-105 
                       ${isLocked ? 'blur-2xl scale-95 select-none pointer-events-none' : ''} 
                       ${shouldBlur ? 'security-blur anti-capture-layer' : ''}`}
           />
 
-          { isAlertActive && (
+          {isAlertActive && (
             <CatSentinel
-                visitorIP={visitorIP}
-                isAlertActive={isAlertActive}
-                onCardResolved={clearAlert}
-                variant="card"
+              visitorIP={visitorIP}
+              isAlertActive={isAlertActive}
+              onCardResolved={clearAlert}
+              variant="card"
             />
           )}
-          
-          
-          { !isAlertActive && !isTabBlurred && isLocked && (
-              <div className="absolute inset-0 flex items-center justify-center bg-text-shade-900/20">
-                  <span className="text-[10px] font-bold text-text-shade-50 uppercase tracking-widest bg-text-shade-900/40 px-3 py-1 rounded-full backdrop-blur-sm">
-                      18+
-                  </span>
-              </div>
+
+
+          {!isAlertActive && !isTabBlurred && isLocked && (
+            <div className="absolute inset-0 flex items-center justify-center bg-text-shade-900/20">
+              <span className="text-[10px] font-bold text-text-shade-50 uppercase tracking-widest bg-text-shade-900/40 px-3 py-1 rounded-full backdrop-blur-sm">
+                18+
+              </span>
+            </div>
           )}
 
           {isMultiple && (
@@ -125,7 +125,7 @@ const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, isTabBlu
           )}
         </div>
 
-      
+
         <div className="mt-2 px-1">
           <h3 className="text-sm font-medium text-main-text truncate">
             {tieuDe}

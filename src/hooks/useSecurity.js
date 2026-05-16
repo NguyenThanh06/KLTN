@@ -56,21 +56,21 @@ export const useSecurity = () => {
       const isMacScreenshot = e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4' || e.key === '5');
       
       // Windows/Linux: F12, Ctrl+Shift+I, Ctrl+U, Ctrl+S, Ctrl+P
-      const isDevToolsOrPrint = 
-        e.keyCode === 123 || 
-        e.key === 'PrintScreen' ||
-        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) ||
-        (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 80 || e.keyCode === 83));
+      // const isDevToolsOrPrint = 
+      //   e.keyCode === 123 || 
+      //   e.key === 'PrintScreen' ||
+      //   (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) ||
+      //   (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 80 || e.keyCode === 83));
 
       const isAnyModifierPressed = e.shiftKey || e.ctrlKey || e.altKey || e.metaKey;
       if ((e.key === 'Shift' || e.key === 'Control'|| e.key === 'Alt' || e.key === 'Meta') || isAnyModifierPressed) {
         setIsTabBlurred(true);
       }
 
-      if (isMacScreenshot || isDevToolsOrPrint) {
-        e.preventDefault();
-        triggerAlert(); // CỐ TÌNH PHÁ HOẠI -> BẬT BÁO ĐỘNG ĐỎ CÓ LƯU STORAGE
-      }
+      // if (isMacScreenshot || isDevToolsOrPrint) {
+      //   e.preventDefault();
+      //   triggerAlert(); // CỐ TÌNH PHÁ HOẠI -> BẬT BÁO ĐỘNG ĐỎ CÓ LƯU STORAGE
+      // }
     };
 
     const handleKeyUp = (e) => {
