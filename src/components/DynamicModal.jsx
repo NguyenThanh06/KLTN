@@ -31,7 +31,7 @@ const DynamicModal = ({
 
     return (
         // Overlay - Nền tối làm mờ, nằm dưới Header (z-40)
-        <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-bg-shade-950/40 backdrop-blur-sm animate-fade-in" onClick={onClose}>
+        <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-bg-shade-950/40 backdrop-blur-sm animate-fade-in">
         
             {/* Modal Content - Chặn nổi bọt sự kiện để bấm vào modal không bị tắt */}
             <div 
@@ -54,8 +54,8 @@ const DynamicModal = ({
 
                     <div className="text-center space-y-6">
                         {/* Tiêu đề & Mô tả */}
-                        <h3 className="text-2xl font-bold text-main-text font-heading">{t(title)}</h3>
-                        <p className="text-sm text-text-shade-400 font-body italic">{t(description)}</p>
+                        <h3 className="text-2xl font-bold text-main-text font-heading">{Array.isArray(title) ? t(...title) : t(title)}</h3>
+                        <p className="text-sm text-text-shade-400 font-body italic">{Array.isArray(description) ? t(...description) : t(description)}</p>
 
                         {/* Phần thân tùy biến theo Type */}
                         <form method={formMethod} onSubmit={handleSubmit} className="flex flex-col items-center space-y-4 w-full">
@@ -71,7 +71,7 @@ const DynamicModal = ({
                                             onClick={onInputOtherAction} 
                                             className="font-medium font-body text-secondary-800 hover:text-secondary-600 cursor-pointer"
                                         >
-                                                {t(inputOtherActionText)}
+                                                {Array.isArray(inputOtherActionText) ? t(...inputOtherActionText) : t(inputOtherActionText)}
                                         </a>
                                         </div>
                                     )}
