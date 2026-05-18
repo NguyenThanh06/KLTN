@@ -227,8 +227,11 @@ i18n
                     home_heroSectionTitle: "Hôm nay bạn muốn xem gì?",
                     home_heroSectionDesc: "Cùng khám phá một góc nhỏ của kho tàng nghệ thuật nhân loại nào! blah",
                     home_heroSectionFormPlaceholder: "Thử nhập thẻ tag, tên bài viết, mô tả hay tên tác giả xem... blah",
+                    home_postSection_title_newestSection: "Tác phẩm mới ra lò blah",
+                    home_postSection_desc_newestSection: "Cái ni thì sắp xếp theo thời gian đăng sớm nhất blah",
                     home_postSection_title_randomSection: "Khám phá ngẫu hứng blah",
                     home_postSection_desc_randomSection: "Cái ni lên random chơ không theo cái thứ tự mô hết blah",
+                    home_postSection_button_showMore: "Khám phá thêm",
                     }
             }
         }

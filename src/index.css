@@ -290,7 +290,7 @@
   }
 }
 
-/* Class bảo mật đặc biệt */
+/* Class bảo mật đặc biệt (à, 2 cái ni chừ không xài nơi tề) */
 .security-blur {
   filter: blur(40px) contrast(150%) brightness(30%);
   transition: filter 0.2s ease-in-out;

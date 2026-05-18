@@ -1,12 +1,16 @@
 import React from 'react';
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
+import { Link } from 'react-router-dom';
+
+import { FaArrowRight } from "react-icons/fa6";
 
 
 const PostSectionContainer = ({ 
   title, 
   description, 
   children,
+  showMore = "",
   className = "" 
 }) => {
 
@@ -15,19 +19,36 @@ const PostSectionContainer = ({
   return (
     // max-w-7xl giúp nội dung danh sách căn giữa đẹp mắt, đồng bộ với các layout chuẩn hiện nay
     <section className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-28 sm:mb-40 ${className}`}>
+
+      {/* Phần thông tin trên */}
       
       {/* KHU VỰC TIÊU ĐỀ (CĂN TRÁI) */}
-      <div className="border-b border-main-border/30 pb-5 mb-10">
+      <div className="border-b border-secondary-700 pb-4 mb-10">
         <h2 className="text-2xl font-black tracking-tight text-main-text sm:text-3xl uppercase">
           {t(title)}
         </h2>
         
-        {/* Subtitle hiển thị động nếu có truyền vào */}
-        {description && (
-          <p className="mt-2 text-sm font-medium text-text-shade-400 tracking-wide">
-            {t(description)}
-          </p>
-        )}
+        <div className='flex justify-between gap-3'>
+          {/* Subtitle hiển thị động nếu có truyền vào */}
+          {description && (
+            <p 
+              className="mt-2 text-sm font-medium text-text-shade-400 tracking-wide">
+              {t(description)}
+            </p>
+          )}
+
+          {/* Phần xem thêm (tùy ý) */}
+          { showMore && (
+            <Link
+              to = {showMore} 
+              className="flex items-center text-text-shade-400 font-light text-sm hover:underline hover:underline-offset-2">
+              {t(I18N_KEYS.HOME.COMMON.home_postSection_button_showMore)}
+              <FaArrowRight className='ml-2 text-xs'/>
+            </Link>
+          )}
+        </div>
+
+        
       </div>
 
       {/* KHU VỰC CHỨA DANH SÁCH (CHILDREN) */}
@@ -35,6 +56,7 @@ const PostSectionContainer = ({
         {children}
       </div>
       
+
     </section>
   );
 };

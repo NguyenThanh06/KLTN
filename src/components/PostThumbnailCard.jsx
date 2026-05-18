@@ -3,13 +3,33 @@ import { RiCheckboxMultipleBlankFill } from "react-icons/ri";
 import { Link } from 'react-router-dom';
 import CatSentinel from './CatSentinel';
 
-const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, isTabBlurred, clearAlert }) => {
-  const { postID, tieuDe, lstKTEOFile, hanCheHienThi } = post;
+
+import { MOCK_USER_DATA_1 } from '../data/User/mockUser1';
+import { MOCK_USER_DATA_3 } from '../data/User/mockUser3';
+
+const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, clearAlert }) => {
+  const { postID, tieuDe, lstKTEOFile, hanCheHienThi, tacGia } = post;
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false); // Trạng thái video có trong vùng nhìn không
   const isMultiple = lstKTEOFile?.length > 1;
   const isLocked = isUnder18 && hanCheHienThi === 1;
+
+  //Thành bỏ đồ vô ok thì xóa cái đoạn ni, bạn làm tạm để có avatar với tên tác giả ơ
+  const authorMap = {
+    1: MOCK_USER_DATA_1,
+    3: MOCK_USER_DATA_3,
+  };
+
+  // Nếu trả về một ID tác giả mà không có mock data, web sẽ hiện thông tin ẩn danh chơ không bị sập. 
+  // (NI LÀ THÀNH XÓA ĐI HẾ, KHÔNG CÓ VỤ ẨN DANH MÔ NỜ)
+  const thongTinTacGia = authorMap[tacGia] || {
+    avatar: "/defaultAvatar/default_avatar_1.svg", // ảnh avatar mặc định của hệ thống
+    tenHienThi: "Tác giả ẩn danh"
+  };
+
+
+
 
   // Hàm vẽ một frame hiện tại của video lên canvas
   const drawFrame = (video, canvas) => {
@@ -19,10 +39,6 @@ const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, isTabBlu
     }
   };
 
-  // Quyết định khi nào thì hiện hiệu ứng mờ bảo mật
-  // 1. Khi đang bị báo động đỏ VÀ mèo chưa đi
-  // 2. Hoặc khi người dùng vừa chuyển tab (isTabBlurred === true)
-  const shouldBlur = isAlertActive || isTabBlurred;
 
 
   //Quản lý việc phát dừng video
@@ -95,8 +111,7 @@ const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, isTabBlu
             width={lstKTEOFile[0].width}
             height={lstKTEOFile[0].height}
             className={`block w-full h-auto transition-transform duration-500 group-hover:scale-105 
-                      ${isLocked ? 'blur-2xl scale-95 select-none pointer-events-none' : ''} 
-                      ${shouldBlur ? 'security-blur anti-capture-layer' : ''}`}
+                      ${isLocked ? 'blur-2xl scale-95 select-none pointer-events-none' : ''} `}
           />
 
           { isAlertActive && (
@@ -109,7 +124,7 @@ const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, isTabBlu
           )}
           
           
-          { !isAlertActive && !isTabBlurred && isLocked && (
+          { isLocked && (
               <div className="absolute inset-0 flex items-center justify-center bg-text-shade-900/20">
                   <span className="text-[10px] font-bold text-text-shade-50 uppercase tracking-widest bg-text-shade-900/40 px-3 py-1 rounded-full backdrop-blur-sm">
                       18+
@@ -130,6 +145,14 @@ const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, isTabBlu
           <h3 className="text-sm font-medium text-main-text truncate">
             {tieuDe}
           </h3>
+          <Link to={`/user?id=${tacGia}`} className="flex items-center gap-2 my-1 text-main-text cursor-pointer transition-colors">
+              <div className="shrink-0 w-8 h-8 bg-primary-200 rounded-full flex items-center justify-center">
+                  <img src={thongTinTacGia.avatar} alt="AuthorAvatar" />
+              </div>
+              <div className="grow min-w-0">
+                  <p className="font-ui text-sm">{thongTinTacGia.tenHienThi}</p>
+              </div>
+          </Link>
         </div>
       </Link>
 

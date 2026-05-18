@@ -167,8 +167,11 @@ export const I18N_KEYS = {
             home_heroSectionTitle: "home_heroSectionTitle",
             home_heroSectionDesc: "home_heroSectionDesc",
             home_heroSectionFormPlaceholder: "home_heroSectionFormPlaceholder",
+            home_postSection_title_newestSection: "home_postSection_title_newestSection",
+            home_postSection_desc_newestSection: "home_postSection_desc_newestSection",
             home_postSection_title_randomSection: "home_postSection_title_randomSection",
             home_postSection_desc_randomSection: "home_postSection_desc_randomSection",
+            home_postSection_button_showMore: "home_postSection_button_showMore",
         },
     },
 }
