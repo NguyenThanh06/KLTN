@@ -47,7 +47,7 @@ const DynamicModal = ({
                     {/* Nút X tròn ở góc trên phải */}
                     <button 
                         onClick={onClose}
-                        className="absolute -top-3 -right-3 z-50 w-10 h-10 bg-accent border-4 border-accent text-accent-50 rounded-full flex items-center justify-center text-xl font-bold hover:scale-110 transition-transform z-50 shadow-[4px_4px_0px_0px] shadow-accent-700 dark:shadow-accent-300"
+                        className="absolute -top-3 -right-3 z-50 w-10 h-10 bg-accent border-4 border-accent text-accent-50 rounded-full flex items-center justify-center text-xl font-bold hover:scale-110 transition-transform shadow-[4px_4px_0px_0px] shadow-accent-700 dark:shadow-accent-300"
                     >
                         ✕
                     </button>

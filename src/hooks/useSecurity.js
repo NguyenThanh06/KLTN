@@ -85,7 +85,7 @@ export const useSecurity = () => {
 
       const isDevToolsOrPrint =
         e.key === "PrintScreen" ||
-        e.key === "F12" ||
+        //e.key === "F12" ||
         (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(key)) ||
         (e.ctrlKey && ["u", "p", "s"].includes(key));
 
