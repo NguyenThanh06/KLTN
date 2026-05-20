@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
 import { useErrorHandler } from '../hooks/useErrorHandler';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
 import PageContainer from '../components/PageContainer';   
 import Input from "../components/Input";
@@ -14,6 +14,11 @@ import { CiCircleMore, CiCircleCheck } from 'react-icons/ci';
 export default function Signup( { setGlobalModal, addHelperError, setHelperFocusState } ){
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const searchParams = new URLSearchParams(location.search);
+    const redirect = searchParams.get("redirect") || "/";
+
     const { handleError } = useErrorHandler(setGlobalModal, addHelperError);
 
     const [ step, setStep ] = useState(1);
@@ -198,7 +203,9 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
                         primaryBtnText: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_success_accountVerified,
                         onPrimaryAction: () => {
                             setGlobalModal(prev => ({ ...prev, isOpen: false }));
-                            navigate("/login");
+                            navigate(`/login?redirect=${encodeURIComponent(redirect)}`, {
+                                replace: true,
+                            });
                         }
                     });
                 } catch (error) {
@@ -685,7 +692,7 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
 
                             <p className="mt-10 text-center text-sm/6 text-text-shade-400">
                             {t(I18N_KEYS.SIGNUP.COMMON.signup_text_isAMember)}
-                            <Link to="/login" 
+                            <Link to={`/login?redirect=${encodeURIComponent(redirect)}`}
                                 className="font-semibold text-accent-700 hover:text-accent-400"
                             >
                                 <br></br>{t(I18N_KEYS.SIGNUP.COMMON.signup_button_toLoginPage)}

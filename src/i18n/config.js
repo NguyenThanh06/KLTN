@@ -293,6 +293,12 @@ i18n
                         postCreate_stepNavigation_back: "Quay lại",
                         postCreate_stepNavigation_createPost: "Đăng bài",
 
+                        // Authentication Check
+                        postCreate_authCheck_modalTitle_disabledAccount: "Không thể đăng bài blah",
+                        postCreate_authCheck_modalDesc_disabledAccount: "Tài khoản của bạn đang ở trạng thái vô hiệu hóa nên chưa thể đăng bài. Hãy vào hồ sơ để bật lại tài khoản trước khi tiếp tục. blah",
+                        postCreate_authCheck_modalButton_toProfile: "Đến hồ sơ",
+                        postCreate_authCheck_modalButton_close: "Đóng",
+
                         // Handle Apply To All Change
                         postCreate_handleApplyToAllChange_modalTitle_applyToAllChange: "Áp dụng riêng từng hình ảnh",
                         postCreate_handleApplyToAllChange_modalDesc_applyToAllChange: "Mỗi hình ảnh sẽ dùng lựa chọn bảo vệ riêng. Hãy chọn từng ảnh để kiểm tra trước khi đăng. blah",

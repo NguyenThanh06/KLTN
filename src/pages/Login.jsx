@@ -18,7 +18,10 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
     const { login, user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
+
+    const searchParams = new URLSearchParams(location.search);
+    const redirect = searchParams.get("redirect") || "/";
+    
 
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -417,13 +420,15 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                 });
                 
                 //Đợi miếng cho đọc thông báo rồi vô
-                await delay(1000);
-                login(MOCK_USER_DATA_3);
+                await delay(500);
+
+                const loggedInUser = MOCK_USER_DATA_3;
+                login(loggedInUser);
                 addHelperError({
                     id: Date.now(),
-                    code: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_helper_success_login, {tenHienThi: user.tenHienThi}],
-                })
-                navigate(from, { replace: true });
+                    code: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_helper_success_login, {tenHienThi: loggedInUser.tenHienThi}],
+                });
+                navigate(redirect, { replace: true });
 
             } catch (error) {
                 const errorData = error.response?.data;
@@ -463,13 +468,14 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
             if (isLoginLoading) return;
             try {
                 setIsLoginLoading(true);
-                // const response = await ...
-                // login(bỏ cái thông tin user vô);
+                // const response = await api.login(formData);
+
+                // const loggedInUser = response.data.user;
 
                 // Cái thông báo chào
                 // addHelperError({
                 //     id: Date.now(),
-                //     code: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_helper_success_login, {tenHienThi: user.tenHienThi}],
+                //     code: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_helper_success_login, {tenHienThi: loggedInUser.tenHienThi}],
                 // })
 
                 // Nếu mà kiểm tra tài khoản đã vô hiệu hóa thì coi hiện cái modal dưới ni:
@@ -477,10 +483,10 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                 //     isOpen: true,
                 //     type: "info",
                 //     title: I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalTitle_accountDeactivated,
-                //     description: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalDesc_accountDeactivated, { daysDeactivated: Math.floor((Date.now() - new Date(user.ngayVoHieuHoa)) / 86400000)} ],
+                //     description: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalDesc_accountDeactivated, { daysDeactivated: Math.floor((Date.now() - new Date(loggedInUser.ngayVoHieuHoa)) / 86400000)} ],
                 // })
 
-                // navigate(from, { replace: true });
+                // navigate(redirect, { replace: true });
 
 
 
@@ -489,18 +495,19 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                 const email = formData.email;
                 switch (email){
                     case "abc@xyz.com":
-                        login(MOCK_USER_DATA_1);
+                        const loggedInUser = MOCK_USER_DATA_1;
+                        login(loggedInUser);
                         addHelperError({
                             id: Date.now(),
-                            code: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_helper_success_login, {tenHienThi: user.tenHienThi}],
+                            code: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_helper_success_login, {tenHienThi: loggedInUser.tenHienThi}],
                         })
                         setGlobalModal({
                                 isOpen: true,
                                 type: "info",
                                 title: I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalTitle_accountDeactivated,
-                                description: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalDesc_accountDeactivated, { daysDeactivated: Math.floor((Date.now() - new Date(user.ngayVoHieuHoa)) / 86400000)} ],
+                                description: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalDesc_accountDeactivated, { daysDeactivated: Math.floor((Date.now() - new Date(loggedInUser.ngayVoHieuHoa)) / 86400000)} ],
                             })
-                        navigate(from, { replace: true });
+                        navigate(redirect, { replace: true });
                         break;
                     case "def@xyz.com":
                         throw {
@@ -681,7 +688,7 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
 
                             <p className="mt-10 text-center text-sm/6 text-text-shade-400">
                             {t(I18N_KEYS.LOGIN.COMMON.login_text_notAMember)}
-                            <Link to="/signup" 
+                            <Link to={`/signup?redirect=${encodeURIComponent(redirect)}`} 
                                 className="font-semibold text-accent-700 hover:text-accent-400"
                             >
                                 <br></br>{t(I18N_KEYS.LOGIN.COMMON.login_button_toSignupPage)}

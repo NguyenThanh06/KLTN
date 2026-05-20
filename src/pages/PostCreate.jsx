@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from '../context/AuthContext';
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
 import { useErrorHandler } from '../hooks/useErrorHandler';
@@ -35,6 +36,8 @@ export default function PostCreate({
     const navigate = useNavigate();
     const { handleError } = useErrorHandler();
     const { t, i18n } = useTranslation();
+    const location = useLocation();
+    const { loading, user, isAuthenticated } = useAuth();
 
     const [currentStep, setCurrentStep] = useState(1);
 
@@ -73,7 +76,46 @@ export default function PostCreate({
 
     const selectedFile = files[selectedImageIndex];
 
+    //-----------------------------Kiểm tra đăng nhập với Vô hiệu hóa trước--------------------------
+    useEffect(() => {
+        if (loading) return;
 
+        const destinationPath = `${location.pathname}${location.search || ""}`;
+
+        if (!isAuthenticated) {
+            navigate(`/login?redirect=${encodeURIComponent(destinationPath)}`, {
+                replace: true,
+            });
+            return;
+        }
+
+        if (user?.daVoHieuHoa === true) {
+            setGlobalModal?.({
+                isOpen: true,
+                type: "two-buttons",
+                title: I18N_KEYS.POST_CREATE.HANDLE.AUTHENTICATION_CHECK.postCreate_authCheck_modalTitle_disabledAccount,
+                description: I18N_KEYS.POST_CREATE.HANDLE.AUTHENTICATION_CHECK.postCreate_authCheck_modalDesc_disabledAccount,
+                primaryBtnText: I18N_KEYS.POST_CREATE.HANDLE.AUTHENTICATION_CHECK.postCreate_authCheck_modalButton_toProfile,
+                secondaryBtnText: I18N_KEYS.POST_CREATE.HANDLE.AUTHENTICATION_CHECK.postCreate_authCheck_modalButton_close,
+                onPrimaryAction: () => {
+                    setGlobalModal?.({ isOpen: false });
+                    navigate("/profile");
+                },
+                onSecondaryAction: () => {
+                    setGlobalModal?.({ isOpen: false });
+                },
+            });
+
+            navigate("/", { replace: true });
+        }
+    }, [
+        isAuthenticated,
+        user?.daVoHieuHoa,
+        location.pathname,
+        location.search,
+        navigate,
+        setGlobalModal,
+    ]);
 
     ///----------------- Hàm linh tinh không cần quan tâm-----------------------
 
@@ -682,7 +724,9 @@ export default function PostCreate({
 
 
     
-
+    if (loading || !isAuthenticated || user?.daVoHieuHoa === true) {
+        return null;
+    }
     return (
         <PageContainer setHelperFocusState = {setHelperFocusState}>
             <SectionContainer

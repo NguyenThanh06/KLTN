@@ -125,6 +125,7 @@ export const I18N_KEYS = {
             signup_formButton_nextStep: "signup_formButton_nextStep",
             signup_formButton_prevStep: "signup_formButton_prevStep",
             signup_formButton_signupSubmit: "signup_formButton_signupSubmit",
+            signup_formButton_signupLoading: "signup_formButton_signupLoading",
             signup_text_isAMember: "signup_text_isAMember",
             signup_button_toLoginPage: "signup_button_toLoginPage",
             signup_text_success_signup: "signup_text_success_signup",
@@ -233,6 +234,12 @@ export const I18N_KEYS = {
             postCreate_stepNavigation_createPost: "postCreate_stepNavigation_createPost",
         },
         HANDLE:{
+            AUTHENTICATION_CHECK:{
+                postCreate_authCheck_modalTitle_disabledAccount: "postCreate_authCheck_modalTitle_disabledAccount",
+                postCreate_authCheck_modalDesc_disabledAccount: "postCreate_authCheck_modalDesc_disabledAccount",
+                postCreate_authCheck_modalButton_toProfile: "postCreate_authCheck_modalButton_toProfile",
+                postCreate_authCheck_modalButton_close: "postCreate_authCheck_modalButton_close",
+            },
             APPLY_TO_ALL_CHANGE:{
                 postCreate_handleApplyToAllChange_modalTitle_applyToAllChange: "postCreate_handleApplyToAllChange_modalTitle_applyToAllChange",
                 postCreate_handleApplyToAllChange_modalDesc_applyToAllChange: "postCreate_handleApplyToAllChange_modalDesc_applyToAllChange",

@@ -272,9 +272,9 @@ export default function TagInput({
                     {tags.map((tag, index) => (
                         <div
                             key={`${tag}-${index}`}
-                            className="inline-flex items-center gap-1 rounded-full bg-text-shade-100 px-3 py-1 text-xs font-ui font-semibold text-main-text"
+                            className="inline-flex items-center gap-1 rounded-full bg-accent-200 px-3 py-1 text-xs font-ui font-semibold text-main-text"
                         >
-                            <span className="text-text-shade-300">#</span>
+                            <span className="text-accent-500">#</span>
 
                             <input
                                 value={tag}
@@ -294,7 +294,7 @@ export default function TagInput({
                             <button
                                 type="button"
                                 onClick={() => removeTag(index)}
-                                className="ml-1 text-text-shade-300 hover:text-accent transition-colors"
+                                className="ml-1 text-text-shade-400 hover:text-accent transition-colors"
                             >
                                 ×
                             </button>
