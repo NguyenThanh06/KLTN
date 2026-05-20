@@ -98,23 +98,23 @@ const MascotHelper = forwardRef(({ errorStack = [], isInputFocusing = false, onC
             <div 
             key={err.id} 
             onClick={() => onClearError(err.id)} 
-            className="group pointer-events-auto cursor-pointer animate-popup-appear-and-float bg-accent-200 text-main-text px-5 py-3 rounded-full border-2 border-accent shadow-[4px_4px_0px_0px] shadow-accent max-w-70 relative transition-all hover:scale-105 active:scale-95"
+            className="group pointer-events-auto cursor-pointer animate-popup-appear-and-float bg-accent-200 text-main-text px-5 py-3 rounded-4xl border-2 border-accent shadow-[4px_4px_0px_0px] shadow-accent max-w-70 relative transition-all hover:scale-105 active:scale-95"
             >
-            {/* Nút X đóng bóng thoại */}
-            <div className="absolute -top-2 -right-1 w-6 h-6 bg-accent border-2 border-accent text-accent-50 rounded-full flex items-center justify-center text-[10px] font-bold shadow-[2px_2px_0px_0px] shadow-accent-700 dark:shadow-accent-300 transition-transform group-hover:rotate-12">
-                ✕
-            </div>
+              {/* Nút X đóng bóng thoại */}
+              <div className="absolute -top-2 -right-1 w-6 h-6 bg-accent border-2 border-accent text-accent-50 rounded-full flex items-center justify-center text-[10px] font-bold shadow-[2px_2px_0px_0px] shadow-accent-700 dark:shadow-accent-300 transition-transform group-hover:rotate-12">
+                  ✕
+              </div>
 
-            {/* Mũi tên trỏ xuống */}
-            <div className="absolute -bottom-3 right-8 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-12 border-accent"></div>
-            
-            {/* Nội dung lỗi */}
-            <p className="font-body text-xs italic leading-relaxed wrap-break-word pr-2">
-                {Array.isArray(err.code) 
-                    ? t(err.code[0], { ...err.code[1], defaultValue: t(I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError) })
-                    : t(`${err.code}`, { defaultValue: t(I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError) })
-                }
-            </p>
+              {/* Mũi tên trỏ xuống */}
+              <div className="absolute -bottom-3 right-8 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-12 border-accent"></div>
+              
+              {/* Nội dung lỗi */}
+              <p className="font-body text-xs italic leading-relaxed wrap-break-word pr-2">
+                  {Array.isArray(err.code) 
+                      ? t(err.code[0], { ...err.code[1], defaultValue: t(I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError) })
+                      : t(`${err.code}`, { defaultValue: t(I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError) })
+                  }
+              </p>
             </div>
         ))}
         </div>

@@ -1,28 +1,25 @@
-import { motion, scale } from "framer-motion";
+import { motion } from "framer-motion";
 
 import patternBgImg from "../assets/seamless-bg.png";
 import Header from "../components/Header";
 import Footer from "./Footer";
 
-export default function PageContainer({setHelperFocusState, children, headerType="full"}){
-    //Hàm chuyển trang mượt mượt
+export default function PageContainer({ setHelperFocusState, children, headerType = "full" }) {
     const animations = {
         initial: { opacity: 0, y: 10 },
         animate: { opacity: 1, y: 0 },
         exit: { opacity: 0, y: -10 },
     };
-    // Hàm kiểm tra xem có phải đang focus vào input/textarea không
+
     const handleFocusChange = (e) => {
-        const isInput = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
-        if (isInput) {
-            // Kiểm tra xem hàm có tồn tại không trước khi gọi để tránh crash
-            if (typeof setHelperFocusState === 'function') {
-                setHelperFocusState(e.type === 'focus' || e.type === 'focusin');
-            }
+        const isInput = ["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName);
+
+        if (isInput && typeof setHelperFocusState === "function") {
+            setHelperFocusState(e.type === "focus" || e.type === "focusin");
         }
     };
 
-    return(
+    return (
         <motion.div
             variants={animations}
             initial="initial"
@@ -30,23 +27,28 @@ export default function PageContainer({setHelperFocusState, children, headerType
             exit="exit"
             transition={{ duration: 0.8, ease: "easeInOut" }}
         >
-            <div className="relative min-h-screen w-full bg-main-bg transition-colors duration-500" 
-                onFocusCapture={(e) => handleFocusChange(e)} 
-                onBlurCapture={(e) => handleFocusChange(e)}
-                >
-                    {/* Lớp họa tiết nền */}
-                    <div 
-                        className="fixed inset-0 animate-pattern pointer-events-none z-0"
-                        style={{
-                            backgroundImage: `url(${patternBgImg})`,
-                            backgroundSize: '250px 250px',
-                            backgroundRepeat: 'repeat',
-                            opacity: 0.25
-                        }}
-                    ></div>
-                    <Header variant={headerType}/>
+            <div
+                className="relative isolate min-h-screen w-full bg-main-bg transition-colors duration-500 overflow-hidden"
+                onFocusCapture={handleFocusChange}
+                onBlurCapture={handleFocusChange}
+            >
+                {/* Lớp họa tiết nền: chỉ nằm phía sau content */}
+                <div
+                    className="fixed inset-0 animate-pattern pointer-events-none z-0"
+                    style={{
+                        backgroundImage: `url(${patternBgImg})`,
+                        backgroundSize: "250px 250px",
+                        backgroundRepeat: "repeat",
+                        opacity: 0.25,
+                    }}
+                />
+
+                {/* Toàn bộ nội dung nằm trên pattern */}
+                <div className="relative z-10">
+                    <Header variant={headerType} />
                     {children}
-                    <Footer/>
+                    <Footer />
+                </div>
             </div>
         </motion.div>
     );

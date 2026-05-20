@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from '../i18n/key';
+import { censorProfanityText } from "../utils/profanityCensor";
 
 export default function Input({
     id,
@@ -23,12 +24,18 @@ export default function Input({
     rightIcon,        // Component Icon (ví dụ: <CheckIcon />)
     helperText,       // Dòng mô tả dưới input
     className = "",   // Cho phép truyền thêm class từ ngoài
+    triggerMascotMood,
+    enableProfanityFilter = true,
     ...rest           // Lùa hết name, value, type, onChange, required, v.v.
 }) {
     const { t } = useTranslation();
     const [hasError, setHasError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [isClosing, setIsClosing] = useState(false);
+
+    const shouldFilter =
+        enableProfanityFilter &&
+        (!rest.type || rest.type === "text" || rest.type === "search");
 
     const handleInvalid = (e) => {
         e.preventDefault();
@@ -97,6 +104,21 @@ export default function Input({
                     {...rest} // Trải hết props: type, name, value, onChange, placeholder...
                     onInvalid={handleInvalid}
                     onInput={handleInput}
+                    onChange={(e) => {
+                        if (!enableProfanityFilter || !shouldFilter) {
+                            rest.onChange?.(e);
+                            return;
+                        }
+
+                        const result = censorProfanityText(e.target.value);
+
+                        if (result.censored) {
+                            e.target.value = result.text;
+                            triggerMascotMood?.("surprised");
+                        }
+
+                        rest.onChange?.(e);
+                    }}
                     placeholder={Array.isArray(placeholder) ? t(...placeholder) : t(placeholder)}
                     className={`
                         [input::-webkit-search-cancel-button]:appearance-none [input::-webkit-search-decoration]:appearance-none
@@ -130,7 +152,7 @@ export default function Input({
             {hasError && (
                 <div className={`absolute top-full right-0 mt-4 mr-2 z-50 pointer-events-none ${isClosing ? 'animate-popup-exit' : 'animate-popup-appear-and-float'}`}>
                     <div className="absolute -top-2 right-6 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-10 border-accent"></div>
-                    <div className="bg-accent-200 text-main-text px-4 py-1.5 rounded-full border-2 border-accent text-xs shadow-[3px_3px_0px_0px] shadow-accent max-w-44 sm:max-w-60">
+                    <div className="bg-accent-200 text-main-text px-4 py-1.5 rounded-4xl border-2 border-accent text-xs shadow-[3px_3px_0px_0px] shadow-accent max-w-44 sm:max-w-60">
                         <span className="block wrap-break-words italic leading-relaxed font-body">{Array.isArray(errorMessage) ? t(...errorMessage) : t(errorMessage)}</span>
                     </div>
                 </div>

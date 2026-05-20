@@ -18,7 +18,7 @@ const PostSectionContainer = ({
 
   return (
     // max-w-7xl giúp nội dung danh sách căn giữa đẹp mắt, đồng bộ với các layout chuẩn hiện nay
-    <section className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-28 sm:mb-40 ${className}`}>
+    <section className={`mx-auto bg-main-bg max-w-7xl px-4 sm:px-6 lg:px-8 mb-28 sm:mb-40 ${className}`}>
 
       {/* Phần thông tin trên */}
       

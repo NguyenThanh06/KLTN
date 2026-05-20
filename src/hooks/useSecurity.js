@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
 export const useSecurity = () => {
+
+  const suspiciousBlurRef = useRef(false);
+
   const checkInitialAlert = () => {
     const alertActive = localStorage.getItem("security_alert") === "true";
     const expiresAt = localStorage.getItem("security_alert_expires_at");
@@ -65,7 +68,7 @@ export const useSecurity = () => {
       setBlurredSafe(true);
     };
 
-    const turnOffBlur = () => {
+    const turnOffBlur = (delay = 100) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -74,7 +77,7 @@ export const useSecurity = () => {
         if (!document.hidden && document.hasFocus()) {
           setBlurredSafe(false);
         }
-      }, 100);
+      }, delay);
     };
 
     const handleKeyDown = (e) => {
@@ -89,6 +92,9 @@ export const useSecurity = () => {
         (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(key)) ||
         (e.ctrlKey && ["u", "p", "s"].includes(key));
 
+      const isWindowsScreenshotPreparing =
+        e.metaKey && e.shiftKey;
+
       const isModifierKey =
         key === "shift" ||
         key === "control" ||
@@ -100,6 +106,10 @@ export const useSecurity = () => {
 
       if (isModifierKey || isAnyModifierPressed) {
         turnOnBlur();
+
+        if (isWindowsScreenshotPreparing) {
+          suspiciousBlurRef.current = true;
+        }
       }
 
       if (isMacScreenshot || isDevToolsOrPrint) {
@@ -121,7 +131,10 @@ export const useSecurity = () => {
         e.shiftKey || e.ctrlKey || e.altKey || e.metaKey;
 
       if (isModifierKey && !isAnyModifierPressed) {
-        turnOffBlur();
+        const delay = suspiciousBlurRef.current ? 3500 : 100;
+
+        suspiciousBlurRef.current = false;
+        turnOffBlur(delay);
       }
     };
 

@@ -130,6 +130,7 @@ i18n
                     signup_formButton_nextStep: "Tiếp tục",
                     signup_formButton_prevStep: "Quay lại",
                     signup_formButton_signupSubmit: "Đăng ký",
+                    signup_formButton_signupLoading: "Đang xử lý... blah",
                     signup_text_isAMember: "Bạn đã có tài khoản?",
                     signup_button_toLoginPage: "Mình sẽ giúp bạn đăng nhập blah!",
                     signup_text_success_signup: "ĐĂNG KÝ THÀNH CÔNG!",
@@ -173,6 +174,7 @@ i18n
                     login_formLabel_password: "Mật khẩu",
                     login_formButton_forgotPassword: "Quên mật khẩu sao?",
                     login_formButton_loginSubmit: "Đăng nhập",
+                    login_formButton_loginLoading: "Đang xử lý... blah",
                     login_text_notAMember: "Bạn chưa có tài khoản?",
                     login_button_toSignupPage: "Mình sẽ giúp bạn đăng ký!",
 
@@ -223,7 +225,7 @@ i18n
 
 
                     // Home Page
-                        //Common
+                        // Common
                     home_heroSectionTitle: "Hôm nay bạn muốn xem gì?",
                     home_heroSectionDesc: "Cùng khám phá một góc nhỏ của kho tàng nghệ thuật nhân loại nào! blah",
                     home_heroSectionFormPlaceholder: "Thử nhập thẻ tag, tên bài viết, mô tả hay tên tác giả xem... blah",
@@ -232,6 +234,97 @@ i18n
                     home_postSection_title_randomSection: "Khám phá ngẫu hứng blah",
                     home_postSection_desc_randomSection: "Cái ni lên random chơ không theo cái thứ tự mô hết blah",
                     home_postSection_button_showMore: "Khám phá thêm",
+
+
+                    // Post Create
+                        // Common
+                        postCreate_sectionContainerTitle: "Tạo bài viết mới blah",
+                        postCreate_sectionContainerDesc: "Hoàn thiện thông tin bài viết, chọn hình ảnh và thiết lập bảo vệ trước khi đăng. blah",
+                        postCreate_stepIndicatorLabel_step1: "Thông tin bài viết blah",
+                        postCreate_stepIndicatorLabel_step2: "Bảo vệ hình ảnh blah",
+                        postCreate_stepIndicatorText_step: "Bước",
+                        postCreate_postFileUploaderInstruction_line1: "Kéo thả ảnh vào đây hoặc chọn từ thiết bị của bạn",
+                        postCreate_postFileUploaderInstruction_line2: "Chỉ nhận PNG, JPG, JPEG, BMP. Mỗi file dưới 15MB, tối đa 10 file và tổng dung lượng dưới 100MB. blah",
+                        postCreate_postFileUploaderButton_selectFile: "Chọn ảnh từ thiết bị",
+                        postCreate_postFileUploaderButton_full10Files: "Đã đủ 10 ảnh blah",
+                        postCreate_formLabel_tieuDe: "Tiêu đề",
+                        postCreate_formPlaceholder_tieuDe: "Nhập tiêu đề bài viết blah",
+                        postCreate_formLabel_moTa: "Mô tả",
+                        postCreate_formPlaceholder_moTa: "Mô tả ngắn về bài viết của bạn blah",
+                        postCreate_tagInputLabel_danhSachThe: "Danh sách thẻ",
+                        postCreate_tagInputPlaceholder_danhSachThe: "Nhập thẻ, dùng dấu phẩy hoặc dấu cách để tách blah",
+                        postCreate_formLabel_hanCheHienThi: "Hiển thị",
+                        postCreate_formMoreInfo_hanCheHienThi: "Mọi độ tuổi dành cho nội dung thông thường. R-18 và R-18G dành cho nội dung cần hạn chế bao gồm nội dung về blah và méo thể hiển thị với người xem dưới 18.",
+                        postCreate_formRadioLabel_hanCheHienThi_all: "Mọi độ tuổi",
+                        postCreate_formRadioLabel_hanCheHienThi_r18: "R-18",
+                        postCreate_formRadioLabel_hanCheHienThi_r18g: "R-18G",
+                        postCreate_formLabel_dynamicWM: "Áp dụng Thủy ấn động",
+                        postCreate_formMoreInfo_dynamicWM: "Thủy ấn động là cái abc xyz chi đó blah",
+                        postCreate_formRadioLabel_dynamicWM_yes: "Có",
+                        postCreate_formRadioLabel_dynamicWM_no: "Không",
+                        postCreate_formLabel_sanPhamAI: "Có sản phẩm AI tạo sinh?",
+                        postCreate_formMoreInfo_sanPhamAI: "Sản phẩm AI tạo sinh là cái blah chi đó",
+                        postCreate_formRadioLabel_sanPhamAI_yes: "Có",
+                        postCreate_formRadioLabel_sanPhamAI_no: "Không",
+                        postCreate_formLabel_choPhepComment: "Cho phép comment",
+                        postCreate_formRadioLabel_choPhepComment_yes: "Có",
+                        postCreate_formRadioLabel_choPhepComment_no: "Không",
+                        postCreate_formLabel_congKhai: "Công khai",
+                        postCreate_formRadioLabel_congKhai_yes: "Có",
+                        postCreate_formRadioLabel_congKhai_no: "Không",
+                        postCreate_notice_step1: "Hãy kiểm tra kỹ thông tin trước khi tiếp tục sang bước bảo vệ hình ảnh. blah",
+                        postCreate_toggleFieldLabel_applyToAll: "Áp dụng lựa chọn hiện tại cho toàn bộ hình ảnh blah",
+                        postCreate_protectionControlsLabel_doNhieu: "Độ nhiễu",
+                        postCreate_protectionControlsLabel_doPhuMau: "Độ phủ màu",
+                        postCreate_protectionControlsLabel_mauNhieu: "Màu nhiễu",
+                        postCreate_protectionControlsLabel_mauNhieu_static: "Màu tĩnh",
+                        postCreate_protectionControlsLabel_mauNhieu_dynamic: "Màu động",
+                        postCreate_protectionControlsLabel_mauTinh: "Màu tĩnh",
+                        postCreate_protectionControlsLabel_soLuongFrame: "Số lượng Frame",
+                        postCreate_protectionControlsLabel_preset: "Mẫu cài đặt có sẵn blah",
+                        postCreate_protectionControlsLabel_preset_strongest: "Bảo vệ mạnh nhất blah",
+                        postCreate_protectionControlsLabel_preset_stable: "Ổn định blah",
+                        postCreate_protectionControlsLabel_preset_none: "Không bảo vệ blah",
+                        postCreate_protectionControlsButton_refreshPreview: "Tải lại bản xem trước",
+                        postCreate_protectionControlsButton_refreshPreviewLoading: "Đang tải blah...",
+                        postCreate_notice_step2: "Bạn có thể chọn từng hình ảnh trong danh sách phía trên để áp dụng lựa chọn bảo vệ riêng lẻ. blah",
+                        postCreate_stepNavigation_next: "Tiếp tục",
+                        postCreate_stepNavigation_loading: "Đang xử lý blah...",
+                        postCreate_stepNavigation_back: "Quay lại",
+                        postCreate_stepNavigation_createPost: "Đăng bài",
+
+                        // Handle Apply To All Change
+                        postCreate_handleApplyToAllChange_modalTitle_applyToAllChange: "Áp dụng riêng từng hình ảnh",
+                        postCreate_handleApplyToAllChange_modalDesc_applyToAllChange: "Mỗi hình ảnh sẽ dùng lựa chọn bảo vệ riêng. Hãy chọn từng ảnh để kiểm tra trước khi đăng. blah",
+                        postCreate_handleApplyToAllChange_modalButton_applyToAllChange: "OK",
+
+                        // Handle Verify Information
+                        postCreate_handleVerifyInformation_helper_error_tieuDeTooLong: "Tiêu đề chi mà dài dữ rứa blah",
+                        postCreate_handleVerifyInformation_helper_error_moTaTooLong: "Mô tả chi dài rứa blah",
+                        postCreate_handleVerifyInformation_helper_error_tagNull: "Không có thẻ chi hết ri blah",
+                        postCreate_handleVerifyInformation_helper_error_tagRangeOverflow: "Nhiều thẻ quá blah",
+                        postCreate_handleVerifyInformation_helper_error_tagTooLong: "Thẻ dài rứa blah",
+                        postCreate_handleVerifyInformation_helper_error_fileNull: "THêm ảnh vô đi chơ blah",
+                        postCreate_handleVerifyInformation_helper_error_fileWrongType: "Cái ni còn kph ảnh blah",
+                        postCreate_handleVerifyInformation_helper_error_fileRangeOverflow: "Ảnh chi nặng ghê rứa blah",
+                        postCreate_handleVerifyInformation_helper_error_fileTooMany: "Chi nhiều ảnh rứa blah",
+                        postCreate_handleVerifyInformation_helper_error_fileTotalRangeOverflow: "Cộng lại chi mà nặng ghê rứa blah",
+                        postCreate_handleVerifyInformation_helper_error_sanPhamAINull: "Chưa chọn spAI tề blah",
+                        postCreate_handleVerifyInformation_helper_error_sanPhamAIWrongType: "Chọn cái chi mà ảo rứa blah",
+                        postCreate_handleVerifyInformation_helper_error_hanCheHienThiNull: "Chưa chọn hạn chế hiển thị tề blah",
+                        postCreate_handleVerifyInformation_helper_error_hanCheHienThiWrongType: "Chọn cái chi mà ảo ma canada rứa blah",
+                        
+                        // Handle Refresh Preview
+                        postCreate_handleRefreshPreview_modalTitle_error_protectionWeirdProp: "Đã đặt lại lựa chọn bảo vệ blah",
+                        postCreate_handleRefreshPreview_modalDesc_error_protectionWeirdProp: "Một vài thông số bảo vệ không hợp lệ nên hệ thống đã đặt lại về mẫu Ổn định. blah",
+                        postCreate_handleRefreshPreview_modalButton_error_protectionWeirdProp: "OK",
+
+                        // Handle Verify Protection Choices
+                        postCreate_handleVerifyProtectionChoices_modalTitle_error_protectionWeirdProp: "Đã đặt lại lựa chọn bảo vệ blah",
+                        postCreate_handleVerifyProtectionChoices_modalDesc_error_protectionWeirdProp: "Một vài thông số bảo vệ không hợp lệ nên hệ thống đã đặt lại về mẫu Ổn định. blah",
+                        postCreate_handleVerifyProtectionChoices_modalButton_error_protectionWeirdProp: "OK",
+                        postCreate_handleVerifyProtectionChoices_helper_success_createPost: "Đã đăng bài thành công! blah",
+                        
                     }
             }
         }

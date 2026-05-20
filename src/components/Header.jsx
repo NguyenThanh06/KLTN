@@ -82,7 +82,7 @@ export default function Header({variant="full"}){
             <Link to="/" 
                 className="flex items-center gap-2"
             >
-                <img src="icon.svg" alt="Logo" className=" w-auto h-8"/>
+                <img src="/icon.svg" alt="Logo" className=" w-auto h-8"/>
                 {variant === "full" && (
                     <span className="font-heading font-bold text-xl text-primary hidden md:block">EyesOnly</span>
                 )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -24,8 +24,82 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [resetPasswordFormData, setResetPasswordFormData] = useState({email: '', otp: ''})
     const [verifyCode, setVerifyCode] = useState('');
+
+    const OTP_RESEND_SECONDS = 60;
+
+    const [resetPasswordOtpCooldown, setResetPasswordOtpCooldown] = useState(0);
+    const [verifyCodeCooldown, setVerifyCodeCooldown] = useState(0);
+
+    const [isLoginLoading, setIsLoginLoading] = useState(false);
+    const [isResetPasswordLoading, setIsResetPasswordLoading] = useState(false);
+    const [isVerifyAccountLoading, setIsVerifyAccountLoading] = useState(false);
+
+    const [isResendingResetPasswordOtp, setIsResendingResetPasswordOtp] = useState(false);
+    const [isResendingVerifyCode, setIsResendingVerifyCode] = useState(false);
+
+    const resetPasswordOtpCooldownRef = useRef(0);
+    const verifyCodeCooldownRef = useRef(0);
+
+    const isResendingResetPasswordOtpRef = useRef(false);
+    const isResendingVerifyCodeRef = useRef(false);
+
+    const isResetPasswordLoadingRef = useRef(false);
+    const isVerifyAccountLoadingRef = useRef(false);
+
     const { t, i18n } = useTranslation();
     const { handleError } = useErrorHandler(setGlobalModal, addHelperError);
+
+    //-------------------------Hàm linh tinh---------------------------------
+    const getResetPasswordResendText = (seconds = resetPasswordOtpCooldown) => {
+        return seconds > 0
+            ? `${t(I18N_KEYS.LOGIN.HANDLE.RESET_PASSWORD.login_handleResetPassword_modalButton_resendOTP)} (${seconds})`
+            : I18N_KEYS.LOGIN.HANDLE.RESET_PASSWORD.login_handleResetPassword_modalButton_resendOTP;
+    };
+
+    const getVerifyCodeResendText = (seconds = verifyCodeCooldown) => {
+        return seconds > 0
+            ? `${t(I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalButton_resendVerifyCode)} (${seconds})`
+            : I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalButton_resendVerifyCode;
+    };
+
+    const startResetPasswordOtpCooldown = () => {
+        resetPasswordOtpCooldownRef.current = OTP_RESEND_SECONDS;
+        setResetPasswordOtpCooldown(OTP_RESEND_SECONDS);
+    };
+
+    const startVerifyCodeCooldown = () => {
+        verifyCodeCooldownRef.current = OTP_RESEND_SECONDS;
+        setVerifyCodeCooldown(OTP_RESEND_SECONDS);
+    };
+
+    const handleResendResetPasswordOtpWithCooldown = async () => {
+        if (resetPasswordOtpCooldownRef.current > 0 || isResendingResetPasswordOtpRef.current) return;
+
+        try {
+            isResendingResetPasswordOtpRef.current = true;
+            setIsResendingResetPasswordOtp(true);
+            await handleSendOTPResetPassword();
+            startResetPasswordOtpCooldown();
+        } finally {
+            isResendingResetPasswordOtpRef.current = false;
+            setIsResendingResetPasswordOtp(false);
+        }
+    };
+
+    const handleResendVerifyCodeWithCooldown = async () => {
+        if (verifyCodeCooldownRef.current > 0 || isResendingVerifyCodeRef.current) return;
+
+        try {
+            isResendingVerifyCodeRef.current = true;
+            setIsResendingVerifyCode(true);
+            await handleSendVerifyCode();
+            startVerifyCodeCooldown();
+        } finally {
+            isResendingVerifyCodeRef.current = false;
+            setIsResendingVerifyCode(false);
+        }
+    };
+    //-------------------------HẾT Hàm linh tinh-----------------------------
 
 
     //-------------------------UseEffect----------------------
@@ -57,6 +131,70 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
 
     }, [resetPasswordFormData.email, resetPasswordFormData.otp, verifyCode]);
 
+    useEffect(() => {
+        resetPasswordOtpCooldownRef.current = resetPasswordOtpCooldown;
+    }, [resetPasswordOtpCooldown]);
+
+    useEffect(() => {
+        verifyCodeCooldownRef.current = verifyCodeCooldown;
+    }, [verifyCodeCooldown]);
+
+    useEffect(() => {
+        isResendingResetPasswordOtpRef.current = isResendingResetPasswordOtp;
+    }, [isResendingResetPasswordOtp]);
+
+    useEffect(() => {
+        isResendingVerifyCodeRef.current = isResendingVerifyCode;
+    }, [isResendingVerifyCode]);
+
+    useEffect(() => {
+        isResetPasswordLoadingRef.current = isResetPasswordLoading;
+    }, [isResetPasswordLoading]);
+
+    useEffect(() => {
+        isVerifyAccountLoadingRef.current = isVerifyAccountLoading;
+    }, [isVerifyAccountLoading]);
+
+    useEffect(() => {
+        if (resetPasswordOtpCooldown <= 0) return;
+
+        const timer = setInterval(() => {
+            setResetPasswordOtpCooldown(prev => Math.max(prev - 1, 0));
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [resetPasswordOtpCooldown]);
+
+    useEffect(() => {
+        if (verifyCodeCooldown <= 0) return;
+
+        const timer = setInterval(() => {
+            setVerifyCodeCooldown(prev => Math.max(prev - 1, 0));
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [verifyCodeCooldown]);
+
+    useEffect(() => {
+        setGlobalModal(prev => {
+            if (!prev.isOpen || prev.type !== 'input') return prev;
+
+            const inputName = prev.inputProps?.name;
+            if (inputName !== "otp_resetPassword" && inputName !== "verifyCode") return prev;
+
+            const nextInputOtherActionText = inputName === "otp_resetPassword"
+                ? getResetPasswordResendText()
+                : getVerifyCodeResendText();
+
+            if (prev.inputOtherActionText === nextInputOtherActionText) return prev;
+
+            return {
+                ...prev,
+                inputOtherActionText: nextInputOtherActionText,
+            };
+        });
+    }, [resetPasswordOtpCooldown, verifyCodeCooldown, i18n.language]);
+
     // -------------------------- Hàm ------------------------
         //-------------------------RESET PASSWORD------------------------
 
@@ -65,6 +203,7 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
             try {
                 //await api.verifyEmail({ email: resetPasswordFormData.email });
                 await handleSendOTPResetPassword();
+                startResetPasswordOtpCooldown();
                 setGlobalModal({
                     isOpen: true,
                     type: "input",
@@ -84,10 +223,8 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                     onPrimaryAction: async() => { 
                         await handleVerifyOTPResetPassword();
                     },
-                    inputOtherActionText: I18N_KEYS.LOGIN.HANDLE.RESET_PASSWORD.login_handleResetPassword_modalButton_resendOTP,
-                    onInputOtherAction: async() => {
-                        await handleSendOTPResetPassword();
-                    }
+                    inputOtherActionText: getResetPasswordResendText(OTP_RESEND_SECONDS),
+                    onInputOtherAction: handleResendResetPasswordOtpWithCooldown,
                 });
             } catch (error) {
                 const errorData = error.response?.data;
@@ -220,7 +357,16 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                     onChange: (e) => setResetPasswordFormData({...resetPasswordFormData, email: e.target.value}),
                 },
                 onPrimaryAction: async() => { 
-                    await handleVerifyEmailResetPassword();
+                    if (isResetPasswordLoadingRef.current) return;
+
+                    try {
+                        isResetPasswordLoadingRef.current = true;
+                        setIsResetPasswordLoading(true);
+                        await handleVerifyEmailResetPassword();
+                    } finally {
+                        isResetPasswordLoadingRef.current = false;
+                        setIsResetPasswordLoading(false);
+                    }
                 },
             });
         };
@@ -314,7 +460,9 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
         //Hàm xử lý đăng nhập
         const handleLogin = async (e) => {
             e.preventDefault();
+            if (isLoginLoading) return;
             try {
+                setIsLoginLoading(true);
                 // const response = await ...
                 // login(bỏ cái thông tin user vô);
 
@@ -424,7 +572,7 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                             break;
 
                         case "ACCOUNT_UNVERIFIED": //Tài khoản chưa xác thực
-                            triggerMascotMood('suprised');
+                            triggerMascotMood('surprised');
                             setGlobalModal({
                                 isOpen: true,
                                 type: "one-button",
@@ -434,6 +582,7 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                                 primaryBtnType: "submit",
                                 onPrimaryAction: async() => { //Gửi mã vô email lấy nơi formData
                                     await handleSendVerifyCode();
+                                    startVerifyCodeCooldown();
                                     setGlobalModal({
                                         isOpen: true,
                                         type: "input",
@@ -451,12 +600,19 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                                             onChange: (e) => setVerifyCode(e.target.value),
                                         },
                                         onPrimaryAction: async() => { 
-                                            await handleVerifyAccount();
+                                            if (isVerifyAccountLoadingRef.current) return;
+
+                                            try {
+                                                isVerifyAccountLoadingRef.current = true;
+                                                setIsVerifyAccountLoading(true);
+                                                await handleVerifyAccount();
+                                            } finally {
+                                                isVerifyAccountLoadingRef.current = false;
+                                                setIsVerifyAccountLoading(false);
+                                            }
                                         },
-                                        inputOtherActionText: I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalButton_resendVerifyCode,
-                                        onInputOtherAction: async() => {
-                                            await handleSendVerifyCode();
-                                        }
+                                        inputOtherActionText: getVerifyCodeResendText(OTP_RESEND_SECONDS),
+                                        onInputOtherAction: handleResendVerifyCodeWithCooldown
                                     });
                                     
                                 } 
@@ -464,6 +620,8 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                             break;
                     }
                 }
+            } finally {
+                setIsLoginLoading(false);
             }
         }
 
@@ -511,7 +669,13 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                                 </div>
 
                                 <div>
-                                    <Button children={t(I18N_KEYS.LOGIN.COMMON.login_formButton_loginSubmit)} type="submit" size="full"/>
+                                    <Button
+                                        type="submit"
+                                        size="full"
+                                        disabled={isLoginLoading}
+                                    >
+                                        {isLoginLoading ? t(I18N_KEYS.LOGIN.COMMON.login_formButton_loginLoading) : t(I18N_KEYS.LOGIN.COMMON.login_formButton_loginSubmit)}
+                                    </Button>
                                 </div>
                             </form>
 

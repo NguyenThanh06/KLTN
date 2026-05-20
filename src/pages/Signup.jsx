@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
 import { useErrorHandler } from '../hooks/useErrorHandler';
@@ -11,7 +12,12 @@ import Button from "../components/Button";
 import { CiCircleMore, CiCircleCheck } from 'react-icons/ci';
 
 export default function Signup( { setGlobalModal, addHelperError, setHelperFocusState } ){
+    const { t, i18n } = useTranslation();
+    const navigate = useNavigate();
+    const { handleError } = useErrorHandler(setGlobalModal, addHelperError);
+
     const [ step, setStep ] = useState(1);
+    const [stepDirection, setStepDirection] = useState(1);
     const finalStep = 2;
     const [formData, setFormData] = useState({ 
         email: '', 
@@ -20,10 +26,62 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
         password: '',
     });
     const [verifyCode, setVerifyCode] = useState('');
-    const { t, i18n } = useTranslation();
-    const navigate = useNavigate();
-    const { handleError } = useErrorHandler(setGlobalModal, addHelperError);
 
+    const OTP_RESEND_SECONDS = 60;
+
+    const [verifyCodeCooldown, setVerifyCodeCooldown] = useState(0);
+    const [isNextStepLoading, setIsNextStepLoading] = useState(false);
+    const [isSignupLoading, setIsSignupLoading] = useState(false);
+    const [isVerifyAccountLoading, setIsVerifyAccountLoading] = useState(false);
+    const [isResendingVerifyCode, setIsResendingVerifyCode] = useState(false);
+
+    const verifyCodeCooldownRef = useRef(0);
+    const isResendingVerifyCodeRef = useRef(false);
+    const isVerifyAccountLoadingRef = useRef(false);
+
+
+    //-----------------------------Hàm linh tinh------------------------
+    const stepVariants = {
+        enter: (direction) => ({
+            x: direction > 0 ? 48 : -48,
+            opacity: 0,
+        }),
+        center: {
+            x: 0,
+            opacity: 1,
+        },
+        exit: (direction) => ({
+            x: direction > 0 ? -48 : 48,
+            opacity: 0,
+        }),
+    };
+
+    const getVerifyCodeResendText = (seconds = verifyCodeCooldown) => {
+        return seconds > 0
+            ? `${t(I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_resendVerifyCode)} (${seconds})`
+            : I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_resendVerifyCode;
+    };
+
+    const startVerifyCodeCooldown = () => {
+        verifyCodeCooldownRef.current = OTP_RESEND_SECONDS;
+        setVerifyCodeCooldown(OTP_RESEND_SECONDS);
+    };
+
+    const handleResendVerifyCodeWithCooldown = async () => {
+        if (verifyCodeCooldownRef.current > 0 || isResendingVerifyCodeRef.current) return;
+
+        try {
+            isResendingVerifyCodeRef.current = true;
+            setIsResendingVerifyCode(true);
+            await handleSendVerifyCode();
+            startVerifyCodeCooldown();
+        } finally {
+            isResendingVerifyCodeRef.current = false;
+            setIsResendingVerifyCode(false);
+        }
+    };
+    //-----------------------------HẾT hàm linh tinh----------------------
+    
 
     //-------------------------UseEffect----------------------
     useEffect(() => {
@@ -57,6 +115,43 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
         });
 
     }, [formData.email, formData.tenHienThi, formData.username, formData.password, verifyCode]);
+
+    useEffect(() => {
+        verifyCodeCooldownRef.current = verifyCodeCooldown;
+    }, [verifyCodeCooldown]);
+
+    useEffect(() => {
+        isResendingVerifyCodeRef.current = isResendingVerifyCode;
+    }, [isResendingVerifyCode]);
+
+    useEffect(() => {
+        isVerifyAccountLoadingRef.current = isVerifyAccountLoading;
+    }, [isVerifyAccountLoading]);
+
+    useEffect(() => {
+        if (verifyCodeCooldown <= 0) return;
+
+        const timer = setInterval(() => {
+            setVerifyCodeCooldown(prev => Math.max(prev - 1, 0));
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [verifyCodeCooldown]);
+
+    useEffect(() => {
+        setGlobalModal(prev => {
+            if (!prev.isOpen || prev.type !== 'input') return prev;
+            if (prev.inputProps?.name !== "verifyCode") return prev;
+
+            const nextInputOtherActionText = getVerifyCodeResendText();
+            if (prev.inputOtherActionText === nextInputOtherActionText) return prev;
+
+            return {
+                ...prev,
+                inputOtherActionText: nextInputOtherActionText,
+            };
+        });
+    }, [verifyCodeCooldown, i18n.language]);
 
     // -------------------------- Hàm ------------------------   
         //------------------------VERIFY ACCOUNT-------------------------
@@ -307,85 +402,115 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
 
         const handleFinalSignup = async (e) => {
             e.preventDefault();
-            //Chạy ktra input trước
-            const results = await Promise.all([
-                handleVerifyEmailSignUp(),
-                handleVerifyTenHienThiSignup(),
-                handleVerifyUsernameSignup(),
-                handleVerifyPasswordSignup(),
-            ]);
-            const isAllValid = results.every(result => result === true);
-            if (isAllValid) {
-                try {
-                    //await api.signup({ email: formData.email, tenHienThi: formData.tenHienThi, username: formData.username, password: formData.password });
-                    //Làm cho hắn mất cái form đăng ký đã nờ
-                    nextStep();
-                    //Chừ là verify tài khoản
-                    setGlobalModal({
-                        isOpen: true,
-                        type: "one-button",
-                        title: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalTitle_accountUnverified,
-                        description: [I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalDesc_accountUnverified, {email: formData.email}],
-                        primaryBtnText: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_sendVerifyCode,
-                        primaryBtnType: "submit",
-                        onPrimaryAction: async() => { //Gửi mã vô email lấy nơi formData
-                            await handleSendVerifyCode();
-                            setGlobalModal({
-                                isOpen: true,
-                                type: "input",
-                                title: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalTitle_enterVerifyCode,
-                                description: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalDesc_enterVerifyCode,
-                                primaryBtnText: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_verifyAccount,
-                                primaryBtnType: "submit",
-                                inputProps: {
-                                    id: "verifyCode",
-                                    name: "verifyCode",
-                                    placeholder: "123456",
-                                    value: verifyCode,
-                                    required: true,
-                                    errorEmpty: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_input_error_nullVerifyCode,
-                                    onChange: (e) => setVerifyCode(e.target.value),
-                                },
-                                onPrimaryAction: async() => { 
-                                    await handleVerifyAccount();
-                                },
-                                inputOtherActionText: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_resendVerifyCode,
-                                onInputOtherAction: async() => {
-                                    await handleSendVerifyCode();
-                                }
-                            });
-                            
-                        } 
-                    })
-                } catch (error) {
-                    addHelperError({
-                        id: Date.now(),
-                        code: I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError,
-                    });
+            if (isSignupLoading) return;
+            try {
+                setIsSignupLoading(true);
+                //Chạy ktra input trước
+                const results = await Promise.all([
+                    handleVerifyEmailSignUp(),
+                    handleVerifyTenHienThiSignup(),
+                    handleVerifyUsernameSignup(),
+                    handleVerifyPasswordSignup(),
+                ]);
+                const isAllValid = results.every(result => result === true);
+                if (isAllValid) {
+                    try {
+                        //await api.signup({ email: formData.email, tenHienThi: formData.tenHienThi, username: formData.username, password: formData.password });
+                        //Làm cho hắn mất cái form đăng ký đã nờ
+                        nextStep();
+                        //Chừ là verify tài khoản
+                        setGlobalModal({
+                            isOpen: true,
+                            type: "one-button",
+                            title: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalTitle_accountUnverified,
+                            description: [I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalDesc_accountUnverified, {email: formData.email}],
+                            primaryBtnText: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_sendVerifyCode,
+                            primaryBtnType: "submit",
+                            onPrimaryAction: async() => { //Gửi mã vô email lấy nơi formData
+                                await handleSendVerifyCode();
+                                startVerifyCodeCooldown();
+                                setGlobalModal({
+                                    isOpen: true,
+                                    type: "input",
+                                    title: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalTitle_enterVerifyCode,
+                                    description: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalDesc_enterVerifyCode,
+                                    primaryBtnText: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_verifyAccount,
+                                    primaryBtnType: "submit",
+                                    inputProps: {
+                                        id: "verifyCode",
+                                        name: "verifyCode",
+                                        placeholder: "123456",
+                                        value: verifyCode,
+                                        required: true,
+                                        errorEmpty: I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_input_error_nullVerifyCode,
+                                        onChange: (e) => setVerifyCode(e.target.value),
+                                    },
+                                    onPrimaryAction: async() => { 
+                                        if (isVerifyAccountLoadingRef.current) return;
+
+                                        try {
+                                            isVerifyAccountLoadingRef.current = true;
+                                            setIsVerifyAccountLoading(true);
+                                            await handleVerifyAccount();
+                                        } finally {
+                                            isVerifyAccountLoadingRef.current = false;
+                                            setIsVerifyAccountLoading(false);
+                                        }
+                                    },
+                                    inputOtherActionText: getVerifyCodeResendText(OTP_RESEND_SECONDS),
+                                    onInputOtherAction: handleResendVerifyCodeWithCooldown
+                                });
+                                
+                            } 
+                        })
+                    } catch (error) {
+                        addHelperError({
+                            id: Date.now(),
+                            code: I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError,
+                        });
+                    }
                 }
+                return;
+            } finally {
+                setIsSignupLoading(false);
             }
-            return;
         }
 
         //---------------------Hàm tào lao khác---------------------
-        const nextStep = () => setStep(prev => prev + 1);
-        const prevStep = () => setStep(prev => prev - 1);
+        const nextStep = () => {
+            setStepDirection(1);
+            setStep(prev => prev + 1);
+        };
+
+        const prevStep = () => {
+            setStepDirection(-1);
+            setStep(prev => prev - 1);
+        };
 
         const handleNextStep = async (e) =>{
             e.preventDefault();
+            if (isNextStepLoading) return;
             // Kiểm tra từng step
-            switch (step){
-                case 1: //Kiểm tra email có ok không rồi xem có trùng CSDL không?
-                    if(handleVerifyEmailSignUp()){
-                        nextStep();
-                    }
-                    break;
-                default:
-                    addHelperError({
-                        id: Date.now(),
-                        code: I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError, 
-                    });
+            try {
+                setIsNextStepLoading(true);
+
+                switch (step){
+                    case 1: //Kiểm tra email có ok không rồi xem có trùng CSDL không?
+                        if(handleVerifyEmailSignUp()){
+                            nextStep();
+                        }
+                        break;
+                    default:
+                        addHelperError({
+                            id: Date.now(),
+                            code: I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError, 
+                        });
+                }
+
+            } finally {
+                setIsNextStepLoading(false);
             }
+            
         }
 
         const handleUsernameChange = (e) => {
@@ -414,94 +539,108 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
 
                         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                             <form method="POST" onSubmit={ step != finalStep ? handleNextStep : handleFinalSignup} className="space-y-6">
+                                {step <= finalStep && (
+                                    <AnimatePresence mode="wait" custom={stepDirection}>
+                                        <motion.div
+                                            key={step}
+                                            custom={stepDirection}
+                                            variants={stepVariants}
+                                            initial="enter"
+                                            animate="center"
+                                            exit="exit"
+                                            transition={{ duration: 0.28, ease: "easeOut" }}
+                                            className="space-y-6"
+                                        >
+                                            {step === 1 && (
+                                                <Input 
+                                                    id="email" 
+                                                    name="email" 
+                                                    label= {t(I18N_KEYS.SIGNUP.COMMON.signup_formLabel_email)}
+                                                    value = {formData.email}
+                                                    type = "email" 
+                                                    placeholder="you@example.com" 
+                                                    required
+                                                    maxLength="100"
+                                                    errorEmpty= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_nullEmail)}
+                                                    errorType = {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_typeMismatchEmail)}
+                                                    errorTooLong= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_emailTooLong)}
+                                                    autoComplete="email"
+                                                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                                />
+                                            )}
 
-                                {/* Step 1 */}
-                                {step === 1 && (
-                                    <Input 
-                                        id="email" 
-                                        name="email" 
-                                        label= {t(I18N_KEYS.SIGNUP.COMMON.signup_formLabel_email)}
-                                        value = {formData.email}
-                                        type = "email" 
-                                        placeholder="you@example.com" 
-                                        required
-                                        maxLength="100"
-                                        errorEmpty= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_nullEmail)}
-                                        errorType = {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_typeMismatchEmail)}
-                                        errorTooLong= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_emailTooLong)}
-                                        autoComplete="email"
-                                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                    />
-                                )}
-                                
-                                {/* Step 2 */}
-                                {step === 2 && (
-                                    <>
-                                    <Input 
-                                        id="tenHienThi" 
-                                        name="tenHienThi" 
-                                        value= {formData.tenHienThi}
-                                        label= {t(I18N_KEYS.SIGNUP.COMMON.signup_formLabel_tenHienThi)}
-                                        optional
-                                        placeholder= {t(I18N_KEYS.SIGNUP.COMMON.signup_formPlaceholder_tenHienThi)}
-                                        errorTooLong= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_tenHienThiTooLong)}
-                                        maxLength="30"
-                                        onChange={(e) => setFormData({...formData, tenHienThi: e.target.value})}
-                                    />
+                                            {step === 2 && (
+                                                <>
+                                                <Input 
+                                                    id="tenHienThi" 
+                                                    name="tenHienThi" 
+                                                    value= {formData.tenHienThi}
+                                                    label= {t(I18N_KEYS.SIGNUP.COMMON.signup_formLabel_tenHienThi)}
+                                                    optional
+                                                    placeholder= {t(I18N_KEYS.SIGNUP.COMMON.signup_formPlaceholder_tenHienThi)}
+                                                    errorTooLong= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_tenHienThiTooLong)}
+                                                    maxLength="30"
+                                                    onChange={(e) => setFormData({...formData, tenHienThi: e.target.value})}
+                                                />
 
-                                    <Input 
-                                        id="username" 
-                                        name="username" 
-                                        value= {formData.username}
-                                        label= {t(I18N_KEYS.SIGNUP.COMMON.signup_formLabel_username)}
-                                        leftIcon= {<span className='text-text-shade-200'>@</span>}
-                                        placeholder= {t(I18N_KEYS.SIGNUP.COMMON.signup_formPlaceholder_username)}
-                                        helperText= {t(I18N_KEYS.SIGNUP.COMMON.signup_formHelperText_username)}
-                                        required
-                                        errorEmpty= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_nullUsername)}
-                                        errorPattern= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_usernameWrongPattern)}
-                                        errorTooLong= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_usernameTooLong)}
-                                        pattern="[a-z0-9_]+"
-                                        maxLength="20"
-                                        autoCapitalize="none"
-                                        autoCorrect="off"
-                                        onChange={handleUsernameChange}
-                                    />
+                                                <Input 
+                                                    id="username" 
+                                                    name="username" 
+                                                    value= {formData.username}
+                                                    label= {t(I18N_KEYS.SIGNUP.COMMON.signup_formLabel_username)}
+                                                    leftIcon= {<span className='text-text-shade-200'>@</span>}
+                                                    placeholder= {t(I18N_KEYS.SIGNUP.COMMON.signup_formPlaceholder_username)}
+                                                    helperText= {t(I18N_KEYS.SIGNUP.COMMON.signup_formHelperText_username)}
+                                                    required
+                                                    errorEmpty= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_nullUsername)}
+                                                    errorPattern= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_usernameWrongPattern)}
+                                                    errorTooLong= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_usernameTooLong)}
+                                                    pattern="[a-z0-9_]+"
+                                                    maxLength="20"
+                                                    autoCapitalize="none"
+                                                    autoCorrect="off"
+                                                    onChange={handleUsernameChange}
+                                                />
 
-                                    <Input 
-                                        id="password" 
-                                        name="password" 
-                                        value= {formData.password}
-                                        label= {t(I18N_KEYS.SIGNUP.COMMON.signup_formLabel_password)}
-                                        rightIcon={
-                                            formData.password.length === 0 ? null : ( // Nếu chưa nhập gì thì không hiện icon
-                                                formData.password.length < 6 ? (
-                                                    <span className="text-text-shade-200 font-bold text-xl"><CiCircleMore strokeWidth={1}/></span>
-                                                ) : (
-                                                    <span className="text-primary-500 font-bold text-xl"><CiCircleCheck strokeWidth={1}/></span>
-                                                )
-                                            )
-                                        }
-                                        placeholder="••••••••" 
-                                        helperText= {t(I18N_KEYS.SIGNUP.COMMON.signup_formHelperText_password)}
-                                        required
-                                        errorEmpty= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_nullPassword)}
-                                        errorTooShort= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_passwordTooShort)}
-                                        errorTooLong= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_passwordTooLong)}
-                                        type= "password"
-                                        maxLength = "32"
-                                        minlenght = "6"
-                                        onChange={(e) => setFormData({...formData, password: e.target.value})}
-                                    />
-                                    </>
-                                )}
+                                                <Input 
+                                                    id="password" 
+                                                    name="password" 
+                                                    value= {formData.password}
+                                                    label= {t(I18N_KEYS.SIGNUP.COMMON.signup_formLabel_password)}
+                                                    rightIcon={
+                                                        formData.password.length === 0 ? null : ( // Nếu chưa nhập gì thì không hiện icon
+                                                            formData.password.length < 6 ? (
+                                                                <span className="text-text-shade-200 font-bold text-xl"><CiCircleMore strokeWidth={1}/></span>
+                                                            ) : (
+                                                                <span className="text-primary-500 font-bold text-xl"><CiCircleCheck strokeWidth={1}/></span>
+                                                            )
+                                                        )
+                                                    }
+                                                    placeholder="••••••••" 
+                                                    helperText= {t(I18N_KEYS.SIGNUP.COMMON.signup_formHelperText_password)}
+                                                    required
+                                                    errorEmpty= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_nullPassword)}
+                                                    errorTooShort= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_passwordTooShort)}
+                                                    errorTooLong= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_passwordTooLong)}
+                                                    type= "password"
+                                                    maxLength = "32"
+                                                    minlenght = "6"
+                                                    onChange={(e) => setFormData({...formData, password: e.target.value})}
+                                                />
+                                                </>
+                                            )}
+                                        </motion.div>
+                                    </AnimatePresence>
+                                )}                              
                                 
                                 {step <= finalStep ? (
                                     <div className='flex justify-between gap-3 mt-6'>
                                         {/* Nút quay lại với step > 1 */}
                                         {step > 1 ? (
                                             <Button
-                                                variant='outline'
+                                                type="button"
+                                                variant="outline"
+                                                disabled={isNextStepLoading || isSignupLoading}
                                                 onClick={() => prevStep()}
                                             >
                                                 {t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_prevStep)}
@@ -512,10 +651,16 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
                                         
                                         {/* Nút Tiếp theo hoặc đăng ký luôn */}
                                         <Button
-                                            type= "submit"
+                                            type="submit"
+                                            disabled={isNextStepLoading || isSignupLoading}
                                         >
-                                            {step === finalStep ? t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_signupSubmit) : t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_nextStep)}
-                                        </Button>
+                                            {(isNextStepLoading || isSignupLoading)
+                                                ? t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_signupLoading)
+                                                : step === finalStep
+                                                    ? t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_signupSubmit)
+                                                    : t(I18N_KEYS.SIGNUP.COMMON.signup_formButton_nextStep)
+                                            }
+                                        </Button>   
                                     </div>
                                 )
                                 :

@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import PageContainer from '../components/PageContainer';
-import Input from "../components/Input";
-import Button from "../components/Button";
 import HeroSearchSection from '../components/HeroSearchSection';
 import PostSectionContainer from '../components/PostSectionContainer';
 import PostGrid from '../components/PostGrid';
