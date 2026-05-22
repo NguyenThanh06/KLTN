@@ -813,9 +813,9 @@ export default function PostCreate({
                                     onClearError={() => clearFieldError("visibility")}
                                     onChange={(visibility) => updatePostForm({ visibility })}
                                     options={[
-                                        { label: I18N_KEYS.POST_CREATE.COMMON.postCreate_formRadioLabel_hanCheHienThi_all, value: "all" },
-                                        { label: I18N_KEYS.POST_CREATE.COMMON.postCreate_formRadioLabel_hanCheHienThi_r18, value: "r18" },
-                                        { label: I18N_KEYS.POST_CREATE.COMMON.postCreate_formRadioLabel_hanCheHienThi_r18g, value: "r18g" },
+                                        { label: I18N_KEYS.POST_CREATE.COMMON.postCreate_formRadioLabel_hanCheHienThi_all, value: "1" },
+                                        { label: I18N_KEYS.POST_CREATE.COMMON.postCreate_formRadioLabel_hanCheHienThi_r18, value: "2" },
+                                        { label: I18N_KEYS.POST_CREATE.COMMON.postCreate_formRadioLabel_hanCheHienThi_r18g, value: "3" },
                                     ]}
                                 />
 
@@ -918,6 +918,8 @@ export default function PostCreate({
                                 previewImageUrl={previewImageUrl}
                                 previewVideoUrl={previewVideoUrl}
                                 isLoading={isPreviewLoading}
+                                dynamicWM={postForm.dynamicWatermark}
+                                watermarkText={`${user?.username || "preview"} · EyesOnly`}   
                             />
                         </div>
 

@@ -17,4 +17,8 @@ export const MOCK_POST_DATA_2 = {
     lstGanThe: ["pokemon", "anhdep"],
     lstKTEOFile: [MOCK_KTEOFILE_DATA_3],
     lstComment: [],
+
+    daThich: false,
+    daLuu: false,
+    daTheoDoiTacGia: false,
 };

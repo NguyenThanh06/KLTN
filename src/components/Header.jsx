@@ -61,7 +61,7 @@ export default function Header({variant="full"}){
     const languages = [
         { code: 'en', label: 'EN' },
         { code: 'vi', label: 'VI' },
-        { code: 'jp', label: 'JP' },
+        { code: 'ja', label: 'JP' },
         { code: 'es', label: 'ES' }
     ];
     //Đổi ngôn ngữ

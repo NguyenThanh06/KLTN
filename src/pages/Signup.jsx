@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
 import { useErrorHandler } from '../hooks/useErrorHandler';
-import { Link } from 'react-router-dom';
 import { useLocation, useNavigate, Link } from "react-router-dom";
 
 import PageContainer from '../components/PageContainer';   

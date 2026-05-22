@@ -19,6 +19,7 @@ import PostCreate from "./pages/PostCreate.jsx";
 
 import MascotHelper from "./components/MascotHelper";
 import DynamicModal from "./components/DynamicModal";
+import PostDetail from "./pages/PostDetail.jsx";
 
 function App() {
   const location = useLocation();
@@ -125,6 +126,18 @@ function App() {
                   />
                   <Route path="/post/create" element={
                     <PostCreate
+                      setGlobalModal = {setModalConfig}
+                      addHelperError = { (newErr) => setErrorStack(prev => [...prev, newErr])}
+                      setHelperFocusState = {setIsHelperFocusing}
+                      triggerMascotMood={triggerMascotMood}
+                      isUnder18={isUnder18}
+                      visitorIP={visitor.ip} 
+                      isAlertActive={isAlertActive}
+                      clearAlert={clearAlert}
+                    />} 
+                  />
+                  <Route path="/post/:postID" element={
+                    <PostDetail
                       setGlobalModal = {setModalConfig}
                       addHelperError = { (newErr) => setErrorStack(prev => [...prev, newErr])}
                       setHelperFocusState = {setIsHelperFocusing}

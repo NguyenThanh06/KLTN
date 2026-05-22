@@ -625,6 +625,12 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                                 } 
                             })
                             break;
+                        default:
+                            addHelperError({
+                                id: Date.now(),
+                                code: I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError,
+                            })
+                            break;
                     }
                 }
             } finally {

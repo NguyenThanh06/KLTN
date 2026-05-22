@@ -1,19 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { RiCheckboxMultipleBlankFill } from "react-icons/ri";
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import CatSentinel from './CatSentinel';
+
 
 
 import { MOCK_USER_DATA_1 } from '../data/User/mockUser1';
 import { MOCK_USER_DATA_3 } from '../data/User/mockUser3';
 
 const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, clearAlert }) => {
+  const navigate = useNavigate();
   const { postID, tieuDe, lstKTEOFile, hanCheHienThi, tacGia } = post;
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false); // Trạng thái video có trong vùng nhìn không
   const isMultiple = lstKTEOFile?.length > 1;
-  const isLocked = isUnder18 && hanCheHienThi === 1;
+  const isLocked = isUnder18 && (hanCheHienThi === 2 || hanCheHienThi === 3); //Bạn đg coi 2 là R-18 với 3 là R-18G
 
   //Thành bỏ đồ vô ok thì xóa cái đoạn ni, bạn làm tạm để có avatar với tên tác giả ơ
   const authorMap = {
@@ -91,9 +93,10 @@ const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, clearAle
 
   return (
     <>
-      <Link 
-          to= {`/post/${postID}`}
-          className="cursor-pointer group  flex flex-col w-full">
+      <div 
+          className="cursor-pointer group  flex flex-col w-full"
+          onClick={() => navigate(`/post/${postID}`)}
+      >
         <div className="relative w-full overflow-hidden rounded-xl bg-text-shade-900 shadow-xl ">
           <video
             ref={videoRef}
@@ -114,13 +117,23 @@ const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, clearAle
                       ${isLocked ? 'blur-2xl scale-95 select-none pointer-events-none' : ''} `}
           />
 
-          { isAlertActive && (
-            <CatSentinel
-                visitorIP={visitorIP}
-                isAlertActive={isAlertActive}
-                onCardResolved={clearAlert}
-                variant="card"
-            />
+          {isAlertActive && (
+              <div
+                  className="no-select absolute inset-0 z-20"
+                  onMouseDown={(event) => event.preventDefault()}
+                  onDragStart={(event) => event.preventDefault()}
+              >
+                  <div className="absolute inset-0 bg-main-text/70" />
+
+                  <div className="relative z-10 h-full w-full">
+                      <CatSentinel
+                          visitorIP={visitorIP}
+                          isAlertActive={isAlertActive}
+                          onCardResolved={clearAlert}
+                          variant="card"
+                      />
+                  </div>
+              </div>
           )}
           
           
@@ -145,16 +158,24 @@ const PostThumbnailCard = ({ post, isUnder18, isAlertActive, visitorIP, clearAle
           <h3 className="text-sm font-medium text-main-text truncate">
             {tieuDe}
           </h3>
-          <Link to={`/user?id=${tacGia}`} className="flex items-center gap-2 my-1 text-main-text cursor-pointer transition-colors">
+          <button
+              type="button"
+              className="flex items-center gap-2 my-1 text-main-text cursor-pointer transition-colors"
+              onClick={(event) => {
+                  event.stopPropagation();
+                  navigate(`/user?id=${tacGia}`);
+              }}
+          >
               <div className="shrink-0 w-8 h-8 bg-primary-200 rounded-full flex items-center justify-center">
                   <img src={thongTinTacGia.avatar} alt="AuthorAvatar" />
               </div>
-              <div className="grow min-w-0">
+
+              <div className="grow min-w-0 text-left">
                   <p className="font-ui text-sm">{thongTinTacGia.tenHienThi}</p>
               </div>
-          </Link>
+          </button>
         </div>
-      </Link>
+      </div>
 
 
     </>

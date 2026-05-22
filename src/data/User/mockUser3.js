@@ -6,7 +6,7 @@ export const MOCK_USER_DATA_3 = {
     ngayTaoTaiKhoan: "2026-05-13T14:30:00Z",
     tieuSu: "",
     avatar: "/defaultAvatar/default_avatar_2.svg",
-    daVoHieuHoa: true,
+    daVoHieuHoa: false,
     ngayVoHieuHoa: "2026-05-07T14:30:00Z",
     ngayDoiTenGanNhat: "2026-05-07T14:30:00Z",
     biKhoa: false,

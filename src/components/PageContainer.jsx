@@ -28,7 +28,7 @@ export default function PageContainer({ setHelperFocusState, children, headerTyp
             transition={{ duration: 0.8, ease: "easeInOut" }}
         >
             <div
-                className="relative isolate min-h-screen w-full bg-main-bg transition-colors duration-500 overflow-hidden"
+                className="relative isolate min-h-screen w-full bg-main-bg transition-colors duration-500 "
                 onFocusCapture={handleFocusChange}
                 onBlurCapture={handleFocusChange}
             >

@@ -1,9 +1,13 @@
 import React, { useEffect, useRef } from "react";
 
+import DynamicWatermarkOverlay from "./DynamicWatermarkOverlay";
+
 export default function ProtectionPreviewCanvas({
     selectedFile,
     previewImageUrl,
     previewVideoUrl,
+    dynamicWM = false,
+    watermarkText = "EyesOnly",
     isLoading = false,
 }) {
     const canvasRef = useRef(null);
@@ -35,21 +39,29 @@ export default function ProtectionPreviewCanvas({
             )}
 
             {selectedFile ? (
-                previewVideoUrl ? (
-                    <video
-                        src={previewVideoUrl}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="max-h-128 w-full rounded-3xl object-contain"
-                    />
-                ) : (
-                    <canvas
-                        ref={canvasRef}
-                        className="max-h-128 w-full rounded-3xl object-contain"
-                    />
-                )
+                <div className="flex max-h-128 w-full justify-center">
+                    <div className="relative inline-block max-h-128 max-w-full overflow-hidden rounded-3xl">
+                        {previewVideoUrl ? (
+                            <video
+                                src={previewVideoUrl}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                className="block max-h-128 max-w-full object-contain"
+                            />
+                        ) : (
+                            <canvas
+                                ref={canvasRef}
+                                className="block max-h-128 max-w-full object-contain"
+                            />
+                        )}
+
+                        {dynamicWM && (
+                            <DynamicWatermarkOverlay text={watermarkText} />
+                        )}
+                    </div>
+                </div>
             ) : (
                 <p className="font-ui text-sm text-text-shade-300">
                     Chưa có ảnh để xem trước.

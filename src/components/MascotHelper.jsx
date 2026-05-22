@@ -20,22 +20,26 @@ const MascotHelper = forwardRef(({ errorStack = [], isInputFocusing = false, onC
   //Làm cái set mood
   useImperativeHandle(ref, () => ({
     setMood: (mood, duration = 1000) => {
-      // Dọn dẹp timeout cũ nếu có để tránh chồng chéo
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      
-      const previousMood = currentMood;
-      setTempMoodActive(true); // Bật flag tạm dừng logic tự động
+
+      setTempMoodActive(true);
       setCurrentMood(mood);
-      
-      // Nếu là mood tích cực thì cho nhảy một cái cho vui
+
       if (mood === 'happy' || mood === 'surprised') {
         setIsJumping(true);
         setTimeout(() => setIsJumping(false), 500);
       }
 
       timeoutRef.current = setTimeout(() => {
-        setTempMoodActive(false); // Trả lại quyền điều khiển cho useEffect
-        // Logic tự động bên dưới sẽ tự đưa về mood đúng dựa trên errorStack
+        setTempMoodActive(false);
+
+        if (isInputFocusing) {
+          setCurrentMood('curious');
+        } else if (errorStack.length > 0) {
+          setCurrentMood('alert');
+        } else {
+          setCurrentMood('normal');
+        }
       }, duration);
     }
   }));

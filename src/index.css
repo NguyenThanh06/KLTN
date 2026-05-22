@@ -304,3 +304,85 @@
   isolation: isolate;
 }
 /* Hết phần chống leak */
+
+
+/* Hiệu ứng nhỏ cho các nút tương tác trong PostDetail */
+.interaction-pop {
+  transform: translateZ(0);
+  transition:
+    transform 160ms ease,
+    opacity 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.interaction-pop:hover {
+  transform: translateY(-1px);
+}
+
+.interaction-pop:active {
+  transform: scale(0.92);
+}
+
+.interaction-soft-bounce {
+  animation: interactionSoftBounce 320ms ease;
+}
+
+@keyframes interactionSoftBounce {
+  0% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.14);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+/* Chống bôi con mèo với mấy cái hình */
+.no-select,
+.no-select * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.no-select img,
+.no-select svg {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: auto;
+}
+
+
+/* Thủy ấn động riêng cho post */
+@keyframes dynamicWatermarkDrift {
+  0% {
+    transform: translate3d(-28px, -18px, 0) rotate(-18deg);
+  }
+
+  50% {
+    transform: translate3d(18px, 16px, 0) rotate(-18deg);
+  }
+
+  100% {
+    transform: translate3d(-28px, -18px, 0) rotate(-18deg);
+  }
+}
+
+.dynamic-watermark-overlay {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.dynamic-watermark-track {
+  animation: dynamicWatermarkDrift 18s ease-in-out infinite;
+}

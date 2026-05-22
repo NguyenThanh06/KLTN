@@ -8,16 +8,22 @@ export const MOCK_POST_DATA_1 = {
     tieuDe: "Gardevoir Ipsum is simply dummy",
     moTa: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the",
     ngayDang: "2026-05-13T14:30:00Z",
-    dynamicWM: false,
+    dynamicWM: true,
     tacGia: 3,
     luotXem: 12544,
     luotThich: 508,
     sanPhamAI: true,
     hanCheHienThi: 1, //tạm tạm 0 là k có, 1 là 18+ đi
-    choPhepComment: false,
+    choPhepComment: true,
     daXemXetBaoCao: true,
     congKhai: true,
     lstGanThe: ["gardevoir", "pokemon", "anhdep"],
+
+    //2 cái lst test test
     lstKTEOFile: [MOCK_KTEOFILE_DATA_1, MOCK_KTEOFILE_DATA_2],
     lstComment: [MOCK_COMMENT_DATA_1, MOCK_COMMENT_DATA_2],
+
+    daThich: false,
+    daLuu: false,
+    daTheoDoiTacGia: false,
 };
