@@ -1523,7 +1523,6 @@ export default function PostDetail({
                                         parentComment: comment,
                                     })}
                                     onNavigateUser={(accountID) => navigate(`/user?id=${accountID}`)}
-                                    language={i18n.language}
                                 />
 
                                 <button

@@ -18,7 +18,6 @@ export default function PostCommentPanel({
     replyCountByCommentID,
     hasMoreRepliesByCommentID,
     isFetchingRepliesByCommentID,
-    language = "vi",
 
     onFetchNextCommentPage,
     onToggleReplies,
@@ -103,7 +102,6 @@ export default function PostCommentPanel({
                                 replyCount={replyCountByCommentID?.[commentID] || 0}
                                 hasMoreReplies={Boolean(hasMoreRepliesByCommentID?.[commentID])}
                                 isFetchingReplies={Boolean(isFetchingRepliesByCommentID?.[commentID])}
-                                language={language}
 
                                 onNavigateUser={onNavigateUser}
                                 onToggleLike={onToggleCommentLike}

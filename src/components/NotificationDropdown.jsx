@@ -1,6 +1,5 @@
 import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
 
 import { I18N_KEYS } from "../i18n/key";
 import NotificationItem from "./NotificationItem";
@@ -13,59 +12,35 @@ const PAGE_SIZE = 6;
 const INITIAL_MOCK_NOTICES = [
     {
         id: "mock-notice-1",
-        type: "theoDoi",
-        noiDung: "Nguyễn Văn A, Lê B, ...",
-        thoiDiemThongBao: "12/4/2026",
+        loaiThongBao: "0",
+        noiDung: "Con khỉ tuyệt vời",
+        thoiDiemThongBao: "2026-05-13T14:30:00Z",
         daDoc: false,
-        link: "/login",
+        link: "/user/123",
     },
     {
         id: "mock-notice-2",
-        type: "cmt",
-        noiDung: "Bức tranh Huế ngày mưa",
-        thoiDiemThongBao: "12/4/2026",
+        loaiThongBao: "1",
+        noiDung: "Bức tranh Huế ngày mưa tầm tã buồn rười rượi",
+        thoiDiemThongBao: "2026-05-13T14:30:00Z",
         daDoc: true,
-        link: "/login",
+        link: "/post/123?comment=1",
     },
     {
         id: "mock-notice-3",
-        type: "cmtRep",
-        noiDung: "'Hôm qua tui ăn cục c...'",
-        thoiDiemThongBao: "12/4/2026",
+        loaiThongBao: "2",
+        noiDung: "Hôm qua tui ăn cục cơm cá mà ngon kinh khủng hồn vía.",
+        thoiDiemThongBao: "2026-05-13T14:30:00Z",
         daDoc: false,
-        link: "/login",
+        link: "/post/123?comment=2",
     },
     {
         id: "mock-notice-4",
-        type: "baoCao",
+        loaiThongBao: "3",
         noiDung: "Hình vẽ tầm bậy 123",
-        thoiDiemThongBao: "12/4/2026",
+        thoiDiemThongBao: "2026-05-13T14:30:00Z",
         daDoc: true,
-        link: "/login",
-    },
-    {
-        id: "mock-notice-5",
-        type: "baoCao",
-        noiDung: "Hình vẽ tầm bậy 123",
-        thoiDiemThongBao: "12/4/2026",
-        daDoc: true,
-        link: "/login",
-    },
-    {
-        id: "mock-notice-6",
-        type: "baoCao",
-        noiDung: "Hình vẽ tầm bậy 123",
-        thoiDiemThongBao: "12/4/2026",
-        daDoc: true,
-        link: "/login",
-    },
-    {
-        id: "mock-notice-7",
-        type: "baoCao",
-        noiDung: "Hình vẽ tầm bậy 123",
-        thoiDiemThongBao: "12/4/2026",
-        daDoc: true,
-        link: "/login",
+        link: "/post/123",
     },
 ];
 
@@ -88,7 +63,7 @@ export default function NotificationDropdown({
 
     const normalizeNotice = (notice, index) => ({
         id: notice.id ?? notice.thongBaoId ?? notice.notificationId ?? `${Date.now()}-${index}`,
-        type: notice.type,
+        loaiThongBao: notice.loaiThongBao,
         noiDung: notice.noiDung,
         thoiDiemThongBao: notice.thoiDiemThongBao,
         daDoc: notice.daDoc,
@@ -101,18 +76,18 @@ export default function NotificationDropdown({
         try {
             setIsLoadingMore(true);
 
-            // TODO: đổi URL này theo endpoint backend thật của bạn.
-            // Gợi ý response dễ dùng:
+            // TODO: trả về ds thông báo vs boolean báo xem còn sau nữa k, như dưới ni
             // {
-            //   content: [{ id, type, noiDung, thoiDiemThongBao, daDoc, link }],
-            //   last: false
+            //   content: [{ id, loaiThongBao, noiDung, thoiDiemThongBao, daDoc, link }],
+            //   hasMore: false
             // }
-            const response = await axios.get("http://localhost:8080/api/thong-bao", {
-                params: {
-                    page,
-                    size: PAGE_SIZE,
-                },
-            });
+
+            // const response = await api.getDsThongBao(), {
+            //     params: {
+            //         page,
+            //         size: PAGE_SIZE,
+            //     },
+            // });
 
             const responseData = response.data;
             const newNoticesRaw = responseData?.content ?? responseData?.data?.content ?? responseData?.data ?? [];
@@ -122,8 +97,8 @@ export default function NotificationDropdown({
             setPage((prevPage) => prevPage + 1);
 
             const isLastPage =
-                responseData?.last ??
-                responseData?.data?.last ??
+                responseData?.hasMore ??
+                responseData?.data?.hasMore ??
                 newNotices.length < PAGE_SIZE;
 
             if (isLastPage || newNotices.length === 0) {
@@ -152,7 +127,7 @@ export default function NotificationDropdown({
     return (
         <div className="relative">
             <button
-                type="button"
+                loaiThongBao="button"
                 onClick={onToggle}
                 className="relative w-10 h-10 rounded-full flex items-center justify-center transition-all active:scale-95 bg-transparent text-main-text hover:bg-bg-shade-100"
             >
@@ -164,7 +139,7 @@ export default function NotificationDropdown({
 
             {isOpen && (
                 <div
-                    className={`absolute right-0 mt-3 w-80 bg-main-bg shadow-2xl rounded-2xl overflow-hidden z-50 ${
+                    className={`absolute right-0 mt-3 w-[min(20rem,calc(100vw-4.5rem))] bg-main-bg shadow-2xl rounded-2xl overflow-hidden z-50 ${
                         isExiting ? "animate-popup-exit" : "animate-popup-appear"
                     }`}
                 >
@@ -177,7 +152,7 @@ export default function NotificationDropdown({
                     <div
                         ref={scrollBoxRef}
                         onScroll={handleScroll}
-                        className="max-h-96 overflow-y-auto custom-scrollbar px-2 py-2"
+                        className="max-h-[calc(100vh-15rem)] overflow-y-auto custom-scrollbar px-2 py-2"
                     >
                         {allNotices.length === 0 ? (
                             <div className="py-10 text-center text-xs text-main-text">
@@ -187,7 +162,7 @@ export default function NotificationDropdown({
                             allNotices.map((notice) => (
                                 <NotificationItem
                                     key={notice.id}
-                                    type={notice.type}
+                                    loaiThongBao={notice.loaiThongBao}
                                     noiDung={notice.noiDung}
                                     thoiDiemThongBao={notice.thoiDiemThongBao}
                                     daDoc={notice.daDoc}
@@ -198,13 +173,13 @@ export default function NotificationDropdown({
 
                         {isLoadingMore && (
                             <div className="py-3 text-center text-xs text-sub-text font-ui">
-                                Đang tải thêm thông báo...
+                                {t(I18N_KEYS.COMMON.common_headerDesc_loadingNotifications)}
                             </div>
                         )}
 
                         {!hasMore && allNotices.length > 0 && (
                             <div className="py-3 text-center text-xs text-sub-text font-ui">
-                                Bạn đã xem hết thông báo.
+                                {t(I18N_KEYS.COMMON.common_headerDesc_noMoreNotifications)}
                             </div>
                         )}
                     </div>

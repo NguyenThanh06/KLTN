@@ -222,18 +222,18 @@ const PostGrid = ({
   // Phần return
 
   return (
-    <div className="w-full py-8">
+    <div className="w-full max-w-full overflow-x-hidden py-8">
       {/* Lưới hiển thị danh sách bài đăng */}
       <div
         className={`
-          flex gap-4 sm:gap-6 xl:gap-20
+          grid w-full max-w-full grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 sm:gap-8 xl:gap-12
           transition-all duration-300 ease-out
           ${isSwitchingPage ? 'opacity-0' : 'opacity-100'}
           ${
             isSwitchingPage && pageDirection > 0
-              ? 'translate-x-4'
+              ? 'sm:translate-x-4'
               : isSwitchingPage && pageDirection < 0
-                ? '-translate-x-4'
+                ? 'sm:-translate-x-4'
                 : 'translate-x-0'
           }
         `}
@@ -241,7 +241,7 @@ const PostGrid = ({
         {columnWrapper.map((columnPosts, colIndex) => (
           <div 
             key={colIndex} 
-            className="flex flex-col flex-1 gap-6 sm:gap-10"
+            className="flex min-w-0 flex-col gap-6 sm:gap-10"
           >
             {columnPosts.map((post) => (
               <PostThumbnailCard 

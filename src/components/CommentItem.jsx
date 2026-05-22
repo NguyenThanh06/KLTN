@@ -46,55 +46,51 @@ const getRelativeTimeLocale = (language) => {
     return "vi-VN";
 };
 
-const getRelativeTime = (value, language = "vi") => {
-    if (!value) return t(I18N_KEYS.POST_DETAIL.COMMON.postDetail_commentItemRelativeTime_recent);
+const RELATIVE_TIME_UNITS = [
+    { unit: "year", milliseconds: 365 * 24 * 60 * 60 * 1000 },
+    { unit: "month", milliseconds: 30 * 24 * 60 * 60 * 1000 },
+    { unit: "week", milliseconds: 7 * 24 * 60 * 60 * 1000 },
+    { unit: "day", milliseconds: 24 * 60 * 60 * 1000 },
+    { unit: "hour", milliseconds: 60 * 60 * 1000 },
+    { unit: "minute", milliseconds: 60 * 1000 },
+];
+
+const getRelativeTimeInfo = (value) => {
+    if (!value) {
+        return {
+            type: "recent",
+            key: I18N_KEYS.POST_DETAIL.COMMON.postDetail_commentItemRelativeTime_recent,
+        };
+    }
 
     const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return {
+            type: "recent",
+            key: I18N_KEYS.POST_DETAIL.COMMON.postDetail_commentItemRelativeTime_recent,
+        };
+    }
+
     const diff = date.getTime() - Date.now();
-
-    if (Number.isNaN(date.getTime())) return t(I18N_KEYS.POST_DETAIL.COMMON.postDetail_commentItemRelativeTime_recent);
-
     const absDiff = Math.abs(diff);
 
-    const minute = 60 * 1000;
-    const hour = 60 * minute;
-    const day = 24 * hour;
-    const week = 7 * day;
-    const month = 30 * day;
-    const year = 365 * day;
-
-    const formatter = new Intl.RelativeTimeFormat(
-        getRelativeTimeLocale(language),
-        {
-            numeric: "auto",
-        }
+    const matchedUnit = RELATIVE_TIME_UNITS.find(
+        (item) => absDiff >= item.milliseconds
     );
 
-    if (absDiff < minute) {
-        return language?.startsWith("vi") ? t(I18N_KEYS.POST_DETAIL.COMMON.postDetail_commentItemRelativeTime_recent) : formatter.format(0, "second");
+    if (!matchedUnit) {
+        return {
+            type: "recent",
+            key: I18N_KEYS.POST_DETAIL.COMMON.postDetail_commentItemRelativeTime_recent,
+        };
     }
 
-    if (absDiff < hour) {
-        return formatter.format(Math.round(diff / minute), "minute");
-    }
-
-    if (absDiff < day) {
-        return formatter.format(Math.round(diff / hour), "hour");
-    }
-
-    if (absDiff < week) {
-        return formatter.format(Math.round(diff / day), "day");
-    }
-
-    if (absDiff < month) {
-        return formatter.format(Math.round(diff / week), "week");
-    }
-
-    if (absDiff < year) {
-        return formatter.format(Math.round(diff / month), "month");
-    }
-
-    return formatter.format(Math.round(diff / year), "year");
+    return {
+        type: "relative",
+        value: Math.round(diff / matchedUnit.milliseconds),
+        unit: matchedUnit.unit,
+    };
 };
 
 export default function CommentItem({
@@ -109,7 +105,6 @@ export default function CommentItem({
     replyCount = 0,
     hasMoreReplies = false,
     isFetchingReplies = false,
-    language = "vi",
 
     onNavigateUser,
     onToggleLike,
@@ -120,6 +115,17 @@ export default function CommentItem({
     onFetchNextReplyPage,
 }) {
     const { t, i18n } = useTranslation();
+    const commentTimeValue =
+        comment.thoiGianDang || comment.ngayTao || comment.createdAt;
+
+    const relativeTimeInfo = getRelativeTimeInfo(commentTimeValue);
+
+    const displayRelativeTime =
+        relativeTimeInfo.type === "recent"
+            ? t(relativeTimeInfo.key)
+            : new Intl.RelativeTimeFormat(i18n.resolvedLanguage || i18n.language, {
+                numeric: "auto",
+            }).format(relativeTimeInfo.value, relativeTimeInfo.unit);
 
     const isChild = level > 0;
 
@@ -180,10 +186,7 @@ export default function CommentItem({
                             </div>
 
                             <span className="shrink-0 pt-0.5 text-xs text-text-shade-400">
-                                {getRelativeTime(
-                                    comment.thoiGianDang || comment.ngayTao || comment.createdAt,
-                                    language
-                                )}
+                                {displayRelativeTime}
                             </span>
                         </div>
 

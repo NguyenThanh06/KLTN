@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
 import { motion } from "framer-motion";
@@ -89,7 +90,6 @@ export default function CommentComposerModal({
     if (!isOpen) return null;
 
     const insertTextAtCursor = (text) => {
-        text = text + ". "
         const textarea = textareaRef.current;
 
         if (!textarea) {
@@ -151,15 +151,18 @@ export default function CommentComposerModal({
         }
     };
 
-    return (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-main-text/30 px-3 pb-28 pt-6 backdrop-blur-sm sm:px-4 sm:py-6">
-            <div className="flex min-h-full items-start justify-center sm:items-center">
+    if (typeof document === "undefined") return null;
+
+
+    return createPortal(
+        <div className="fixed inset-0 z-50 overflow-y-auto overscroll-contain bg-main-text/30 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-6">
+            <div className="flex min-h-full items-start justify-center pb-24 sm:items-center sm:pb-0">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.96, y: 10 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.96, y: 10 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="relative my-auto flex max-h-[calc(100dvh-2rem)] w-full max-w-4xl flex-col overflow-hidden rounded-4xl bg-main-bg p-4 shadow-xl sm:max-h-[calc(100dvh-3rem)] sm:p-6"
+                    className="relative flex max-h-[calc(100dvh-7rem)] w-full max-w-4xl flex-col overflow-hidden rounded-4xl bg-main-bg p-4 shadow-xl sm:max-h-[calc(100dvh-3rem)] sm:p-6"
                 >
                     <button
                         type="button"
@@ -274,6 +277,7 @@ export default function CommentComposerModal({
                     </div>
                 </motion.div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

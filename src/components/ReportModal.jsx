@@ -196,7 +196,7 @@ export default function ReportModal({
                                             onClick={() => setIsReasonDropdownOpen((prev) => !prev)}
                                         >
                                             <span className={reason ? "text-main-text" : "text-text-shade-400"}>
-                                                {reason ? getReasonLabel(reason) : t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalReasonLable_step1_chooseReason)}
+                                                {reason ? t(getReasonLabel(reason)) : t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalReasonLable_step1_chooseReason)}
                                             </span>
 
                                             <ChevronDown

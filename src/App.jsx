@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigationType } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "./i18n/key.js";
@@ -23,6 +23,22 @@ import PostDetail from "./pages/PostDetail.jsx";
 
 function App() {
   const location = useLocation();
+  const navigationType = useNavigationType();
+
+  const handleExitComplete = () => {
+      if (navigationType === "POP") {
+          return;
+      }
+
+      requestAnimationFrame(() => {
+          window.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: "auto",
+          });
+      });
+  };
+  
   const visitor = useVisitorInfo(); // Lấy IP và Path hiện tại
   const { isAlertActive, isTabBlurred, clearAlert } = useSecurity(); // Quản lý trạng thái báo động
   const currentAlpha = (isAlertActive || isTabBlurred) ? 0.08 : 0.04; //Quản lý cái độ mờ của thủy ấn động
@@ -95,7 +111,7 @@ function App() {
   return (
     <AuthProvider>
         <div className="antialiased">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" onExitComplete={handleExitComplete}>
                 <Routes location={location} key={location.pathname}>
                   <Route path="/login" element={
                     <Login

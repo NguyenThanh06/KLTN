@@ -95,25 +95,25 @@ const MascotHelper = forwardRef(({ errorStack = [], isInputFocusing = false, onC
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-100 flex flex-col items-end pointer-events-none">
+    <div className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 lg:bottom-6 lg:right-6 z-100 flex flex-col items-end pointer-events-none">
         {/* Cột bong bóng lỗi */}
-        <div className="flex flex-col-reverse gap-3 mb-4 items-end">
+        <div className="flex flex-col-reverse gap-2 sm:gap-3 mb-2 sm:mb-3 lg:mb-4 items-end">
         {errorStack.map((err) => (
             <div 
             key={err.id} 
             onClick={() => onClearError(err.id)} 
-            className="group pointer-events-auto cursor-pointer animate-popup-appear-and-float bg-accent-200 text-main-text px-5 py-3 rounded-4xl border-2 border-accent shadow-[4px_4px_0px_0px] shadow-accent max-w-70 relative transition-all hover:scale-105 active:scale-95"
+            className="group pointer-events-auto cursor-pointer animate-popup-appear-and-float bg-accent-200 text-main-text px-3 py-2 sm:px-4 sm:py-2.5 lg:px-5 lg:py-3 rounded-3xl lg:rounded-4xl border-2 border-accent shadow-[3px_3px_0px_0px] lg:shadow-[4px_4px_0px_0px] shadow-accent max-w-[min(16rem,calc(100vw-5rem))] sm:max-w-64 lg:max-w-70 relative transition-all hover:scale-105 active:scale-95"
             >
               {/* Nút X đóng bóng thoại */}
-              <div className="absolute -top-2 -right-1 w-6 h-6 bg-accent border-2 border-accent text-accent-50 rounded-full flex items-center justify-center text-[10px] font-bold shadow-[2px_2px_0px_0px] shadow-accent-700 dark:shadow-accent-300 transition-transform group-hover:rotate-12">
+              <div className="absolute -top-1.5 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-accent border-2 border-accent text-accent-50 rounded-full flex items-center justify-center text-[9px] sm:text-[10px] font-bold shadow-[2px_2px_0px_0px] shadow-accent-700 dark:shadow-accent-300 transition-transform group-hover:rotate-12">
                   ✕
               </div>
 
               {/* Mũi tên trỏ xuống */}
-              <div className="absolute -bottom-3 right-8 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-12 border-accent"></div>
+              <div className="absolute -bottom-2 right-6 sm:-bottom-3 sm:right-8 w-0 h-0 border-l-6 border-l-transparent border-r-6 border-r-transparent border-t-8 sm:border-l-8 sm:border-r-8 sm:border-t-12 border-accent"></div>
               
               {/* Nội dung lỗi */}
-              <p className="font-body text-xs italic leading-relaxed wrap-break-word pr-2">
+              <p className="font-body text-[11px] sm:text-xs italic leading-snug sm:leading-relaxed wrap-break-word pr-1 sm:pr-2">
                   {Array.isArray(err.code) 
                       ? t(err.code[0], { ...err.code[1], defaultValue: t(I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError) })
                       : t(`${err.code}`, { defaultValue: t(I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError) })
@@ -131,7 +131,7 @@ const MascotHelper = forwardRef(({ errorStack = [], isInputFocusing = false, onC
         <img 
           src={mascotImages[currentMood]} 
           alt="Mascot"
-          className="h-24 w-24 object-contain"
+          className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 object-contain"
         />
       </div>
     </div>
