@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
 import { useAuth } from '../context/AuthContext';
+import { saveSearchHistory } from "../utils/searchHistory";
 
 
 import { TbPhotoQuestion, TbLogout, TbLogin } from "react-icons/tb";
@@ -24,6 +25,21 @@ export default function Header({variant="full"}){
     const [isUserMenuExiting, setIsUserMenuExiting] = useState(false);
     const [showLanguageMenu, setShowLanguageMenu] = useState(false);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+    const [headerSearchQuery, setheaderSearchQuery] = useState('');
+
+    const handleHeaderSearchSubmit = (e) => {
+        e.preventDefault();
+        const trimmedKeyword = headerSearchQuery.trim();
+        if (!trimmedKeyword) return;
+        
+        saveSearchHistory({
+            keyword: trimmedKeyword,
+            mode: "post",
+        });
+
+        navigate(`/search?mode=post&keyword=${encodeURIComponent(trimmedKeyword)}&page=1&pageSize=18&postSearchType=all&includeAi=true&sort=newest`);
+    };
 
     //Xử lý cái logout cho đẹp hơn
     const handleLogout = async () => {
@@ -258,20 +274,26 @@ export default function Header({variant="full"}){
                 )}
             </div>
 
-            {/* Phần chỉ hiện ở variant full (thanh tìm kiếm, user, nút đăng post đồ rứa) */}
+            
                 {/* Phần tìm kiếm */}
             {variant === "full" && (
                 <div className="flex items-center w-full lg:w-1/3 lg:px-4 lg:py-2">
-                    <Input
-                        type="search"
-                        leftIcon={
-                            <span className="text-text-shade-200 font-bold text-xl">
-                                <GoSearch strokeWidth={1} />
-                            </span>
-                        }
-                        placeholder={t(I18N_KEYS.COMMON.common_headerPlaceholder_search)}
-                        className="w-full"
-                    />
+                    <form 
+                        onSubmit={handleHeaderSearchSubmit}
+                    >
+                        <Input
+                            value={headerSearchQuery}
+                            onChange={(e) => setheaderSearchQuery(e.target.value)}
+                            type="search"
+                            leftIcon={
+                                <span className="text-text-shade-200 font-bold text-xl">
+                                    <GoSearch strokeWidth={1} />
+                                </span>
+                            }
+                            placeholder={t(I18N_KEYS.COMMON.common_headerPlaceholder_search)}
+                            className="w-full"
+                        />
+                    </form>
                 </div>
             )}
 

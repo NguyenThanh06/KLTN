@@ -7,7 +7,8 @@ export const useErrorHandler = (setGlobalModal, addHelperError) => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const handleError = useCallback((errorResponse) => {
-    const { status, code } = errorResponse;
+    const safeErrorResponse = errorResponse || {};
+    const { status, code } = safeErrorResponse;
 
     // A. XỬ LÝ TOÀN CỤC (Tự làm luôn)
       // 401: Chưa đăng nhập hoặc token hết hạn.

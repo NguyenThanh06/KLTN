@@ -121,7 +121,8 @@ export default function Input({
                     }}
                     placeholder={Array.isArray(placeholder) ? t(...placeholder) : t(placeholder)}
                     className={`
-                        [input::-webkit-search-cancel-button]:appearance-none [input::-webkit-search-decoration]:appearance-none
+                        [&::-webkit-search-cancel-button]:appearance-none
+                        [&::-webkit-search-decoration]:appearance-none
                         block w-full rounded-xl bg-bg-shade-50 py-1.5 text-base text-text-shade-900 
                         outline-1 -outline-offset-1 outline-bg-shade-300 
                         placeholder:text-text-shade-200 

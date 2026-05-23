@@ -4,5 +4,5 @@ export const MOCK_COMMENT_DATA_1 = {
     noiDung: "Alo úm ba la xì bùa.",
     thoiGianDang: "2026-05-03T14:30:00Z",
     commentCha: null,
-    lstThichComment: [1, 2]
+    lstThichComment: [1, 2],
 };

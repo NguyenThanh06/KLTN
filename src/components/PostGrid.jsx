@@ -17,11 +17,13 @@ const PostGrid = ({
   currentPage = 1,
   totalPages = 1,
   onPageChange,
+  scrollOnPageChange = true,
 }) => {
   
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const loaderRef = useRef(null);
+  const gridContainerRef = useRef(null);
 
   const [columnCount, setColumnCount] = useState(3);
   const [displayPosts, setDisplayPosts] = useState(posts);
@@ -153,6 +155,19 @@ const PostGrid = ({
     return items;
   }, [showPagination, totalPages, currentPage]);
 
+  const scrollToGridTop = () => {
+    if (!scrollOnPageChange) return;
+
+    window.requestAnimationFrame(() => {
+      const top = gridContainerRef.current?.getBoundingClientRect().top || 0;
+
+      window.scrollTo({
+        top: window.scrollY + top - 96,
+        behavior: "smooth",
+      });
+    });
+  };
+
   const handleChangePage = (nextPage) => {
     if (!onPageChange) return;
     if (nextPage < 1 || nextPage > totalPages) return;
@@ -160,6 +175,7 @@ const PostGrid = ({
 
     setPageDirection(nextPage > currentPage ? 1 : -1);
     onPageChange(nextPage);
+    scrollToGridTop();
   };
 
   // CƠ CHẾ INTERSECTION OBSERVER BẮT ĐÁY GRID
@@ -222,7 +238,7 @@ const PostGrid = ({
   // Phần return
 
   return (
-    <div className="w-full max-w-full overflow-x-hidden py-8">
+    <div ref={gridContainerRef} className="w-full max-w-full overflow-x-hidden py-8">
       {/* Lưới hiển thị danh sách bài đăng */}
       <div
         className={`

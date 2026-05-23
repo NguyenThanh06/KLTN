@@ -127,7 +127,7 @@ export default function NotificationDropdown({
     return (
         <div className="relative">
             <button
-                loaiThongBao="button"
+                type="button"
                 onClick={onToggle}
                 className="relative w-10 h-10 rounded-full flex items-center justify-center transition-all active:scale-95 bg-transparent text-main-text hover:bg-bg-shade-100"
             >

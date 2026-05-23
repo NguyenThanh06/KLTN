@@ -16,10 +16,11 @@ import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Home from "./pages/Home.jsx";
 import PostCreate from "./pages/PostCreate.jsx";
+import PostDetail from "./pages/PostDetail.jsx";
+import MixedSearch from "./pages/MixedSearch";
 
 import MascotHelper from "./components/MascotHelper";
 import DynamicModal from "./components/DynamicModal";
-import PostDetail from "./pages/PostDetail.jsx";
 
 function App() {
   const location = useLocation();
@@ -164,6 +165,18 @@ function App() {
                       clearAlert={clearAlert}
                     />} 
                   />
+                  <Route path="/search" element={
+                    <MixedSearch
+                      setGlobalModal = {setModalConfig}
+                      addHelperError = { (newErr) => setErrorStack(prev => [...prev, newErr])}
+                      setHelperFocusState = {setIsHelperFocusing}
+                      triggerMascotMood={triggerMascotMood}
+                      isUnder18={isUnder18}
+                      visitorIP={visitor.ip} 
+                      isAlertActive={isAlertActive}
+                      clearAlert={clearAlert}
+                    />} 
+                  /> 
                 </Routes>
             </AnimatePresence>
             

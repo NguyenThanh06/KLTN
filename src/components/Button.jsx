@@ -11,7 +11,8 @@ export default function Button({
         // Color Variants
         primary: "bg-primary-500 text-main-text hover:bg-primary-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500",
         outline: "border-1 border text-main-text border-text-shade-100 bg-bg-shade-50 hover:bg-bg-shade-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bg-shade-50",
-        secondary: "bg-secondary-500 text-main-text hover:bg-secondary-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-500",
+        secondary: "bg-secondary-600 text-main-text hover:bg-secondary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-600",
+        accent: "bg-accent-500 text-main-text hover:bg-accent-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500",
         none: "text-main-text hover:bg-bg-shade-100",
 
         // Disabled Variant

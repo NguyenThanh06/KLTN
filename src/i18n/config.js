@@ -78,6 +78,7 @@ i18n
                     
                     //Input things
                     common_input_label_optional: "(không bắt buộc)",
+                    common_select_option_chooseOne: "Chọn blah",
 
                     //Age Status Modal
                     common_ageStatus_modalTitle: "Ây yo hỏi tuổi cái blah",
@@ -447,6 +448,7 @@ i18n
                         postDetail_handleReport_reportModalButton_next: "Tiếp tục",
                         postDetail_handleReport_reportModalButton_loading: "Đang gửi...blah",
                         postDetail_handleReport_reportModalButton_send: "Chia sẻ suy nghĩ blah",
+                        postDetail_handleReport_helper_error_daXemXetBaoCao: "Post ni quản trị viên ok rồi, khỏi báo cáo blah",
                         postDetail_handleReport_helper_error_nullMucBaoCao: "Mục báo cáo răng trống ri blah",
                         postDetail_handleReport_helper_error_nullNoiDung: "Nội dung bị để trống blah",
                         postDetail_handleReport_helper_error_typeMismatchMucBaoCao: "Mục báo cáo tầm bậy blah",
@@ -489,6 +491,40 @@ i18n
                         postDetail_handleCreateComment_helper_error_nullNoiDung: "Nội dung trống tề blah",
                         postDetail_handleCreateComment_helper_error_noiDungTooLong: "Nội dung dài vãi blah",
                         postDetail_handleCreateComment_helper_error_commentNotAllowed: "Tác giả post mới khóa bình luận rồi blah",
+
+
+                    // Mixed Search
+                        // Common
+                        mixedSearch_searchBarPlaceholder_postMode: "Nhập từ khóa hay thẻ để tìm kiếm tác phẩm... blah",
+                        mixedSearch_searchBarPlaceholder_accMode: "Nhập tên hoặc username để tìm kiếm người dùng... blah",
+                        mixedSearch_searchBarSwitchLabel_accMode: "Tìm người dùng",
+                        mixedSearch_searchBarSwitchLabel_postMode: "Tìm tác phẩm",
+                        mixedSearch_searchHistoryDropdownTitle: "Lịch sử tìm kiếm gần đây blah",
+                        mixedSearch_searchHistoryDropdownButton_deleteAll: "Xoá tất cả",
+                        mixedSearch_searchHistoryDropdownLabel_postMode: "Tác phẩm",
+                        mixedSearch_searchHistoryDropdownLabel_accMode: "Người dùng",
+                        mixedSearch_searchBarButton_search: "Tìm kiếm",
+                        mixedSearch_searchFilterLabel_compareType: "Tìm theo:",
+                        mixedSearch_searchFilterSelect_compareType_tagRelative: "Thẻ (tương đối)",
+                        mixedSearch_searchFilterSelect_compareType_tagExact: "Thẻ (tuyệt đối)",
+                        mixedSearch_searchFilterSelect_compareType_titleDesc: "Tiêu đề và mô tả",
+                        mixedSearch_searchFilterSelect_compareType_all: "Thẻ, tiêu đề, mô tả",
+                        mixedSearch_searchFilterLabel_ai: "Hiển thị tác phẩm do AI tạo sinh blah",
+                        mixedSearch_searchFilterSelect_ai_include: "Đang hiển thị blah",
+                        mixedSearch_searchFilterSelect_ai_exclude: "Đang ẩn blah",
+                        mixedSearch_searchFilterLabel_sort: "Sắp xếp theo:",
+                        mixedSearch_searchFilterSelect_sort_newest: "Mới nhất blah",
+                        mixedSearch_searchFilterSelect_sort_oldest: "Cũ nhất blah",
+                        mixedSearch_searchFilterSelect_sort_mostViewed: "Xem nhiều nhất blah",
+                        mixedSearch_searchResultSummaryTitle_postMode_withoutKey: "Tác phẩm tìm được blah",
+                        mixedSearch_searchResultSummaryTitle_postMode_withKey: "Tác phẩm tìm được với <keyword>'{{keyword}}'</keyword> blah",
+                        mixedSearch_searchResultSummaryTitle_accMode_withoutKey: "Người dùng tìm được blah",
+                        mixedSearch_searchResultSummaryTitle_accMode_withKey: "Người dùng tìm được với <keyword>'{{keyword}}'</keyword> blah",
+                        mixedSearch_searchHintStateText_postMode_text1: "Nhập từ khóa hoặc thẻ vào thanh tìm kiếm blah",
+                        mixedSearch_searchHintStateText_accMode_text1: "Nhập tên hoặc username vào thanh tìm kiếm blah",
+                        mixedSearch_searchHintStateText_accMode_text2: "Mình sẽ hiển thị kết quả phù hợp sau khi bạn bấm tìm kiếm. blah",
+                        mixedSearch_searchEmptyStateText_text1: "Không có kết quả blah",
+                        mixedSearch_searchEmptyStateText_text2: "Thử đổi từ khóa hoặc bộ lọc nhẹ hơn nha. blah",
 
 
 

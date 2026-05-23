@@ -355,6 +355,17 @@ export default function PostDetail({
         !revealedRestrictedPostIDs.has(String(post.postID))
     );
 
+    const isReportReviewed = (value) => {
+        if (value === true || value === "true") return true;
+        if (value === false || value === "false") return false;
+        return true;
+    };
+
+    const shouldShowReportOption = post
+        ? !isReportReviewed(post.daXemXetBaoCao)
+        : false;
+
+
     const handleCloseGlobalModal = useCallback(() => {
         setGlobalModal?.((prev) => ({
             ...prev,
@@ -818,6 +829,10 @@ export default function PostDetail({
             return;
         }
 
+        if (!shouldShowReportOption){
+            return;
+        }
+
         try {
             // TODO: gọi backend kiểm tra người dùng đã từng báo cáo post này chưa.
             // const hasReportedBefore = await api.getIsPostReported({idAccount: currentUserID, idPost: post.postID})
@@ -879,6 +894,13 @@ export default function PostDetail({
 
             if (result && !result.handled) {
                 switch (result.code) {
+                    //Kịch bản post đã được xem xét báo cáo rồi
+                    case "POST_DAXEMXETBAOCAO":
+                        addHelperError({
+                            id: Date.now(),
+                            code: I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_helper_error_daXemXetBaoCao,
+                        })
+                        break;
                     //Kịch bản mục báo cáo rỗng
                     case "MUCBAOCAO_NULL":
                         addHelperError({
@@ -1482,7 +1504,7 @@ export default function PostDetail({
                                     isCurrentUserAuthor={isCurrentUserAuthor}
                                     onEditPost={() => navigate(`/post/edit/${post.postID}`)}
                                     onTagClick={(tag) => {
-                                        navigate(`/post/search?key=${encodeURIComponent(tag)}&keyCompareType=tagCompletly`);
+                                        navigate(`/search?mode=post&keyword=${encodeURIComponent(tag)}&page=1&pageSize=18&postSearchType=tag_exact&includeAi=true&sort=newest`);
                                     }}
                                 />
 
@@ -1492,6 +1514,7 @@ export default function PostDetail({
                                     isShareDone={isShareDone}
                                     isLikeLoading={isLikeLoading}
                                     isSaveLoading={isSaveLoading}
+                                    shouldShowReportOption = {shouldShowReportOption}
                                     onToggleLike={handleTogglePostLike}
                                     onToggleSave={handleTogglePostSave}
                                     onShare={handleSharePost}

@@ -11,4 +11,5 @@ export const MOCK_USER_DATA_1 = {
     ngayDoiTenGanNhat: "2026-05-07T14:30:00Z",
     biKhoa: false,
     daXacThuc: false,
+    daTheoDoi: true,
 };
