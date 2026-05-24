@@ -43,6 +43,8 @@ export default function TagInput({
     setTags,
     maxTags = 10,
     required = true,
+    disabled = false,
+    helperText = "",
 
     errorType = "",
     errorMessage = "",
@@ -85,6 +87,7 @@ export default function TagInput({
     };
 
     const addDraftTag = () => {
+        if (disabled) return;
         if (draftTag.trim().length > 50) {
             setLocalErrorType("tooLong");
             setDraftTag("");
@@ -121,6 +124,7 @@ export default function TagInput({
     };
 
     const handleDraftKeyDown = (e) => {
+        if (disabled) return;
         if (e.key === "," || e.key === " " || e.key === "Enter") {
             e.preventDefault();
             addDraftTag();
@@ -128,6 +132,7 @@ export default function TagInput({
     };
 
     const handleDraftChange = (e) => {
+        if (disabled) return;
         const rawValue = e.target.value;
         const hasSeparator = /[,\s]/.test(rawValue);
 
@@ -204,6 +209,7 @@ export default function TagInput({
     };
 
     const handleTagChange = (index, value) => {
+        if (disabled) return;
         if (value.length > 50) {
             setLocalErrorType("tooLong");
             return;
@@ -239,6 +245,7 @@ export default function TagInput({
     };
 
     const removeTag = (index) => {
+        if (disabled) return;
         setTags((prev) => prev.filter((_, currentIndex) => currentIndex !== index));
         clearError();
     };
@@ -266,18 +273,22 @@ export default function TagInput({
                     focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-primary-600
                     transition-all
                     ${displayedError ? "outline-accent-500" : ""}
+                    ${disabled ? "cursor-not-allowed bg-bg-shade-100 opacity-70": ""}
                 `}
             >
                 <div className="flex flex-wrap items-center gap-2 pr-12">
                     {tags.map((tag, index) => (
                         <div
                             key={`${tag}-${index}`}
-                            className="inline-flex items-center gap-1 rounded-full bg-accent-200 px-3 py-1 text-xs font-ui font-semibold text-main-text"
+                            className={`inline-flex items-center gap-1 rounded-full  px-3 py-1 text-xs font-ui font-semibold text-main-text
+                                        ${disabled ? "bg-bg-shade-200" : "bg-accent-200"}
+                            `}
                         >
-                            <span className="text-accent-500">#</span>
+                            <span className={ disabled ? "text-text-shade-400" : "text-accent-500"}>#</span>
 
                             <input
                                 value={tag}
+                                disabled = {disabled}
                                 onChange={(e) => handleTagChange(index, e.target.value)}
                                 onKeyDown={(e) => {
                                     if (e.key === "," || e.key === " " || e.key === "Enter") {
@@ -285,7 +296,11 @@ export default function TagInput({
                                         e.currentTarget.blur();
                                     }
                                 }}
-                                className="w-[7ch] max-w-32 bg-transparent outline-none font-ui text-xs font-semibold text-main-text"
+                                className="w-[7ch] max-w-32 bg-transparent outline-none font-ui text-xs font-semibold text-main-text
+                                            disabled:cursor-not-allowed
+                                            disabled:text-text-shade-700
+                                            disabled:placeholder:text-text-shade-200
+                                            disabled:opacity-70"
                                 style={{
                                     width: `${Math.max(tag.length, 1)}ch`,
                                 }}
@@ -293,8 +308,13 @@ export default function TagInput({
 
                             <button
                                 type="button"
+                                disabled = {disabled}
                                 onClick={() => removeTag(index)}
-                                className="ml-1 text-text-shade-400 hover:text-accent transition-colors"
+                                className="ml-1 text-text-shade-400 hover:text-accent transition-colors
+                                disabled:cursor-not-allowed
+                                disabled:text-text-shade-700
+                                disabled:placeholder:text-text-shade-200
+                                disabled:opacity-70"
                             >
                                 ×
                             </button>
@@ -305,6 +325,7 @@ export default function TagInput({
                         <input
                             id={id}
                             value={draftTag}
+                            disabled = {disabled}
                             onChange={handleDraftChange}
                             onKeyDown={handleDraftKeyDown}
                             onBlur={addDraftTag}
@@ -323,6 +344,12 @@ export default function TagInput({
                     {tags.length}/{maxTags}
                 </span>
             </div>
+
+            {helperText && !displayedError && (
+                <p className="mt-1.5 px-1 text-xs text-text-shade-200 italic font-body leading-relaxed">
+                    {Array.isArray(helperText) ? t(...helperText) : t(helperText)}
+                </p>
+            )}
 
             {displayedError && <FieldErrorBubble message={displayedError} />}
         </div>

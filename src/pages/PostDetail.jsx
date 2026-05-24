@@ -355,16 +355,6 @@ export default function PostDetail({
         !revealedRestrictedPostIDs.has(String(post.postID))
     );
 
-    const isReportReviewed = (value) => {
-        if (value === true || value === "true") return true;
-        if (value === false || value === "false") return false;
-        return true;
-    };
-
-    const shouldShowReportOption = post
-        ? !isReportReviewed(post.daXemXetBaoCao)
-        : false;
-
 
     const handleCloseGlobalModal = useCallback(() => {
         setGlobalModal?.((prev) => ({
@@ -826,10 +816,6 @@ export default function PostDetail({
     const handleOpenReportFlow = async () => { // Luồng báo cáo
         if (!isAuthenticated) {
             handleRequireLogin(I18N_KEYS.POST_DETAIL.HANDLE.REQUIRE_LOGIN.postDetail_handleRequireLogin_modalDesc_needToLoginReport);
-            return;
-        }
-
-        if (!shouldShowReportOption){
             return;
         }
 
@@ -1432,6 +1418,8 @@ export default function PostDetail({
                             {shouldShowRestrictedPreview ? (
                                 <RestrictedMediaPreview
                                     file={post.lstKTEOFile?.[0]}
+                                    dynamicWM = {post.dynamicWM}
+                                    watermarkText={`@${author?.username || `user #${post?.tacGia || ""}` || "Protected"} · EyesOnly`} 
                                     canReveal={!isUnder18}
                                     isAlertActive={isAlertActive}
                                     visitorIP={visitorIP}
@@ -1449,6 +1437,8 @@ export default function PostDetail({
                                     <div className="relative">
                                         <PostDetailMediaViewer
                                             files={visibleFiles}
+                                            dynamicWM = {post.dynamicWM}
+                                            watermarkText={`@${author?.username || `user #${post?.tacGia || ""}` || "Protected"} · EyesOnly`} 
                                             isAlertActive={isAlertActive}
                                             visitorIP={visitorIP}
                                             clearAlert={clearAlert}
@@ -1514,7 +1504,6 @@ export default function PostDetail({
                                     isShareDone={isShareDone}
                                     isLikeLoading={isLikeLoading}
                                     isSaveLoading={isSaveLoading}
-                                    shouldShowReportOption = {shouldShowReportOption}
                                     onToggleLike={handleTogglePostLike}
                                     onToggleSave={handleTogglePostSave}
                                     onShare={handleSharePost}

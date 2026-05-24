@@ -13,6 +13,7 @@ export default function RadioGroupField({
     value,
     onChange,
     options = [],
+    disabled = false,
 
     errorType = "",
     errorMessage = "",
@@ -51,6 +52,8 @@ export default function RadioGroupField({
     };
 
     const handleChange = (nextValue) => {
+        if (disabled) return;
+
         onChange(nextValue);
         if (onClearError) onClearError();
     };
@@ -59,7 +62,12 @@ export default function RadioGroupField({
         <div className={`relative ${className}`}>
             {label && (
                 <div className="mb-2 flex items-center gap-2">
-                    <p className="font-heading text-sm font-medium text-text-shade-300">
+                    <p
+                        className={`
+                            font-heading text-sm font-medium transition-colors
+                            ${disabled ? "text-text-shade-200" : "text-text-shade-300"}
+                        `}
+                    >
                         {renderText(label)}
                     </p>
 
@@ -88,14 +96,30 @@ export default function RadioGroupField({
                         <button
                             key={option.value}
                             type="button"
+                            disabled={disabled}
                             onClick={() => handleChange(option.value)}
                             className={`
                                 rounded-full px-4 py-2 text-sm font-ui transition-all
                                 border outline-none
                                 ${
+                                    disabled
+                                        ? "cursor-not-allowed opacity-40 active:scale-100"
+                                        : "active:scale-95"
+                                }
+                                ${
                                     isActive
-                                        ? "bg-primary text-main-text border-primary hover:bg-primary-700"
-                                        : "bg-main-bg text-main-text border-bg-shade-300 hover:bg-bg-shade-100"
+                                        ? "bg-primary text-main-text border-primary"
+                                        : "bg-main-bg text-main-text border-bg-shade-300"
+                                }
+                                ${
+                                    !disabled && isActive
+                                        ? "hover:bg-primary-700"
+                                        : ""
+                                }
+                                ${
+                                    !disabled && !isActive
+                                        ? "hover:bg-bg-shade-100"
+                                        : ""
                                 }
                             `}
                         >

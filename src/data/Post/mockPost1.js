@@ -13,9 +13,9 @@ export const MOCK_POST_DATA_1 = {
     luotXem: 12544,
     luotThich: 508,
     sanPhamAI: true,
-    hanCheHienThi: 1, //tạm tạm 0 là k có, 1 là 18+ đi
+    hanCheHienThi: 2, //tạm tạm 0 là k có, 1 là 18+ đi
     choPhepComment: true,
-    daXemXetBaoCao: false,
+    daXemXetBaoCao: true,
     congKhai: true,
     lstGanThe: ["gardevoir", "pokemon", "anhdep"],
 

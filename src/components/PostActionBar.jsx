@@ -14,7 +14,6 @@ export default function PostActionBar({
     isShareDone = false,
     isLikeLoading = false,
     isSaveLoading = false,
-    shouldShowReportOption = false,
     onToggleLike,
     onToggleSave,
     onShare,
@@ -59,15 +58,14 @@ export default function PostActionBar({
                 </ActionIconButton>
             </div>
 
-            { shouldShowReportOption && (
-                <ActionIconButton
-                    label={t(I18N_KEYS.POST_DETAIL.COMMON.postDetail_postActionBarIconLabel_report)}
-                    subtle
-                    onClick={onReport}
-                >
-                    <FaCircleExclamation size={18} />
-                </ActionIconButton>
-            )}
+            <ActionIconButton
+                label={t(I18N_KEYS.POST_DETAIL.COMMON.postDetail_postActionBarIconLabel_report)}
+                subtle
+                onClick={onReport}
+            >
+                <FaCircleExclamation size={18} />
+            </ActionIconButton>
+            
         </div>
     );
 }

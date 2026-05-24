@@ -17,6 +17,7 @@ import Signup from "./pages/Signup.jsx";
 import Home from "./pages/Home.jsx";
 import PostCreate from "./pages/PostCreate.jsx";
 import PostDetail from "./pages/PostDetail.jsx";
+import PostEdit from "./pages/PostEdit.jsx";
 import MixedSearch from "./pages/MixedSearch";
 
 import MascotHelper from "./components/MascotHelper";
@@ -155,6 +156,18 @@ function App() {
                   />
                   <Route path="/post/:postID" element={
                     <PostDetail
+                      setGlobalModal = {setModalConfig}
+                      addHelperError = { (newErr) => setErrorStack(prev => [...prev, newErr])}
+                      setHelperFocusState = {setIsHelperFocusing}
+                      triggerMascotMood={triggerMascotMood}
+                      isUnder18={isUnder18}
+                      visitorIP={visitor.ip} 
+                      isAlertActive={isAlertActive}
+                      clearAlert={clearAlert}
+                    />} 
+                  />
+                  <Route path="/post/edit/:postID" element={
+                    <PostEdit
                       setGlobalModal = {setModalConfig}
                       addHelperError = { (newErr) => setErrorStack(prev => [...prev, newErr])}
                       setHelperFocusState = {setIsHelperFocusing}

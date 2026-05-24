@@ -48,7 +48,7 @@ export default function PostCreate({
         title: "",
         description: "",
         tags: [],
-        visibility: "all",
+        visibility: "1",
         dynamicWatermark: true,
         isAIGenerated: false,
         allowComment: true,
@@ -414,10 +414,10 @@ export default function PostCreate({
                 }
             }
 
-                //Check Sản phẩm AI
+                //Check Hạn chế hiển thị
             const handleVerifyHanCheHienThiPostCreate = async (e) => {
                 try {
-                    //await api.verifyHanCheHienThiPostCreate({hanCheHienThi: postForm.visibility});
+                    //await api.verifyHanCheHienThiPostCreate({hanCheHienThi: Number(postForm.visibility)});
                     return true;
                 } catch (error) {
                     const errorData = error.response?.data;
@@ -476,6 +476,25 @@ export default function PostCreate({
 
                 if (result && !result.handled) {
                     switch (result.code) {
+                        case "ACCOUNT_DISABLED":
+                            setGlobalModal?.({
+                                isOpen: true,
+                                type: "two-buttons",
+                                title: I18N_KEYS.POST_CREATE.HANDLE.AUTHENTICATION_CHECK.postCreate_authCheck_modalTitle_disabledAccount,
+                                description: I18N_KEYS.POST_CREATE.HANDLE.AUTHENTICATION_CHECK.postCreate_authCheck_modalDesc_disabledAccount,
+                                primaryBtnText: I18N_KEYS.POST_CREATE.HANDLE.AUTHENTICATION_CHECK.postCreate_authCheck_modalButton_toProfile,
+                                secondaryBtnText: I18N_KEYS.POST_CREATE.HANDLE.AUTHENTICATION_CHECK.postCreate_authCheck_modalButton_close,
+                                onPrimaryAction: () => {
+                                    setGlobalModal?.({ isOpen: false });
+                                    navigate("/profile");
+                                },
+                                onSecondaryAction: () => {
+                                    setGlobalModal?.({ isOpen: false });
+                                },
+                            });
+
+                            navigate("/", { replace: true });
+                            break;
                         default:
                             addHelperError({
                                 id: Date.now(),
@@ -599,7 +618,7 @@ export default function PostCreate({
                 *     moTa: postForm.description,
                 *     lstGanThe: postForm.tags,
                 *     sanPhamAI: postForm.isAIGenerated,
-                *     hanCheHienThi: postForm.visibility,
+                *     hanCheHienThi: Number(postForm.visibility),
                 *     choPhepComment: postForm.allowComment,
                 *     congKhai: postForm.isPublic,
                 *     lstFiles: files.map((item) => item.file),
@@ -919,7 +938,7 @@ export default function PostCreate({
                                 previewVideoUrl={previewVideoUrl}
                                 isLoading={isPreviewLoading}
                                 dynamicWM={postForm.dynamicWatermark}
-                                watermarkText={`${user?.username || "preview"} · EyesOnly`}   
+                                watermarkText={`@${user?.username || "preview"} · EyesOnly`}   
                             />
                         </div>
 

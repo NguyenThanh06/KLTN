@@ -80,6 +80,8 @@ export default function TextAreaInput({
                 onInvalid={handleInvalid}
                 onInput={handleInput}
                 onChange={(e) => {
+                    if (rest.disabled) return;
+
                     if (!enableProfanityFilter) {
                         rest.onChange?.(e);
                         return;
@@ -100,6 +102,13 @@ export default function TextAreaInput({
                     text-base text-text-shade-900 outline-1 -outline-offset-1 outline-bg-shade-300
                     placeholder:text-text-shade-200 focus:outline-2 focus:-outline-offset-2
                     focus:outline-primary-600 font-ui sm:text-sm/6 transition-all
+                    disabled:cursor-not-allowed
+                    disabled:bg-bg-shade-100
+                    disabled:text-text-shade-200
+                    disabled:placeholder:text-text-shade-200
+                    disabled:outline-bg-shade-200
+                    disabled:opacity-70
+                    disabled:focus:outline-bg-shade-200
                     ${hasError ? "outline-accent-500" : ""}
                 `}
             />

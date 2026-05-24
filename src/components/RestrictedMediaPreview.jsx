@@ -8,13 +8,13 @@ import { HiMiniShieldExclamation } from "react-icons/hi2";
 
 export default function RestrictedMediaPreview({
     file,
+    dynamicWM = false,
+    watermarkText = "EyesOnly",
     canReveal,
     isAlertActive,
     visitorIP,
     clearAlert,
     onReveal,
-    dynamicWM = false,
-    watermarkText = "EyesOnly",
 }) {
 
     const { t, i18n } = useTranslation();

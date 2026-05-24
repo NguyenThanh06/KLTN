@@ -16,11 +16,12 @@ export default function Button({
         none: "text-main-text hover:bg-bg-shade-100",
 
         // Disabled Variant
-        disabled: "bg-bg-shade-200 text-text-shade-500 cursor-not-allowed opacity-80 hover:bg-bg-shade-200 active:scale-100 focus-visible:outline-none",
+        disabled: "bg-bg-shade-200 text-bg-shade-400 cursor-not-allowed opacity-80 hover:bg-bg-shade-200 active:scale-100 focus-visible:outline-none",
 
         // Sizes
-        full: "flex w-full justify-center font-bold",
-        medium: "font-semibold",
+        full: "flex w-full justify-center font-bold px-4 py-1.5",
+        large: "font-semibold px-6 py-2",
+        medium: "font-semibold px-4 py-1.5",
     };
 
     const finalVariant = disabled ? "disabled" : variant;
@@ -32,7 +33,7 @@ export default function Button({
             {...rest}
             className={`
                 ${className}
-                rounded-2xl px-4 py-1.5 text-sm/6 font-ui transition-all
+                rounded-2xl text-sm/6 font-ui transition-all
                 ${!disabled ? "active:scale-95" : ""}
                 ${styles[finalVariant]}
                 ${styles[size]}
