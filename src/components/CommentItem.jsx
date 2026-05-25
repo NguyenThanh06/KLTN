@@ -26,7 +26,7 @@ const getUsername = (user) => {
         return "";
     }
 
-    return user.username ? `@${user.username}` : "";
+    return user.username ? `${user.username}` : "";
 };
 
 const getAvatar = (user) => {
@@ -132,6 +132,7 @@ export default function CommentItem({
     const commentID = String(comment.commentID);
     const author = comment.author || comment.nguoiVietDetail || comment.user || comment.nguoiViet;
     const authorID = getAccountID(author);
+    const authorUsername = getUsername(author)
     const currentUserID = getAccountID(currentUser);
 
     const canDelete = Boolean(
@@ -158,7 +159,7 @@ export default function CommentItem({
                     <button
                         type="button"
                         className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-main-bg shadow-sm"
-                        onClick={() => onNavigateUser?.(authorID)}
+                        onClick={() => onNavigateUser?.(authorUsername)}
                     >
                         <img
                             src={getAvatar(author)}
@@ -173,14 +174,14 @@ export default function CommentItem({
                                 <button
                                     type="button"
                                     className="block max-w-full truncate text-left font-ui text-sm font-bold text-main-text hover:underline"
-                                    onClick={() => onNavigateUser?.(authorID)}
+                                    onClick={() => onNavigateUser?.(authorUsername)}
                                 >
                                     {getDisplayName(author)}
                                 </button>
 
                                 {getUsername(author) && (
                                     <p className="truncate text-xs text-text-shade-400">
-                                        {getUsername(author)}
+                                        @{authorUsername}
                                     </p>
                                 )}
                             </div>

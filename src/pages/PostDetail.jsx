@@ -880,12 +880,13 @@ export default function PostDetail({
 
             if (result && !result.handled) {
                 switch (result.code) {
-                    //Kịch bản post đã được xem xét báo cáo rồi
-                    case "POST_DAXEMXETBAOCAO":
+                    //Kịch bản post đang tạm ẩn rồi
+                    case "POST_HIDDEN":
                         addHelperError({
                             id: Date.now(),
-                            code: I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_helper_error_daXemXetBaoCao,
-                        })
+                            code: I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_helper_error_postHidden,
+                        });
+                        navigate("/");
                         break;
                     //Kịch bản mục báo cáo rỗng
                     case "MUCBAOCAO_NULL":
@@ -1480,7 +1481,7 @@ export default function PostDetail({
                                     isCurrentUserAuthor={isCurrentUserAuthor}
                                     isFollowingAuthor={isFollowingAuthor}
                                     isFollowLoading={isFollowLoading}
-                                    onNavigateAuthor={() => navigate(`/user?id=${authorID}`)}
+                                    onNavigateAuthor={() => navigate(`/user/${author.username}`)}
                                     onToggleFollow={handleToggleFollowAuthor}
                                 />
                             </div>
@@ -1534,7 +1535,7 @@ export default function PostDetail({
                                         type: COMMENT_COMPOSER_TYPE.REPLY,
                                         parentComment: comment,
                                     })}
-                                    onNavigateUser={(accountID) => navigate(`/user?id=${accountID}`)}
+                                    onNavigateUser={(accountUsername) => navigate(`/user/${accountUsername}`)}
                                 />
 
                                 <button
@@ -1559,7 +1560,7 @@ export default function PostDetail({
                                 isCurrentUserAuthor={isCurrentUserAuthor}
                                 isFollowingAuthor={isFollowingAuthor}
                                 isFollowLoading={isFollowLoading}
-                                onNavigateAuthor={() => navigate(`/user?id=${authorID}`)}
+                                onNavigateAuthor={() => navigate(`/user/${author.username}`)}
                                 onToggleFollow={handleToggleFollowAuthor}
                             />
                         </aside>

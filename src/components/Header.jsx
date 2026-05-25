@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
@@ -18,7 +18,23 @@ export default function Header({variant="full"}){
     const { isAuthenticated, user, logout } = useAuth();
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
-    const [isDark, setIsDark] = useState(false);
+    const [isDark, setIsDark] = useState(() => {
+        if (typeof window === "undefined") return false;
+
+        return (
+            localStorage.getItem("theme") === "dark" ||
+            document.documentElement.classList.contains("dark")
+        );
+    });
+    useEffect(() => {
+        if (isDark) {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+    }, [isDark]);
     const [showNotifications, setShowNotifications] = useState(false);
     const [isNotificationDropdownExiting, setIsNotificationDropdownExiting] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
@@ -107,13 +123,8 @@ export default function Header({variant="full"}){
 
     // Đổi theme
     const toggleTheme = () => {
-        setIsDark(!isDark);
-        if (!isDark) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }
+        setIsDark((prev) => !prev);
+    };
 
     return (
         <header className="sticky top-0 z-50 w-full px-3 lg:px-4 py-2 lg:py-0 lg:h-16 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2 bg-main-bg/80 backdrop-blur-md">            {/* Phần logo bên trái */}
@@ -237,7 +248,7 @@ export default function Header({variant="full"}){
 
                                 {showUserMenu && (
                                     <div className={`absolute right-0 top-11 w-[min(12rem,calc(100vw-1.5rem))] bg-main-bg shadow-2xl rounded-2xl overflow-hidden z-50 ${isUserMenuExiting ? 'animate-popup-exit' : 'animate-popup-appear'}`}>
-                                        <Link to="/user?id=123" className="flex items-start gap-3 py-2 px-4 my-2 bg-main-bg text-main-text cursor-pointer transition-colors">
+                                        <Link to={`/user/${user.username}`} className="flex items-start gap-3 py-2 px-4 my-2 bg-main-bg text-main-text cursor-pointer transition-colors">
                                             <div className="shrink-0 w-10 h-10 bg-primary-200 rounded-full flex items-center justify-center">
                                                 <img src={ user.avatar } alt="Avatar" />
                                             </div>
@@ -247,13 +258,13 @@ export default function Header({variant="full"}){
                                             </div>
                                         </Link>
                                         <div className="border-t border-text-shade-200 font-light font-body p-4 flex flex-col gap-2">
-                                            <Link to="/user?id=123">
+                                            <Link to={`/user/${user.username}`}>
                                                 <span className="flex items-center gap-3 text-main-text">
                                                     <FaUserCircle strokeWidth={2}/>
                                                     {t(I18N_KEYS.COMMON.common_headerButton_user)}
                                                 </span>
                                             </Link>
-                                            <Link to="/profile">
+                                            <Link to="/profile?edit">
                                                 <span className="flex items-center gap-3 text-main-text">
                                                     <FaPen strokeWidth={2}/>
                                                     {t(I18N_KEYS.COMMON.common_headerButton_profile)}
@@ -348,7 +359,7 @@ export default function Header({variant="full"}){
                                     {showUserMenu && (
                                         <div className={`absolute right-0 top-10 w-[min(12rem,calc(100vw-1.5rem))] bg-main-bg shadow-2xl rounded-2xl overflow-hidden z-50 
                                                     ${isUserMenuExiting ? 'animate-popup-exit' : 'animate-popup-appear'}`}>
-                                            <Link to="/user?id=123" className="flex items-start gap-3 py-2 px-4 my-2 bg-main-bg text-main-text cursor-pointer transition-colors">
+                                            <Link to={`/user/${user.username}`} className="flex items-start gap-3 py-2 px-4 my-2 bg-main-bg text-main-text cursor-pointer transition-colors">
                                                 <div className="shrink-0 w-10 h-10 bg-primary-200 rounded-full flex items-center justify-center">
                                                     <img src={ user.avatar } alt="Avatar" />
                                                 </div>
@@ -358,13 +369,13 @@ export default function Header({variant="full"}){
                                                 </div>
                                             </Link>
                                             <div className="border-t border-text-shade-200 font-light font-body p-4 flex flex-col gap-2">
-                                                <Link to="/user?id=123">
+                                                <Link to={`/user/${user.username}`}>
                                                     <span className="flex items-center gap-3 text-main-text">
                                                         <FaUserCircle strokeWidth={2}/>
                                                         {t(I18N_KEYS.COMMON.common_headerButton_user)}
                                                     </span>
                                                 </Link>
-                                                <Link to="/profile">
+                                                <Link to="/profile?edit">
                                                     <span className="flex items-center gap-3 text-main-text">
                                                         <FaPen strokeWidth={2}/>
                                                         {t(I18N_KEYS.COMMON.common_headerButton_profile)}

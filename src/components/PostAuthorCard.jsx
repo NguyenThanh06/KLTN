@@ -14,25 +14,37 @@ export default function PostAuthorCard({
 }) {
     const { t } = useTranslation();
 
-    const displayName = author?.tenHienThi || author?.username || "Người dùng cute hột mít";
+    const displayName =
+        author?.tenHienThi || author?.username || "Người dùng cute hột mít";
     const username = author?.username ? `@${author.username}` : "@nguoidung";
     const avatar = author?.avatar || "/defaultAvatar/default_avatar_1.svg";
     const bio = author?.tieuSu?.trim();
 
+    const isSimpleVariant = variant === "simple";
     const shouldShowBio = variant === "bio";
     const shouldShowFollowButton = variant === "follow" && !isCurrentUserAuthor;
 
     return (
-        <div className="flex h-full flex-col rounded-[1.75rem] bg-main-bg p-3 shadow-sm">
+        <div
+            className={`
+                flex h-full flex-col bg-main-bg shadow-sm
+                ${isSimpleVariant ? "rounded-3xl p-2" : "rounded-[1.75rem] p-3"}
+            `}
+        >
             <button
                 type="button"
-                className="
-                    interaction-pop flex w-full cursor-pointer items-center gap-3
-                    rounded-[1.35rem] p-1 text-left hover:bg-bg-shade-50
-                "
+                className={`
+                    interaction-pop flex w-full cursor-pointer items-center gap-3 text-left hover:bg-bg-shade-50
+                    ${isSimpleVariant ? "rounded-3xl p-2" : "rounded-[1.35rem] p-1"}
+                `}
                 onClick={onNavigateAuthor}
             >
-                <div className="h-11 w-11 shrink-0 overflow-hidden rounded-full bg-bg-shade-100 shadow-sm">
+                <div
+                    className={`
+                        shrink-0 overflow-hidden rounded-full bg-bg-shade-100 shadow-sm
+                        ${isSimpleVariant ? "h-12 w-12" : "h-11 w-11"}
+                    `}
+                >
                     <img
                         src={avatar}
                         alt=""
@@ -59,7 +71,7 @@ export default function PostAuthorCard({
                             ${bio ? "" : "text-text-shade-300"}
                         `}
                     >
-                        {bio || "Người dùng này chưa viết tiểu sử."}
+                        {bio || ""}
                     </p>
                 </div>
             )}
@@ -74,10 +86,19 @@ export default function PostAuthorCard({
                     onClick={onToggleFollow}
                 >
                     {isFollowLoading
-                        ? t(I18N_KEYS.POST_DETAIL.COMMON.postDetail_postAuthorCardButton_loading)
+                        ? t(
+                              I18N_KEYS.POST_DETAIL.COMMON
+                                  .postDetail_postAuthorCardButton_loading
+                          )
                         : isFollowingAuthor
-                            ? t(I18N_KEYS.POST_DETAIL.COMMON.postDetail_postAuthorCardButton_unfollow)
-                            : t(I18N_KEYS.POST_DETAIL.COMMON.postDetail_postAuthorCardButton_follow)}
+                          ? t(
+                                I18N_KEYS.POST_DETAIL.COMMON
+                                    .postDetail_postAuthorCardButton_unfollow
+                            )
+                          : t(
+                                I18N_KEYS.POST_DETAIL.COMMON
+                                    .postDetail_postAuthorCardButton_follow
+                            )}
                 </Button>
             )}
         </div>

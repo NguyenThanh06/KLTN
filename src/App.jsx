@@ -22,6 +22,7 @@ import MixedSearch from "./pages/MixedSearch";
 
 import MascotHelper from "./components/MascotHelper";
 import DynamicModal from "./components/DynamicModal";
+import UserDetail from "./pages/UserDetail.jsx";
 
 function App() {
   const location = useLocation();
@@ -189,7 +190,21 @@ function App() {
                       isAlertActive={isAlertActive}
                       clearAlert={clearAlert}
                     />} 
-                  /> 
+                  />
+                  <Route
+                  path="/user/:username" element={
+                    <UserDetail
+                      setGlobalModal = {setModalConfig}
+                      addHelperError = { (newErr) => setErrorStack(prev => [...prev, newErr])}
+                      setHelperFocusState = {setIsHelperFocusing}
+                      triggerMascotMood={triggerMascotMood}
+                      isUnder18={isUnder18}
+                      visitorIP={visitor.ip} 
+                      isAlertActive={isAlertActive}
+                      clearAlert={clearAlert}
+                    />
+                  }
+              />
                 </Routes>
             </AnimatePresence>
             

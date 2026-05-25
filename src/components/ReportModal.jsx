@@ -7,7 +7,7 @@ import { ChevronDown, X } from "lucide-react";
 
 import Button from "./Button";
 
-const REPORT_REASONS = [
+const POST_REPORT_REASONS = [
     {
         value: "uncomf",
         label: I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalReasonLable_step1_uncomf,
@@ -49,8 +49,122 @@ const REPORT_REASONS = [
         label: I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalReasonLable_step1_other,
     },
 ];
-const getReasonLabel = (reasonValue) => {
-    return REPORT_REASONS.find((item) => item.value === reasonValue)?.label || "";
+
+const USER_REPORT_REASONS = [
+    {
+        value: "fake",
+        label: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalReasonLable_step1_fake,
+    },
+    {
+        value: "harass",
+        label: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalReasonLable_step1_harass,
+    },
+    {
+        value: "badprof",
+        label: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalReasonLable_step1_badprof,
+    },
+    {
+        value: "badavt",
+        label: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalReasonLable_step1_badavt,
+    },
+    {
+        value: "spam",
+        label: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalReasonLable_step1_spam,
+    },
+    {
+        value: "scam",
+        label: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalReasonLable_step1_scam,
+    },
+    {
+        value: "other",
+        label: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalReasonLable_step1_other,
+    },
+];
+
+const getReasonLabel = (targetType, reasonValue) => {
+    return getReportReasons(targetType).find((item) => item.value === reasonValue)?.label || "";
+};
+
+const getReportReasons = (targetType) => {
+    return targetType === "user" ? USER_REPORT_REASONS : POST_REPORT_REASONS;
+};
+
+const getReportText = (targetType, key) => {
+    const userText = {
+        stepTitle0: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalTitle_step0,
+        stepTitle1: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalTitle_step1,
+        stepTitle2: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalTitle_step2,
+        stepInfo: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalInfo_step,
+        step0Desc: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalDesc_step0,
+        step0Subtext: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalSubtext_step0,
+        step1Desc: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalDesc_step1,
+        chooseReason: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalReasonLable_step1_chooseReason,
+        step1Subtext: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalSubtext_step1,
+        step2Desc: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalDesc_step2,
+        textareaPlaceholder: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalPlaceholder_step2,
+        buttonBack: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalButton_back,
+        buttonNext: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalButton_next,
+        buttonSend: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalButton_send,
+        buttonLoading: I18N_KEYS.USER_DETAIL.HANDLE.USER_REPORT.userDetail_handleReport_reportModalButton_loading,
+    };
+
+    if (targetType === "user") {
+        return userText[key];
+    }
+
+    const postText = {
+        stepTitle0:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalTitle_step0,
+        stepTitle1:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalTitle_step1,
+        stepTitle2:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalTitle_step2,
+        stepInfo:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalInfo_step,
+        step0Desc:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalDesc_step0,
+        step0Subtext:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalSubtext_step0,
+        step1Desc:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalDesc_step1,
+        chooseReason:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalReasonLable_step1_chooseReason,
+        step1Subtext:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalSubtext_step1,
+        step2Desc:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalDesc_step2,
+        textareaPlaceholder: I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalPlaceholder_step2,
+        buttonBack:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalButton_back,
+        buttonNext:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalButton_next,
+        buttonSend:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalButton_send,
+        buttonLoading:
+            I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT
+                .postDetail_handleReport_reportModalButton_loading,
+    };
+
+    return postText[key];
+};
+
+const renderReportText = (t, value) => {
+    if (!value) return "";
+    return typeof value === "string" && value.includes("_") ? t(value) : value;
 };
 
 export default function ReportModal({
@@ -67,12 +181,19 @@ export default function ReportModal({
     const [description, setDescription] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isReasonDropdownOpen, setIsReasonDropdownOpen] = useState(false);
+    const reportReasons = getReportReasons(targetType);
 
     const stepTitle = useMemo(() => {
-        if (step === 0) return t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalTitle_step0);
-        if (step === 1) return t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalTitle_step1);
-        return t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalTitle_step2);
-    }, [step]);
+        if (step === 0) {
+            return renderReportText(t, getReportText(targetType, "stepTitle0"));
+        }
+
+        if (step === 1) {
+            return renderReportText(t, getReportText(targetType, "stepTitle1"));
+        }
+
+        return renderReportText(t, getReportText(targetType, "stepTitle2"));
+    }, [step, targetType, t]);
 
     useEffect(() => {
         if (!isOpen) {
@@ -136,7 +257,7 @@ export default function ReportModal({
 
                 <div className="mb-5 pr-10">
                     <p className="mb-2 font-ui text-xs font-bold text-text-shade-400">
-                        {t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalInfo_step)} {step + 1}/3
+                        {renderReportText(t, getReportText(targetType, "stepInfo"))} {step + 1}/3
                     </p>
 
                     <h2 className="font-ui text-xl font-bold text-main-text">
@@ -169,12 +290,12 @@ export default function ReportModal({
                             {step === 0 && (
                                 <div className="rounded-4xl bg-bg-shade-50 p-5 text-sm leading-7 text-main-text">
                                     <p>
-                                        {t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalDesc_step0)}
+                                        {renderReportText(t, getReportText(targetType, "step0Desc"))}
                                     </p>
 
                                     {targetName && (
                                         <p className="mt-4 rounded-3xl bg-main-bg px-4 py-3 font-ui text-xs font-bold text-text-shade-500">
-                                            {t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalSubtext_step0)} {targetName}
+                                            {renderReportText(t, getReportText(targetType, "step0Subtext"))} {targetName}
                                         </p>
                                     )}
                                 </div>
@@ -183,7 +304,7 @@ export default function ReportModal({
                             {step === 1 && (
                                 <div className={isReasonDropdownOpen ? "pb-48" : ""}>
                                     <span className="mb-2 block font-ui text-sm font-bold text-main-text">
-                                        {t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalDesc_step1)}
+                                        {renderReportText(t, getReportText(targetType, "step1Desc"))}
                                     </span>
 
                                     <div className="relative">
@@ -196,7 +317,9 @@ export default function ReportModal({
                                             onClick={() => setIsReasonDropdownOpen((prev) => !prev)}
                                         >
                                             <span className={reason ? "text-main-text" : "text-text-shade-400"}>
-                                                {reason ? t(getReasonLabel(reason)) : t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalReasonLable_step1_chooseReason)}
+                                                {reason
+                                                    ? renderReportText(t, getReasonLabel(targetType, reason))
+                                                    : renderReportText(t, getReportText(targetType, "chooseReason"))}
                                             </span>
 
                                             <ChevronDown
@@ -210,7 +333,7 @@ export default function ReportModal({
 
                                         {isReasonDropdownOpen && (
                                             <div className="absolute left-0 right-0 top-full z-30 mt-2 max-h-64 overflow-y-auto rounded-4xl bg-main-bg p-2 shadow-xl">
-                                                {REPORT_REASONS.map((item) => (
+                                                {reportReasons.map((item) => (
                                                     <button
                                                         key={item.value}
                                                         type="button"
@@ -227,7 +350,7 @@ export default function ReportModal({
                                                             setIsReasonDropdownOpen(false);
                                                         }}
                                                     >
-                                                        {t(item.label)}
+                                                        {renderReportText(t, item.label)}
                                                     </button>
                                                 ))}
                                             </div>
@@ -236,7 +359,7 @@ export default function ReportModal({
 
                                     {!reason && (
                                         <p className="mt-2 text-xs text-text-shade-400">
-                                            {t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalSubtext_step1)}
+                                            {renderReportText(t, getReportText(targetType, "step1Subtext"))}
                                         </p>
                                     )}
                                 </div>
@@ -246,14 +369,14 @@ export default function ReportModal({
                                 <label className="block">
                                     
                                     <span className="mb-2 block font-ui text-sm font-bold text-main-text">
-                                        {t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalDesc_step2)}
+                                        {renderReportText(t, getReportText(targetType, "step2Desc"))}
                                     </span>
 
                                     <textarea
                                         value={description}
                                         maxLength={500}
                                         onChange={(event) => setDescription(event.target.value)}
-                                        placeholder="Bạn có thể viết ngắn thôi cũng được nha..."
+                                        placeholder={renderReportText(t, getReportText(targetType, "textareaPlaceholder"))}
                                         className="min-h-37.5 w-full resize-none rounded-4xl border border-bg-shade-100 bg-main-bg px-4 py-3 text-sm leading-6 text-main-text outline-none focus:border-primary"
                                     />
 
@@ -276,7 +399,7 @@ export default function ReportModal({
                             className="interaction-pop rounded-full"
                             onClick={handleGoBack}
                         >
-                            {t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalButton_back)}
+                            {renderReportText(t, getReportText(targetType, "buttonBack"))}
                         </Button>
                     )}
 
@@ -288,7 +411,7 @@ export default function ReportModal({
                             disabled={step === 1 && !reason}
                             onClick={handleGoNext}
                         >
-                            {t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalButton_next)}
+                            {renderReportText(t, getReportText(targetType, "buttonNext"))}
                         </Button>
                     ) : (
                         <Button
@@ -298,7 +421,9 @@ export default function ReportModal({
                             disabled={!reason || !description.trim() || isSubmitting}
                             onClick={handleSubmit}
                         >
-                            {isSubmitting ? t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalButton_loading) : t(I18N_KEYS.POST_DETAIL.HANDLE.POST_REPORT.postDetail_handleReport_reportModalButton_send)}
+                            {isSubmitting
+                                ? renderReportText(t, getReportText(targetType, "buttonLoading"))
+                                : renderReportText(t, getReportText(targetType, "buttonSend"))}
                         </Button>
                     )}
                 </div>

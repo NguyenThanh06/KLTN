@@ -6,38 +6,69 @@ export default function SectionContainer({
     title,
     description,
     headerRight,
+    compact = false,
     className = "",
     children,
 }) {
 
     const { t } = useTranslation();
+    
+    const renderText = (value) => {
+        if (!value) return "";
+        return Array.isArray(value) ? t(...value) : t(value);
+    };
+
+    const hasHeaderText = Boolean(title || description);
+    const hasHeader = Boolean(hasHeaderText || headerRight);
 
     return (
         <section
             className={`
-                w-full max-w-7xl mx-auto my-8 sm:my-10 rounded-4xl
-                px-4 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10
+                w-full max-w-7xl mx-auto rounded-4xl
                 shadow-sm bg-main-bg
+                ${
+                    compact
+                        ? "my-4 px-4 py-4 sm:my-5 sm:px-6 sm:py-5 lg:px-7 lg:py-6"
+                        : "my-8 px-4 py-6 sm:my-10 sm:px-8 sm:py-8 lg:px-10 lg:py-10"
+                }
                 ${className}
             `}
         >
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-8 ">
-                <div>
-                    {title && (
-                        <h1 className="font-heading text-2xl sm:text-3xl font-semibold text-main-text">
-                            {t(title)}
-                        </h1>
+            {hasHeader && (
+                <div
+                    className={`
+                        flex gap-4
+                        ${compact ? "mb-4" : "mb-8"}
+                        ${
+                            hasHeaderText
+                                ? "flex-col sm:flex-row sm:items-start sm:justify-between"
+                                : "items-center justify-end"
+                        }
+                    `}
+                >
+                    {hasHeaderText && (
+                        <div className="min-w-0">
+                            {title && (
+                                <h1 className="font-heading text-2xl font-semibold text-main-text sm:text-3xl">
+                                    {renderText(title)}
+                                </h1>
+                            )}
+
+                            {description && (
+                                <p className="mt-2 max-w-2xl font-body text-sm leading-relaxed text-text-shade-300">
+                                    {renderText(description)}
+                                </p>
+                            )}
+                        </div>
                     )}
 
-                    {description && (
-                        <p className="mt-2 max-w-2xl font-body text-sm text-text-shade-300 leading-relaxed">
-                            {t(description)}
-                        </p>
+                    {headerRight && (
+                        <div className="shrink-0 self-end">
+                            {headerRight}
+                        </div>
                     )}
                 </div>
-
-                {headerRight && <div className="shrink-0">{headerRight}</div>}
-            </div>
+            )}
 
             {children}
         </section>

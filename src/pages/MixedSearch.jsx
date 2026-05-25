@@ -131,7 +131,7 @@ const createMockAccounts = ({ page, pageSize }) => {
         return {
             ...sourceAccount,
             accountID: `mixed-search-account-${page}-${index + 1}`,
-            username: `${sourceAccount.username}_${page}_${index + 1}`,
+            username: `${sourceAccount.username}`,
         };
     });
 };
@@ -606,12 +606,12 @@ export default function MixedSearch({
                         onPageChange={handleChangePage}
                         scrollOnPageChange={true}
                         onNavigateAccount={(account) => {
-                            const accountID =
-                                account?.accountID ||
-                                account?.id ||
-                                account?.idAccount;
+                            const accountUsername =
+                                account?.accountUsername ||
+                                account?.username ||
+                                account?.usernameAccount;
 
-                            navigate(`/user?id=${accountID}`);
+                            navigate(`/user/${accountUsername}`);
                         }}
                     />
                 )}

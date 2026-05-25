@@ -12,4 +12,6 @@ export const MOCK_USER_DATA_3 = {
     biKhoa: false,
     daXacThuc: true,
     daTheoDoi: false,
+    soNguoiTheoDoi: 24582,
+    soNguoiDangTheoDoi: 910,
 };

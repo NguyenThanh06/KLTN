@@ -93,7 +93,7 @@ const DynamicModal = ({
                                     <Button 
                                         type={primaryBtnType === "submit" ? "submit" : "button"}
                                         onClick={primaryBtnType !== "submit" ? onPrimaryAction : undefined}
-                                        className="min-w-37.5"
+                                        className="min-w-28"
                                     >
                                         {t(primaryBtnText)}
                                     </Button>

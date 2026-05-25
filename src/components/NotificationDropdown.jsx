@@ -16,7 +16,7 @@ const INITIAL_MOCK_NOTICES = [
         noiDung: "Con khỉ tuyệt vời",
         thoiDiemThongBao: "2026-05-13T14:30:00Z",
         daDoc: false,
-        link: "/user/123",
+        link: "/user/abc123",
     },
     {
         id: "mock-notice-2",

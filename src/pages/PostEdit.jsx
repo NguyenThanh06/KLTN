@@ -23,6 +23,10 @@ const getCurrentUserID = (user) => {
     return user?.id ?? user?.accountID ?? user?.userID ?? "";
 };
 
+const getCurrentUserUsername = (user) => {
+    return user?.username ?? user?.accountUsername ?? user?.userUsername ?? "";
+};
+
 const normalizeBoolean = (value) => {
     if (value === true || value === "true") return true;
     if (value === false || value === "false") return false;
@@ -97,7 +101,8 @@ export default function PostEdit({
 
     const postID = params.postID || params.id || "2";
     const currentUserID = getCurrentUserID(user);
-    const userProfilePath = `/user?id=${currentUserID}`;
+    const currentUserUsername = getCurrentUserUsername(user);
+    const userProfilePath = `/user/${currentUserUsername}`;
 
     const deleteConfirmInputRef = useRef("");
 
