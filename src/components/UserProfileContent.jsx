@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
+import { formatDateByLanguage } from "../utils/dateFormat";
 
 import { CalendarDays, Mail, ShieldAlert } from "lucide-react";
 import Button from "./Button";
@@ -8,18 +9,6 @@ const formatNumber = (value = 0) => {
     return new Intl.NumberFormat("vi-VN").format(Number(value || 0));
 };
 
-const formatJoinedDate = (value) => {
-    if (!value) return "Chưa rõ";
-
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return "Chưa rõ";
-
-    return new Intl.DateTimeFormat("vi-VN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-    }).format(date);
-};
 
 const getDisabledDayCount = (disabledDate) => {
     if (!disabledDate) return null;
@@ -44,6 +33,10 @@ export default function UserProfileContent({
     onOpenFollowing,
 }) {
     const { t, i18n } = useTranslation();
+
+    const joinedDateAtText =
+            formatDateByLanguage(account?.ngayTaoTaiKhoan, i18n.language) ||
+            t(I18N_KEYS.COMMON.common_dateFormat_unknownTime);
 
     const displayName =
         account?.tenHienThi || account?.username || "Người dùng cute hột mít";
@@ -89,7 +82,7 @@ export default function UserProfileContent({
                     <div className="flex max-w-full items-center gap-2 rounded-full bg-bg-shade-50 px-3 py-1.5">
                         <CalendarDays size={16} className="shrink-0" />
                         <span>
-                            {t(I18N_KEYS.USER_DETAIL.COMMON.userDetail_userProfileContentText_joinedSince, {ngayTaoTaiKhoan: formatJoinedDate(account?.ngayTaoTaiKhoan)})}
+                            {t(I18N_KEYS.USER_DETAIL.COMMON.userDetail_userProfileContentText_joinedSince, {ngayTaoTaiKhoan: joinedDateAtText})}
                         </span>
                     </div>
                 </div>

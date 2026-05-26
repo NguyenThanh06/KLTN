@@ -11,10 +11,10 @@ export const useErrorHandler = (setGlobalModal, addHelperError) => {
     const { status, code } = safeErrorResponse;
 
     // A. XỬ LÝ TOÀN CỤC (Tự làm luôn)
-      // 401: Chưa đăng nhập hoặc token hết hạn.
+      // 401: Chưa đăng nhập hoặc token hết hạn. Hoặc đang xài nửa chừng xong bị khóa thì thành cx trả 401 hế
       if (status === 401) {
         window.location.href = '/login';
-        return { handled: true }; // Báo cho Page là "Tôi lo xong rồi"
+        return { handled: true }; 
       }
 
       // 403: Đã đăng nhập nhưng không có quyền vào chỗ này.
@@ -30,7 +30,15 @@ export const useErrorHandler = (setGlobalModal, addHelperError) => {
         return { handled: true };
       }
 
-      if (status === 500) {
+      
+      // 404: Tìm k ra trang
+      if (status === 404) {
+        //Ni chắc là đẩy về 404 thôi
+        navigate("/404", { replace: true });
+        return { handled: true };
+      }
+
+      if (status === 500) { // Server sập
         setGlobalModal({
           isOpen: true,
           type: 'info',

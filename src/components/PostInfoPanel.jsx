@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
+import { formatDateByLanguage } from "../utils/dateFormat";
 
 import {
     CalendarDays,
@@ -17,16 +18,6 @@ const getDateLocale = (language) => {
     if (language?.startsWith("es")) return "es-ES";
 
     return "vi-VN";
-};
-
-const formatPostDate = (value, language) => {
-    if (!value) return "Vừa mới đăng";
-
-    return new Intl.DateTimeFormat(getDateLocale(language), {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-    }).format(new Date(value));
 };
 
 const formatNumber = (value, language) => {
@@ -51,6 +42,10 @@ export default function PostInfoPanel({
 }) {
     const { t, i18n } = useTranslation();
 
+    const createdDateAtText =
+            formatDateByLanguage(post?.ngayDang, i18n.language) ||
+            t(I18N_KEYS.COMMON.common_dateFormat_unknownTime);
+
     const restrictionLabel = getRestrictionLabel(post?.hanCheHienThi);
 
     return (
@@ -59,7 +54,7 @@ export default function PostInfoPanel({
                 <div className="flex min-w-0 items-center gap-2 rounded-full bg-bg-shade-50 px-3 py-2 font-ui text-xs font-bold text-text-shade-500">
                     <CalendarDays size={15} className="shrink-0" />
                     <span className="truncate">
-                        {formatPostDate(post?.ngayDang, language)}
+                        {createdDateAtText}
                     </span>
                 </div>
 

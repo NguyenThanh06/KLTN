@@ -419,8 +419,6 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                     description: I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalDesc_success_accountVerified,
                 });
                 
-                //Đợi miếng cho đọc thông báo rồi vô
-                await delay(500);
 
                 const loggedInUser = MOCK_USER_DATA_3;
                 login(loggedInUser);
@@ -479,19 +477,23 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                 // })
 
                 // Nếu mà kiểm tra tài khoản đã vô hiệu hóa thì coi hiện cái modal dưới ni:
-                // setGlobalModal({
-                //     isOpen: true,
-                //     type: "info",
-                //     title: I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalTitle_accountDeactivated,
-                //     description: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalDesc_accountDeactivated, { daysDeactivated: Math.floor((Date.now() - new Date(loggedInUser.ngayVoHieuHoa)) / 86400000)} ],
-                // })
+                // if (loggedInUser.daVoHieuHoa === true){
+                //     setGlobalModal({
+                //         isOpen: true,
+                //         type: "info",
+                //         title: I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalTitle_accountDeactivated,
+                //         description: [I18N_KEYS.LOGIN.HANDLE.LOGIN.login_handleLogin_modalDesc_accountDeactivated, { daysDeactivated: Math.floor((Date.now() - new Date(loggedInUser.ngayVoHieuHoa)) / 86400000)} ],
+                //     })
+                // }
+
+                // Rứa là thành vừa trả id, avatar, tên hiển thị, username, đã vô hiệu hóa chưa. Chắc ngang ni là hết r?
 
                 // navigate(redirect, { replace: true });
 
 
 
 
-                //Nháp nháp mấy cái mock user test, thành xóa hoặc coi tham khảo
+                //Nháp nháp mấy cái mock user test, thành xóa hoặc coi tham khảo từ đoạn ni tới...
                 const email = formData.email;
                 switch (email){
                     case "abc@xyz.com":
@@ -537,6 +539,7 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                             }
                         };
                 }
+                // ... ngang đoạn ni, đó thành xóa hế
             }
             catch (error) {
                 const errorData = error.response?.data;

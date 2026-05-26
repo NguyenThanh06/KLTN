@@ -37,14 +37,6 @@ const getAvatar = (user) => {
     return user.avatar || "/defaultAvatar/default_avatar_1.svg";
 };
 
-const getRelativeTimeLocale = (language) => {
-    if (language?.startsWith("vi")) return "vi-VN";
-    if (language?.startsWith("en")) return "en-US";
-    if (language?.startsWith("ja")) return "ja-JP";
-    if (language?.startsWith("es")) return "es-ES";
-
-    return "vi-VN";
-};
 
 const RELATIVE_TIME_UNITS = [
     { unit: "year", milliseconds: 365 * 24 * 60 * 60 * 1000 },

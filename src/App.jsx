@@ -19,11 +19,14 @@ import PostCreate from "./pages/PostCreate.jsx";
 import PostDetail from "./pages/PostDetail.jsx";
 import PostEdit from "./pages/PostEdit.jsx";
 import MixedSearch from "./pages/MixedSearch";
+import UserDetail from "./pages/UserDetail.jsx";
+import Profile from "./pages/Profile.jsx";
+import Verify from "./pages/Verify.jsx";
+import VerifyResult from "./pages/VerifyResult.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
 
 import MascotHelper from "./components/MascotHelper";
 import DynamicModal from "./components/DynamicModal";
-import UserDetail from "./pages/UserDetail.jsx";
-import Profile from "./pages/Profile.jsx";
 
 function App() {
   const location = useLocation();
@@ -214,9 +217,49 @@ function App() {
                       visitorIP={visitor.ip} 
                       isAlertActive={isAlertActive}
                       clearAlert={clearAlert}
-                    />
-                    }
+                    />}
                   />
+                  <Route path="/verify" element={
+                    <Verify
+                      setGlobalModal = {setModalConfig}
+                      addHelperError = { (newErr) => setErrorStack(prev => [...prev, newErr])}
+                      setHelperFocusState = {setIsHelperFocusing}
+                      triggerMascotMood={triggerMascotMood}
+                      isUnder18={isUnder18}
+                      visitorIP={visitor.ip} 
+                      isAlertActive={isAlertActive}
+                      clearAlert={clearAlert}
+                    />}
+                  />
+                  <Route path="/verify/:verifyID" element={
+                    <VerifyResult
+                      setGlobalModal = {setModalConfig}
+                      addHelperError = { (newErr) => setErrorStack(prev => [...prev, newErr])}
+                      setHelperFocusState = {setIsHelperFocusing}
+                      triggerMascotMood={triggerMascotMood}
+                      isUnder18={isUnder18}
+                      visitorIP={visitor.ip} 
+                      isAlertActive={isAlertActive}
+                      clearAlert={clearAlert}
+                    />}
+                  />
+                  <Route
+                    path="/404"
+                    element={
+                        <NotFoundPage
+                            setHelperFocusState={setIsHelperFocusing}
+                        />
+                    }
+                />
+
+                <Route
+                    path="*"
+                    element={
+                        <NotFoundPage
+                            setHelperFocusState={setIsHelperFocusing}
+                        />
+                    }
+                />
                 </Routes>
             </AnimatePresence>
             

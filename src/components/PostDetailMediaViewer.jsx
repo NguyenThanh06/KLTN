@@ -9,8 +9,10 @@ export default function PostDetailMediaViewer({
     clearAlert,
     dynamicWM = false,
     watermarkText = "EyesOnly",
+    className = "",
+    itemClassName = "",
 }) {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     if (!files.length) {
         return (
@@ -23,17 +25,21 @@ export default function PostDetailMediaViewer({
     }
 
     return (
-        <div className="flex w-full flex-col gap-5">
+        <div className={`flex w-full flex-col gap-5 ${className}`}>
             {files.map((file, index) => (
-                <PostDetailMediaCanvas
+                <div
                     key={file?.fileID || file?.link || index}
-                    file={file}
-                    isAlertActive={isAlertActive}
-                    visitorIP={visitorIP}
-                    clearAlert={clearAlert}
-                    dynamicWM={dynamicWM}
-                    watermarkText={watermarkText}
-                />
+                    className={itemClassName}
+                >
+                    <PostDetailMediaCanvas
+                        file={file}
+                        isAlertActive={isAlertActive}
+                        visitorIP={visitorIP}
+                        clearAlert={clearAlert}
+                        dynamicWM={dynamicWM}
+                        watermarkText={watermarkText}
+                    />
+                </div>
             ))}
         </div>
     );

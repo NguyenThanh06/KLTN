@@ -2,20 +2,30 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
 
-export default function StepIndicator({ currentStep }) {
-    const steps = [
-        { number: 1, label: I18N_KEYS.POST_CREATE.COMMON.postCreate_stepIndicatorLabel_step1 },
-        { number: 2, label: I18N_KEYS.POST_CREATE.COMMON.postCreate_stepIndicatorLabel_step2 },
-    ];
-    
-    const { t, i18n } = useTranslation();
+const DEFAULT_STEPS = [
+    { number: 1, label: I18N_KEYS.POST_CREATE.COMMON.postCreate_stepIndicatorLabel_step1 },
+    { number: 2, label: I18N_KEYS.POST_CREATE.COMMON.postCreate_stepIndicatorLabel_step2 },
+];
+
+export default function StepIndicator({
+    currentStep,
+    steps = DEFAULT_STEPS,
+    stepText = I18N_KEYS.POST_CREATE.COMMON.postCreate_stepIndicatorText_step,
+}) {
+    const { t } = useTranslation();
+
+    const renderText = (value) => {
+        if (!value) return "";
+        return Array.isArray(value) ? t(...value) : t(value);
+    };
 
     return (
         <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2">
-                {steps.map((step) => {
+                {steps.map((step, index) => {
                     const isActive = currentStep === step.number;
                     const isDone = currentStep > step.number;
+                    const isLast = index === steps.length - 1;
 
                     return (
                         <div key={step.number} className="flex items-center gap-2">
@@ -38,10 +48,10 @@ export default function StepIndicator({ currentStep }) {
                                     ${isActive ? "text-main-text" : "text-text-shade-300"}
                                 `}
                             >
-                                {t(step.label)}
+                                {renderText(step.label)}
                             </span>
 
-                            {step.number !== steps.length && (
+                            {!isLast && (
                                 <span className="h-px w-8 bg-bg-shade-300 sm:w-12" />
                             )}
                         </div>
@@ -50,7 +60,7 @@ export default function StepIndicator({ currentStep }) {
             </div>
 
             <p className="font-ui text-xs text-text-shade-300">
-                {`${t(I18N_KEYS.POST_CREATE.COMMON.postCreate_stepIndicatorText_step)} ${currentStep}/2`}
+                {`${renderText(stepText)} ${currentStep}/${steps.length}`}
             </p>
         </div>
     );

@@ -75,7 +75,17 @@ i18n
                     ERROR_422_desc: "Tài khoản ni vừa bị khóa blah",
                     ERROR_500_title: "Hệ thống bảo trì blah",
                     ERROR_500_desc: "Hệ thống hiện đang bảo trì blah",
+                    ERROR_404_labelCode: "404",
+                    ERROR_404_title: "Không tìm thấy trang",
+                    ERROR_404_desc: "Có vẻ bạn đã đi lạc rồi. Trang này không tồn tại hoặc liên kết đã không còn khả dụng.",
+                    ERROR_404_button_toHome: "Về trang chủ",
+                    ERROR_404_button_back: "Quay lại",
                     
+
+                    //Util Date Format
+                    common_dateFormat_unknownTime: "Không rõ thời gian",
+
+
                     //Input things
                     common_input_label_optional: "(không bắt buộc)",
                     common_select_option_chooseOne: "Chọn blah",
@@ -361,6 +371,7 @@ i18n
                         postDetail_postAuthorCardButton_loading: "Đang xử lý...blah",
                         postDetail_postAuthorCardButton_follow: "Theo dõi",
                         postDetail_postAuthorCardButton_unfollow: "Bỏ theo dõi",
+                        postDetail_postInfoPanelRelativeTime_recent: "Vừa mới đăng blah",
                         postDetail_postInfoPanelIconLable_editPost: "Chỉnh sửa bài viết blah",
                         postDetail_postInfoPanelTitle_titleAlt: "Bài viết chưa có tiêu đề blah",
                         postDetail_likeMoodText_range1: "Hãy là người đầu tiên thả tim cho bài này blah",
@@ -809,6 +820,69 @@ i18n
                         profile_handleBlockAccount_modalButton_back: "Quay lại blah",
                         profile_handleBlockAccount_helper_success_block: "Đã chặn tài khoản này. blah",
                         profile_handleBlockAccount_helper_success_unblock: "Đã gỡ chặn tài khoản này. blah",
+
+
+                    // Verify
+                        // Common
+                        verify_sectionContainerTitle: "Xác thực bài viết blah",
+                        verify_sectionContainerDesc: "Nhập ID hoặc đường dẫn bài viết, chọn hình gốc trong bài, rồi tải lên hình bạn muốn kiểm tra. blah",
+                        verify_stepIndicatorLabel_step1: "Nhập bài viết blah",
+                        verify_stepIndicatorLabel_step2: "Chọn ảnh xác thực blah",
+                        verify_stepIndicatorText_step: "Bước",
+                        verify_formLabel_postID: "ID hoặc đường dẫn bài viết blah",
+                        verify_formPlaceholder_postID: "Ví dụ: 123 hoặc /post/123 blah",
+                        verify_formHelper_postID: "Bạn có thể nhập trực tiếp ID bài viết, hoặc dán đường dẫn bài viết vào đây. blah",
+                        verify_title_verifyingPost: "Bài viết đang xác thực blah",
+                        verify_title_chooseKTEOFile: "Chọn hình gốc trong bài viết blah",
+                        verify_desc_chooseKTEOFile: "Bạn chỉ có thể chọn một hình để đối chiếu. blah",
+                        verify_verifyKTEOFilePickerText_noKTEOFile: "Bài viết này chưa có hình ảnh để xác thực. blah",
+                        verify_verifyKTEOFilePickerBadge_selected: "Đã chọn",
+                        verify_verifyKTEOFilePickerBadge_select: "Chọn",
+                        verify_title_uploadFile: "Tải hình cần kiểm tra blah",
+                        verify_desc_uploadFile: "Hình này sẽ được gửi lên để so khớp với hình gốc bạn đã chọn. blah",
+                        verify_singleImageUploaderText_text1: "Kéo thả hình ảnh cần xác thực vào đây blah",
+                        verify_singleImageUploaderText_text2: "Chỉ nhận một hình ảnh PNG, JPG, JPEG hoặc BMP. Hình này sẽ được gửi cùng file gốc bạn chọn để kiểm tra. blah",
+                        verify_singleImageUploaderButton_upload: "Chọn hình ảnh",
+                        verify_singleImageUploaderButton_changeImage: "Đổi hình ảnh",
+                        verify_text_verifyFailed1: "Xác thực không thành công blah",
+                        verify_text_verifyFailed2: "Hình bạn tải lên không khớp với dữ liệu xác thực của hình đã chọn. Bạn có thể thử chọn hình khác trong bài viết hoặc tải lại hình rõ hơn. blah",
+                        verify_stepNavigationButton_nextStep1: "Xác thực bài viết này blah",
+                        verify_stepNavigationButton_nextStep2: "Xác thực blah",
+                        verify_stepNavigationButton_loadingStep1: "Đang tìm bài viết... blah",
+                        verify_stepNavigationButton_loadingStep2: "Đang xác thực... blah",
+                        verify_stepNavigationButton_back: "Quay lại",
+
+                        // Handle Find Post
+                        verify_handleFindPost_helper_error_nullID: "Bạn cần nhập ID hoặc đường dẫn bài viết cần xác thực. blah",
+                        verify_handleFindPost_helper_error_cannotFindID: "Không tìm thấy bài viết này. blah",
+                        verify_handleFindPost_helper_error_privatePost: "Bài viết này hiện không thể xác thực công khai. blah",
+
+                        // Handle Verify
+                        verify_handleVerify_helper_error_noKTEOFile: "Bạn cần chọn một hình trong bài viết để xác thực. blah",
+                        verify_handleVerify_helper_error_kteoFileNotFound: "Bấm răng mà tìm k ra luôn blah",
+                        verify_handleVerify_helper_error_nullUploadImage: "Bỏ ảnh lên đi chơ blah",
+                        verify_handleVerify_helper_error_typeMismatchUploadImage: "Ni mô phải ảnh? blah",
+                        verify_handleVerify_helper_error_uploadImageRangeOverflow: "Ảnh nặng quá blah",
+                        verify_handleVerify_helper_error_uploadImageTooMany: "Kêu up 1 ảnh chơ mấy blah",
+
+                    // Verify Result
+                        //Common
+                        verifyResult_title_notFoundCertificate: "Không tìm thấy kết quả xác thực blah",
+                        verifyResult_desc_notFoundCertificate: "Kết quả này không tồn tại, hoặc liên kết xác thực đã hết hạn. blah",
+                        verifyResult_verifyCertificateCardTitle_successfulVerify: "Xác thực thành công blah",
+                        verifyResult_verifyCertificateCardSubtext_dateVerify: "Thời điểm xác thực: {{date}} blah",
+                        verifyResult_verifyCertificateCardTitle_verifiedPost: "Bài viết được xác thực blah",
+                        verifyResult_verifyCertificateCardText_altTieudDe: "(Không có tiêu đề blah)",
+                        verifyResult_verifyCertificateCardText_altMoTa: "(Không có mô tả blah)",
+                        verifyResult_verifyCertificateCardButton_toPost: "Xem bài viết gốc blah",
+                        verifyResult_verifyCertificateCardText_expireAt: "Kết quả xác thực này có giá trị đến {{date}} blah",
+                        verifyResult_verifyCertificateCardText_verifiedFile: "Hình ảnh được xác thực blah",
+                        verifyResult_copyLinkBoxLabel_shareLink: "Chia sẻ kết quả xác thực blah",
+                        verifyResult_copyLinkBoxIconLabel_copiedLink: "Đã sao chép",
+                        verifyResult_copyLinkBoxIconLabel_copyLink: "Sao chép liên kết",
+                        verifyResult_copyLinkBoxHelper_expireAt: "Liên kết này có giá trị đến {{date}} blah ",
+                        verifyResult_helper_success_copyLink: "Sao chép thành công. blah",
+                        verifyResult_helper_error_copyLink: "Không thể sao chép liên kết. Bạn hãy thử sao chép thủ công nhé. blah",
 
                     }
             }
