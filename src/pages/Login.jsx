@@ -55,13 +55,13 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
     //-------------------------Hàm linh tinh---------------------------------
     const getResetPasswordResendText = (seconds = resetPasswordOtpCooldown) => {
         return seconds > 0
-            ? `${t(I18N_KEYS.LOGIN.HANDLE.RESET_PASSWORD.login_handleResetPassword_modalButton_resendOTP)} (${seconds})`
+            ? [I18N_KEYS.LOGIN.HANDLE.RESET_PASSWORD.login_handleResetPassword_modalButton_resendOTPWithTimer, {seconds: seconds}]
             : I18N_KEYS.LOGIN.HANDLE.RESET_PASSWORD.login_handleResetPassword_modalButton_resendOTP;
     };
 
     const getVerifyCodeResendText = (seconds = verifyCodeCooldown) => {
         return seconds > 0
-            ? `${t(I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalButton_resendVerifyCode)} (${seconds})`
+            ? [I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalButton_resendVerifyCodeWithTimer, {seconds: seconds}]
             : I18N_KEYS.LOGIN.HANDLE.VERIFY_ACCOUNT.login_handleVerifyAccount_modalButton_resendVerifyCode;
     };
 
@@ -315,7 +315,7 @@ export default function Login( { setGlobalModal, addHelperError, setHelperFocusS
                 if (result && !result.handled) {
                     switch (result.code){
                         //Kịch bản otp null
-                        case "WRONG_RESET_PASSWORD_OTP":
+                        case "NULL_RESET_PASSWORD_OTP":
                             addHelperError({
                                 id: Date.now(),
                                 code: I18N_KEYS.LOGIN.HANDLE.RESET_PASSWORD.login_handleResetPassword_input_error_nullOTP,

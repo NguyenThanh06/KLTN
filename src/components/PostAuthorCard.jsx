@@ -11,6 +11,10 @@ export default function PostAuthorCard({
     isFollowLoading = false,
     onNavigateAuthor,
     onToggleFollow,
+
+    // Dùng cho variant="sideButton"
+    sideButtonConfig = null,
+    disableNavigate = false,
 }) {
     const { t } = useTranslation();
 
@@ -23,21 +27,31 @@ export default function PostAuthorCard({
     const isSimpleVariant = variant === "simple";
     const shouldShowBio = variant === "bio";
     const shouldShowFollowButton = variant === "follow" && !isCurrentUserAuthor;
+    const shouldShowSideButton = variant === "sideButton" && sideButtonConfig;
 
-    return (
-        <div
-            className={`
-                flex h-full flex-col bg-main-bg shadow-sm
-                ${isSimpleVariant ? "rounded-3xl p-2" : "rounded-[1.75rem] p-3"}
-            `}
-        >
+    const shouldDisableNavigate =
+        disableNavigate || (shouldShowSideButton && author?.isBlocked);
+
+    const handleNavigateAuthor = () => {
+        if (shouldDisableNavigate) return;
+        onNavigateAuthor?.();
+    };
+
+    const renderAuthorMainInfo = () => {
+        return (
             <button
                 type="button"
+                disabled={shouldDisableNavigate}
                 className={`
-                    interaction-pop flex w-full cursor-pointer items-center gap-3 text-left hover:bg-bg-shade-50
+                    interaction-pop flex min-w-0 flex-1 items-center gap-3 text-left transition-all
                     ${isSimpleVariant ? "rounded-3xl p-2" : "rounded-[1.35rem] p-1"}
+                    ${
+                        shouldDisableNavigate
+                            ? "cursor-default opacity-90"
+                            : "cursor-pointer hover:bg-bg-shade-50"
+                    }
                 `}
-                onClick={onNavigateAuthor}
+                onClick={handleNavigateAuthor}
             >
                 <div
                     className={`
@@ -53,15 +67,64 @@ export default function PostAuthorCard({
                 </div>
 
                 <div className="min-w-0">
-                    <p className="truncate font-ui text-sm font-bold text-main-text">
-                        {displayName}
-                    </p>
+                    <div className="flex min-w-0 flex-wrap items-center gap-2">
+                        <p className="truncate font-ui text-sm font-bold text-main-text">
+                            {displayName}
+                        </p>
+
+                        {shouldShowSideButton && sideButtonConfig.badgeText && (
+                            <span
+                                className={`
+                                    rounded-full px-2.5 py-0.5 font-ui text-[0.68rem] font-bold
+                                    ${
+                                        sideButtonConfig.badgeTone === "active"
+                                            ? "bg-accent-200 text-main-text"
+                                            : "bg-bg-shade-100 text-text-shade-300"
+                                    }
+                                `}
+                            >
+                                {t(sideButtonConfig.badgeText)}
+                            </span>
+                        )}
+                    </div>
 
                     <p className="truncate text-xs text-text-shade-400">
                         {username}
                     </p>
                 </div>
             </button>
+        );
+    };
+
+    return (
+        <div
+            className={`
+                flex h-full flex-col bg-main-bg shadow-sm
+                ${isSimpleVariant ? "rounded-3xl p-2" : "rounded-[1.75rem] p-3"}
+            `}
+        >
+            {shouldShowSideButton ? (
+                <div className="flex w-full items-center gap-3">
+                    {renderAuthorMainInfo()}
+
+                    <Button
+                        type="button"
+                        variant={sideButtonConfig.variant || "primary"}
+                        className={`
+                            shrink-0 rounded-full px-3 sm:px-4
+                            ${sideButtonConfig.className || ""}
+                        `}
+                        disabled={sideButtonConfig.disabled}
+                        onClick={sideButtonConfig.onClick}
+                    >
+                        {t(sideButtonConfig.disabled && sideButtonConfig.loadingText
+                            ? sideButtonConfig.loadingText
+                            : sideButtonConfig.text)}
+                    </Button>
+                </div>
+            ) : (
+                renderAuthorMainInfo()
+            )}
 
             {shouldShowBio && (
                 <div className="mt-3 min-h-[5.5rem] rounded-[1.35rem] bg-bg-shade-200/25 px-4 py-3">

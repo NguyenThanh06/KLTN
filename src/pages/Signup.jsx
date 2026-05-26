@@ -62,7 +62,7 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
 
     const getVerifyCodeResendText = (seconds = verifyCodeCooldown) => {
         return seconds > 0
-            ? `${t(I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_resendVerifyCode)} (${seconds})`
+            ? [I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_resendVerifyCodeWithTimer, {seconds: seconds}]
             : I18N_KEYS.SIGNUP.HANDLE.VERIFY_ACCOUNT.signup_handleVerifyAccount_modalButton_resendVerifyCode;
     };
 
@@ -630,7 +630,7 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
                                                     errorTooLong= {t(I18N_KEYS.SIGNUP.HANDLE.SIGNUP.signup_handleSignup_input_error_passwordTooLong)}
                                                     type= "password"
                                                     maxLength = "32"
-                                                    minlenght = "6"
+                                                    minLenght = "6"
                                                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                                                 />
                                                 </>

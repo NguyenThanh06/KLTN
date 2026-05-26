@@ -7,6 +7,11 @@ import { Search, X } from "lucide-react";
 import Input from "./Input";
 import PostAuthorCard from "./PostAuthorCard";
 
+const getAccountID = (account) => {
+    if (!account) return "";
+    return String(account.accountID || account.userID || account.id || "");
+};
+
 const getDisplayName = (account) => {
     return account?.tenHienThi || account?.username || "Người dùng cute hột mít";
 };
@@ -16,14 +21,18 @@ export default function RelationshipListModal({
     type = "followers",
     account,
     isCurrentAccount = false,
+    isAuthenticated = false,
+    currentUserID = "",
     items = [],
     keyword = "",
     isLoading = false,
     hasMore = false,
+    followLoadingAccountID = null,
     onKeywordChange,
     onLoadMore,
     onClose,
     onNavigateUser,
+    onToggleFollow,
 }) {
 
     const { t, i18n } = useTranslation();
@@ -120,14 +129,42 @@ export default function RelationshipListModal({
                         </div>
                     ) : (
                         <div className="space-y-3">
-                            {items.map((item) => (
-                                <PostAuthorCard
-                                    key={item.relationshipID || item.accountID}
-                                    author={item}
-                                    variant="simple"
-                                    onNavigateAuthor={() => onNavigateUser?.(item)}
-                                />
-                            ))}
+                            {items.map((item) => {
+                                const itemAccountID = getAccountID(item);
+                                const isCurrentUserItem = Boolean(
+                                    isAuthenticated &&
+                                        currentUserID &&
+                                        itemAccountID &&
+                                        String(itemAccountID) === String(currentUserID)
+                                );
+
+                                const loadingKey = item.relationshipID || itemAccountID;
+                                const isFollowButtonLoading = followLoadingAccountID === loadingKey;
+
+                                const isFollowingItem = isAuthenticated
+                                    ? Boolean(item.daTheoDoi)
+                                    : false;
+
+                                return (
+                                    <PostAuthorCard
+                                        key={item.relationshipID || item.accountID}
+                                        author={item}
+                                        variant={isCurrentUserItem ? "simple" : "sideButton"}
+                                        onNavigateAuthor={() => onNavigateUser?.(item)}
+                                        sideButtonConfig={
+                                            isCurrentUserItem
+                                                ? null
+                                                : {
+                                                    text: isFollowingItem ? t(I18N_KEYS.USER_DETAIL.COMMON.userDetail_userProfileContentButton_unfollow) : t(I18N_KEYS.USER_DETAIL.COMMON.userDetail_userProfileContentButton_follow),
+                                                    loadingText: t(I18N_KEYS.USER_DETAIL.COMMON.userDetail_userProfileContentButton_loading),
+                                                    variant: isFollowingItem ? "outline" : "primary",
+                                                    disabled: isFollowButtonLoading,
+                                                    onClick: () => onToggleFollow?.(item),
+                                                }
+                                        }
+                                    />
+                                );
+                            })}
                         </div>
                     )}
 

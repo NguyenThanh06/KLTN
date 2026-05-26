@@ -280,6 +280,26 @@
 }
 
 
+/* Hiệu ứng hop của mấy cái nút nhảy nhảy để người ta chú ý vô chơ không quên hắn */
+@keyframes save-button-hop {
+    0% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-8px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.animate-save-button-hop {
+    animation: save-button-hop 0.35s ease-out 2;
+    will-change: transform;
+}
+
+
 
 
 /* Phần chống leak ảnh FE */

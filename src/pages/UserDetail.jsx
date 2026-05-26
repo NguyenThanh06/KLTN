@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
 import { useAuth } from "../context/AuthContext";
 import { useErrorHandler } from "../hooks/useErrorHandler";
@@ -21,7 +21,6 @@ import { MOCK_USER_DATA_2 } from "../data/User/mockUser2";
 import { MOCK_USER_DATA_3 } from "../data/User/mockUser3";
 import { MOCK_POST_DATA_1 } from "../data/Post/mockPost1";
 import { MOCK_POST_DATA_2 } from "../data/Post/mockPost2";
-import { t } from "i18next";
 
 const POST_PAGE_SIZE = 12;
 const RELATIONSHIP_PAGE_SIZE = 20;
@@ -73,12 +72,16 @@ const buildMockRelationshipUsers = (accountID, type) => {
         return {
             ...baseUser,
             relationshipID: `${type}-${baseUser.accountID}-${index + 1}`,
-            accountID: `${baseUser.accountID}-${type}-${index + 1}`,
+            accountID: baseUser.accountID,
             username: baseUser.username,
             tenHienThi:
                 index < baseUsers.length
                     ? baseUser.tenHienThi
                     : `${baseUser.tenHienThi} ${index + 1}`,
+
+            // TODO: Backend sau này cần trả thêm trường này cho từng account trong follower/following.
+            // Đây là trạng thái "user đang đăng nhập có theo dõi account này hay không".
+            daTheoDoi: type === "following" ? true : index % 2 === 0,
         };
     });
 };
@@ -101,6 +104,14 @@ const buildMockAccountPosts = (accountID) => {
     });
 };
 
+
+
+
+
+
+
+
+
 export default function UserDetail({
     setGlobalModal,
     addHelperError,
@@ -110,6 +121,9 @@ export default function UserDetail({
     visitorIP,
     clearAlert,
 }) {
+
+    const { t, i18n } = useTranslation();
+
     const { username } = useParams();
     const navigate = useNavigate();
 
@@ -140,6 +154,7 @@ export default function UserDetail({
     const [relationshipItems, setRelationshipItems] = useState([]);
     const [relationshipHasMore, setRelationshipHasMore] = useState(false);
     const [isRelationshipLoading, setIsRelationshipLoading] = useState(false);
+    const [relationshipFollowLoadingID, setRelationshipFollowLoadingID] = useState(null);
 
     const isCurrentAccount = Boolean(
         isAuthenticated &&
@@ -432,6 +447,94 @@ export default function UserDetail({
             }
         } finally {
             setIsFollowLoading(false);
+        }
+    };
+
+    const handleToggleFollowRelationshipAccount = async (targetAccount) => {
+        if (!targetAccount) return;
+
+        if (!isAuthenticated) {
+            handleRequireLogin(
+                I18N_KEYS.USER_DETAIL.HANDLE.PREPARE_PAGE
+                    .userDetail_preparePageAndRequireLogin_modalDesc_requireLogin_follow
+            );
+            return;
+        }
+
+        const targetAccountID = getAccountID(targetAccount);
+
+        if (!targetAccountID || String(targetAccountID) === String(currentUserID)) {
+            return;
+        }
+
+        const targetRelationshipID =
+            targetAccount.relationshipID || targetAccountID;
+
+        if (relationshipFollowLoadingID) return;
+
+        const previousItems = relationshipItems;
+        const previousFollowing = Boolean(targetAccount.daTheoDoi);
+        const nextFollowing = !previousFollowing;
+
+        setRelationshipFollowLoadingID(targetRelationshipID);
+
+        setRelationshipItems((prev) =>
+            prev.map((item) => {
+                const isSameItem = item.relationshipID
+                    ? item.relationshipID === targetRelationshipID
+                    : String(item.accountID) === String(targetAccountID);
+
+                if (!isSameItem) return item;
+
+                return {
+                    ...item,
+                    daTheoDoi: nextFollowing,
+                };
+            })
+        );
+
+        try {
+            // TODO: gọi backend follow/unfollow account trong danh sách follower/following.
+            // const response = nextFollowing
+            //     ? await userApi.followUser(targetAccountID)
+            //     : await userApi.unfollowUser(targetAccountID);
+            //
+            // Nếu backend trả trạng thái cuối:
+            // const finalFollowing = Boolean(response.data.daTheoDoi);
+            // setRelationshipItems((prev) =>
+            //     prev.map((item) =>
+            //         item.relationshipID === targetRelationshipID
+            //             ? { ...item, daTheoDoi: finalFollowing }
+            //             : item
+            //     )
+            // );
+            // Mỗi cái account nên có
+            // accountID,
+            // username,
+            // tenHienThi,
+            // avatar,
+            // tieuSu,
+            // daTheoDoi
+
+            await Promise.resolve();
+        } catch (error) {
+            setRelationshipItems(previousItems);
+
+            const errorData = error.response?.data;
+            const result = handleError(errorData);
+
+            if (result && !result.handled) {
+                switch (result.code) {
+                    default:
+                        addHelperError?.({
+                            id: Date.now(),
+                            code: I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError,
+                        });
+                        break;
+                }
+            }
+        } finally {
+            setRelationshipFollowLoadingID(null);
         }
     };
 
@@ -953,14 +1056,18 @@ export default function UserDetail({
                 type={relationshipModalType || "followers"}
                 account={account}
                 isCurrentAccount={isCurrentAccount}
+                isAuthenticated={isAuthenticated}
+                currentUserID={currentUserID}
                 items={relationshipItems}
                 keyword={relationshipKeyword}
                 isLoading={isRelationshipLoading}
                 hasMore={relationshipHasMore}
+                followLoadingAccountID={relationshipFollowLoadingID}
                 onKeywordChange={handleSearchRelationship}
                 onLoadMore={handleLoadMoreRelationship}
                 onClose={handleCloseRelationshipModal}
                 onNavigateUser={handleNavigateRelationshipUser}
+                onToggleFollow={handleToggleFollowRelationshipAccount}
             />
 
             <ReportModal
