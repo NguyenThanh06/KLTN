@@ -99,7 +99,7 @@ export default function PostCreate({
                 secondaryBtnText: I18N_KEYS.POST_CREATE.HANDLE.AUTHENTICATION_CHECK.postCreate_authCheck_modalButton_close,
                 onPrimaryAction: () => {
                     setGlobalModal?.({ isOpen: false });
-                    navigate("/profile");
+                    navigate("/profile?tab=disabled");
                 },
                 onSecondaryAction: () => {
                     setGlobalModal?.({ isOpen: false });
@@ -486,7 +486,7 @@ export default function PostCreate({
                                 secondaryBtnText: I18N_KEYS.POST_CREATE.HANDLE.AUTHENTICATION_CHECK.postCreate_authCheck_modalButton_close,
                                 onPrimaryAction: () => {
                                     setGlobalModal?.({ isOpen: false });
-                                    navigate("/profile");
+                                    navigate("/profile?tab=disabled");
                                 },
                                 onSecondaryAction: () => {
                                     setGlobalModal?.({ isOpen: false });
