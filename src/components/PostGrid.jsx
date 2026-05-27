@@ -4,26 +4,26 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import PostThumbnailCard from "./PostThumbnailCard";
 import Button from "./Button";
 
-const PostGrid = ({
-    posts = [],
-    isUnder18,
-    isAlertActive,
-    visitorIP,
-    clearAlert,
+const PostGrid = ({ 
+  posts = [], 
+  isUnder18, 
+  isAlertActive, 
+  visitorIP,  
+  clearAlert,
 
-    enableInfiniteScroll = false,
-    onLoadMore,
+  enableInfiniteScroll = false,
+  onLoadMore,
 
-    showPagination = false,
-    currentPage = 1,
-    totalPages = 1,
-    onPageChange,
-    scrollOnPageChange = true,
+  showPagination = false,
+  currentPage = 1,
+  totalPages = 1,
+  onPageChange,
+  scrollOnPageChange = true,
 
-    showAuthorInfo = true,
-    viewerIsAuthor = false,
-    showEditButton = false,
-    onEditPost,
+  showAuthorInfo = true,
+  viewerIsAuthor = false,
+  showEditButton = false,
+  onEditPost,
 }) => {
     const [hasMore, setHasMore] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
@@ -89,10 +89,10 @@ const PostGrid = ({
             const estimatedCardGap = 32;
 
             const estimatedPostHeight =
-                estimatedImageHeight +
-                estimatedTitleHeight +
-                estimatedAuthorHeight +
-                estimatedCardGap;
+            estimatedImageHeight +
+            estimatedTitleHeight +
+            estimatedAuthorHeight +
+            estimatedCardGap;
 
             const shortestColumnIndex = columnHeights.indexOf(
                 Math.min(...columnHeights)
@@ -241,17 +241,17 @@ const PostGrid = ({
                         className="flex min-w-0 flex-col gap-6 sm:gap-10"
                     >
                         {columnPosts.map((post) => (
-                            <PostThumbnailCard
-                                key={post.postID}
-                                post={post}
-                                isUnder18={isUnder18}
-                                isAlertActive={isAlertActive}
-                                visitorIP={visitorIP}
-                                clearAlert={clearAlert}
-                                showAuthorInfo={showAuthorInfo}
-                                viewerIsAuthor={viewerIsAuthor}
-                                showEditButton={showEditButton}
-                                onEditPost={onEditPost}
+                            <PostThumbnailCard 
+                            key={post.postID} 
+                            post={post} 
+                            isUnder18={isUnder18}
+                            isAlertActive={isAlertActive} 
+                            visitorIP={visitorIP}
+                            clearAlert={clearAlert}
+                            showAuthorInfo={showAuthorInfo}
+                            viewerIsAuthor={viewerIsAuthor}
+                            showEditButton={showEditButton}
+                            onEditPost={onEditPost}
                             />
                         ))}
                     </div>

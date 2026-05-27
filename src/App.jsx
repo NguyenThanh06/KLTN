@@ -24,9 +24,11 @@ import Profile from "./pages/Profile.jsx";
 import Verify from "./pages/Verify.jsx";
 import VerifyResult from "./pages/VerifyResult.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
+import Terms from "./pages/Terms.jsx";
 
 import MascotHelper from "./components/MascotHelper";
 import DynamicModal from "./components/DynamicModal";
+import AboutUs from "./pages/AboutUs.jsx";
 
 function App() {
   const location = useLocation();
@@ -248,18 +250,30 @@ function App() {
                     element={
                         <NotFoundPage
                             setHelperFocusState={setIsHelperFocusing}
-                        />
-                    }
-                />
-
-                <Route
-                    path="*"
+                        />}
+                  />
+                  <Route
+                    path="/about"
                     element={
-                        <NotFoundPage
+                        <AboutUs
                             setHelperFocusState={setIsHelperFocusing}
-                        />
-                    }
-                />
+                        />}
+                  />
+                  <Route
+                    path="/terms"
+                    element={
+                        <Terms
+                            setHelperFocusState={setIsHelperFocusing}
+                        />}
+                  />
+
+                  <Route
+                      path="*"
+                      element={
+                          <NotFoundPage
+                              setHelperFocusState={setIsHelperFocusing}
+                          />}
+                  />
                 </Routes>
             </AnimatePresence>
             

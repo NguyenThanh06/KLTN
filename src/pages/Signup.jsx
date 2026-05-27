@@ -633,6 +633,19 @@ export default function Signup( { setGlobalModal, addHelperError, setHelperFocus
                                                     minLenght = "6"
                                                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                                                 />
+
+                                                <span className='mt-2 text-xs to-main-text leading-tight'>
+                                                    {t(I18N_KEYS.SIGNUP.COMMON.signup_formText_termsAgree)}
+                                                    <Link
+                                                        to="/terms"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="font-semibold text-primary hover:text-primary-700"
+                                                    >
+                                                        {t(I18N_KEYS.COMMON.common_footerButton_terms)}
+                                                    </Link>
+                                                    .
+                                                </span>
                                                 </>
                                             )}
                                         </motion.div>

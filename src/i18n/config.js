@@ -57,27 +57,27 @@ i18n
                     //Global Errors
                         //Lỗi Input
                     ERROR_handleInputEmpty: "Đừng quên điền chỗ này nhé.",
-                    ERROR_handleInputWrongPattern: "Nhìn sai sai pattern ơ nhờ blah",
-                    ERROR_handleInputWrongType: "Lộn kiểu dữ liệu rồi blah.",
-                    ERROR_handleInputTooShort: "Ngắn quá!!!! blah",
-                    ERROR_handleInputTooLong: "Dài quá!!!! blah",
-                    ERROR_handleInputRangeUnderflow: "Số chi mà nhỏ xí blah.",
-                    ERROR_handleInputRangeOverflow: "Số chi mà to đùng blah",
-                    ERROR_handleInputStepMismatch: "Kêu nhập số nguyên mà đi nhập số thực blah",
-                    ERROR_handleInputBadInput: "Nhập cái chi mà không quy đổi ra số được luôn??? blah",
-                    ERROR_handleInputInvalid: "Lỗi méo chi chả hiểu nữa! blah",
+                    ERROR_handleInputWrongPattern: "Chỗ này đang hơi lệch mẫu rồi nè.",
+                    ERROR_handleInputWrongType: "Định dạng này chưa đúng kiểu cần dùng rồi.",
+                    ERROR_handleInputTooShort: "Hơi ngắn một xíu, thêm chút nữa nha.",
+                    ERROR_handleInputTooLong: "Hơi dài quá rồi, gọt bớt một chút nhé.",
+                    ERROR_handleInputRangeUnderflow: "Giá trị này hơi thấp hơn mức cần thiết rồi.",
+                    ERROR_handleInputRangeOverflow: "Giá trị này hơi vượt mức cho phép rồi.",
+                    ERROR_handleInputStepMismatch: "Giá trị này chưa khớp nhịp cho lắm.",
+                    ERROR_handleInputBadInput: "Chỗ này chưa đọc được thành số rồi.",
+                    ERROR_handleInputInvalid: "Có gì đó chưa ổn ở chỗ này nè.",
                         //Lỗi chung khác
                     ERROR_unknownError: "Có lỗi gì đó lạ lắm, mình cũng chưa biết là gì nữa...",
-                    ERROR_401: "Phiên đăng nhập hết hạn blah",
-                    ERROR_403_title: "Tài khoản không có quyền vô đây, cook blah",
-                    ERROR_403_desc: "Tài khoản không có quyền vô đây, cook, blah blah",
-                    ERROR_422_title: "Tài khoản bị xích blah",
-                    ERROR_422_desc: "Tài khoản ni vừa bị khóa blah",
-                    ERROR_500_title: "Hệ thống bảo trì blah",
-                    ERROR_500_desc: "Hệ thống hiện đang bảo trì blah",
+                    ERROR_401: "Phiên đăng nhập đã nghỉ giải lao rồi. Đăng nhập lại giúp mình nhé.",
+                    ERROR_403_title: "Lối này chưa mở cho bạn rồi",
+                    ERROR_403_desc: "Tài khoản hiện chưa có quyền vào khu vực này. Mình quay lại chỗ an toàn hơn nhé.",
+                    ERROR_422_title: "Tài khoản đang tạm nghỉ một chút",
+                    ERROR_422_desc: "Tài khoản này hiện đang bị hạn chế hoạt động, nên chưa thể tiếp tục thao tác này được.",
+                    ERROR_500_title: "Hệ thống đang hơi khựng lại",
+                    ERROR_500_desc: "Có vẻ phía hệ thống đang gặp chút trục trặc. Bạn thử lại sau một lát nhé.",
                     ERROR_404_labelCode: "404",
                     ERROR_404_title: "Không tìm thấy trang",
-                    ERROR_404_desc: "Có vẻ bạn đã đi lạc rồi. Trang này không tồn tại hoặc liên kết đã không còn khả dụng.",
+                    ERROR_404_desc: "Bạn ơi mình đi đâu thế? Trang này không tồn tại hoặc liên kết đã không còn khả dụng.",
                     ERROR_404_button_toHome: "Về trang chủ",
                     ERROR_404_button_back: "Quay lại",
                     
@@ -88,16 +88,16 @@ i18n
 
                     //Input things
                     common_input_label_optional: "(không bắt buộc)",
-                    common_select_option_chooseOne: "Chọn blah",
+                    common_select_option_chooseOne: "Chọn một món nhé",
 
                     //Age Status Modal
-                    common_ageStatus_modalTitle: "Ây yo hỏi tuổi cái blah",
-                    common_ageStatus_modalDesc: "Chọn dưới 18 thì sẽ blur mấy ảnh 18+ đi, mà tắt cái modal ni thì tí hắn hỏi lại đó blah",
-                    common_ageStatus_modalButton_under18: "Em chưa 18",
+                    common_ageStatus_modalTitle: "Trạm kiểm tuổi mini đây",
+                    common_ageStatus_modalDesc: "Nếu bạn chưa đủ 18, tụi mình sẽ làm mờ nội dung 18+ để mọi thứ đỡ kì cục hơn. Đóng bảng này thì lát nữa mình sẽ hỏi lại đó nha — không trốn được đâu.",
+                    common_ageStatus_modalButton_under18: "Mình chưa đủ 18",
                     common_ageStatus_modalButton_above18: "Mình đủ 18 rồi",
 
                     //Header
-                    common_headerPlaceholder_search: "Tìm kiếm...",
+                    common_headerPlaceholder_search: "Tìm gì đó hay hay...",
                     common_headerButton_post: "Đăng bài",
                     common_headerButton_verify: "Xác thực ảnh",
                     common_headerTitle_notifications: "Thông báo",
@@ -106,9 +106,9 @@ i18n
                     common_headerButton_login: "Đăng nhập",
                     common_headerButton_logout: "Đăng xuất",
                     common_headerButton_language: "Ngôn ngữ:",
-                    common_headerButton_theme: "Chủ đề:",
-                    common_headerButton_themeLight: "Sáng",
-                    common_headerButton_themeDark: "Tối",
+                    common_headerButton_theme: "Giao diện:",
+                    common_headerButton_themeLight: "Sáng sủa",
+                    common_headerButton_themeDark: "Tối sủa",
                     
                     //Notification things
                     common_headerDesc_noNotifications: "Không có thông báo mới blah",
@@ -132,10 +132,55 @@ i18n
                     common_footerDesc_eyesonly: "Cộng đồng tranh ảnh tạo ra bởi hai đứa sinh viên ngầu quãi đạn.",
                     common_footerButton_about: "Về chúng mình",
                     common_footerButton_privacy: "Quyền riêng tư",
-                    common_footerButton_terms: "Điều khoản",
+                    common_footerButton_terms: "Điều khoản sử dụng & Quyền riêng tư",
 
                     //Security
                     common_security_catSentinel_dialogue: "Vuốt ve em {{remaningPets}} cái nữa đi!",
+
+
+                    // About us
+                    aboutUs_title: "Về EyesOnly",
+                    aboutUs_h1: "EyesOnly là gì?",
+                    aboutUs_p1: "EyesOnly là một không gian để người dùng đăng tải, ngắm nhìn và tương tác với các tác phẩm hình ảnh. Website được tạo ra dành cho những tác giả, nghệ sĩ và những người yêu sáng tạo muốn chia sẻ tác phẩm của mình một cách tự do hơn, nhưng vẫn có thêm lớp bảo vệ cho nội dung họ đăng tải.\n\nCái tên EyesOnly được lấy cảm hứng từ những tập tài liệu “chỉ được xem bằng mắt” — nơi nội dung có thể được mở ra để nhìn, nhưng không nên bị sao chép, lưu trữ hay phát tán tùy tiện.",
+                    aboutUs_h2: "EyesOnly bảo vệ tác phẩm như thế nào?",
+                    aboutUs_p2: "Website hỗ trợ nhiều cơ chế nhằm giảm rủi ro sao chép nội dung, như hạn chế chụp màn hình, hạn chế quay màn hình, hạn chế tải ảnh trực tiếp và xử lý hình ảnh trước khi hiển thị.\n\nĐiều đó có nghĩa là hình ảnh người xem nhìn thấy trên website không phải lúc nào cũng là file gốc mà tác giả đã tải lên ban đầu, mà là một phiên bản đã được xử lý để phục vụ việc xem trước. Tác phẩm vẫn có thể được chia sẻ để mọi người chiêm ngưỡng, nhưng khó bị lấy đi dưới dạng nguyên bản hơn.",
+                    aboutUs_h3: "Dành cho những ai?",
+                    aboutUs_p3: "EyesOnly dành cho những người yêu thích việc tạo ra, đăng tải và khám phá các tác phẩm hình ảnh. Dù bạn là nghệ sĩ, người sáng tạo nội dung, người thích sưu tầm cảm hứng hay chỉ đơn giản là một người yêu cái đẹp, bạn đều có thể tìm thấy một không gian phù hợp để chia sẻ và tương tác.\n\nChúng tôi mong muốn mỗi tác phẩm khi được đăng lên đều được tôn trọng, và mỗi người dùng khi xem tác phẩm đều hiểu rằng phía sau một hình ảnh là công sức, thời gian và cảm xúc của người tạo ra nó.",
+                    aboutUs_h4: "Một không gian để ngắm nhìn, không phải đánh cắp",
+                    aboutUs_p4: "EyesOnly không hứa rằng mọi hành vi sao chép đều có thể bị ngăn chặn tuyệt đối, vì trên môi trường số luôn tồn tại nhiều giới hạn kỹ thuật. Nhưng chúng tôi cố gắng tạo thêm nhiều lớp bảo vệ để việc đánh cắp tác phẩm trở nên khó hơn, kém nguyên vẹn hơn và ít hấp dẫn hơn.\n\nVới EyesOnly, chúng tôi hy vọng người sáng tạo có thể yên tâm hơn khi chia sẻ tác phẩm, còn người xem có thể tận hưởng nội dung theo cách văn minh, tôn trọng và có trách nhiệm hơn.",
+
+
+                    // Terms Page
+                    terms_title: "Điều khoản sử dụng & Quyền riêng tư",
+                    terms_h1: "1. Phạm vi áp dụng",
+                    terms_p1: "Các điều khoản này áp dụng cho người dùng khi tạo tài khoản, đăng tải bài viết, bình luận, sử dụng chức năng xác thực ảnh và các tính năng khác trên hệ thống. Khi đăng ký hoặc tiếp tục sử dụng website, người dùng được xem là đã đọc, hiểu và đồng ý tuân thủ các điều khoản được nêu trong trang này.\n\nWebsite được xây dựng nhằm phục vụ mục đích học tập, nghiên cứu và mô phỏng quy trình vận hành của một nền tảng đăng tải, chia sẻ và kiểm duyệt nội dung hình ảnh.",
+                    terms_h2: "2. Tài khoản người dùng",
+                    terms_p2: "Người dùng cần cung cấp thông tin phù hợp khi tạo tài khoản, bao gồm tên hiển thị, tên người dùng, email và các thông tin cần thiết khác theo yêu cầu của hệ thống. Người dùng chịu trách nhiệm bảo mật tài khoản của mình và không nên chia sẻ thông tin đăng nhập cho người khác.\n\nNgười dùng không được sử dụng tài khoản để giả mạo cá nhân, tổ chức khác, gây hiểu nhầm về danh tính, thực hiện hành vi quấy rối, spam, lừa đảo hoặc các hành vi gây ảnh hưởng tiêu cực đến người dùng khác và hệ thống.",
+                    terms_h3: "3. Trách nhiệm với nội dung đăng tải",
+                    terms_p3: "Người dùng chịu trách nhiệm đối với toàn bộ nội dung do mình đăng tải hoặc tạo ra trên hệ thống, bao gồm hình ảnh, tiêu đề, mô tả, thẻ tag, bình luận và các thông tin liên quan khác.\n\nNgười dùng không được đăng tải nội dung vi phạm pháp luật, vi phạm bản quyền, xúc phạm danh dự hoặc nhân phẩm của người khác, quấy rối, kích động thù ghét, lừa đảo, spam, phát tán thông tin sai lệch hoặc nội dung mà người dùng không có quyền sử dụng.\n\nNếu nội dung do người dùng đăng tải gây ra tranh chấp, khiếu nại hoặc ảnh hưởng đến cá nhân, tổ chức khác, người dùng có trách nhiệm phối hợp xử lý và chịu trách nhiệm đối với nội dung của mình.",
+                    terms_h4: "4. Nội dung hạn chế hiển thị và nhãn 18+",
+                    terms_p4: "Đối với các nội dung có yếu tố nhạy cảm, không phù hợp với người dùng dưới 18 tuổi hoặc cần hạn chế hiển thị, người dùng có trách nhiệm gắn nhãn phù hợp trước khi đăng tải.\n\nNgười dùng không được cố tình che giấu, gắn nhãn sai hoặc đăng tải nội dung nhạy cảm dưới hình thức gây hiểu nhầm nhằm vượt qua cơ chế kiểm duyệt của hệ thống. Việc gắn nhãn chính xác giúp hệ thống bảo vệ trải nghiệm của người dùng nhỏ tuổi và hỗ trợ hiển thị nội dung phù hợp hơn.\n\nHệ thống có thể làm mờ, hạn chế hiển thị hoặc áp dụng các biện pháp cảnh báo đối với nội dung được đánh dấu là hạn chế hiển thị hoặc nội dung được phát hiện có yếu tố nhạy cảm.",
+                    terms_h5: "5. Nội dung có sử dụng AI tạo sinh",
+                    terms_p5: "Nếu hình ảnh hoặc nội dung được tạo ra, chỉnh sửa đáng kể, hoặc hỗ trợ bởi công cụ AI tạo sinh, người dùng có trách nhiệm đánh dấu chính xác thông tin này khi đăng tải.\n\nNgười dùng không được cố tình che giấu việc sử dụng AI tạo sinh nếu điều đó có thể gây hiểu nhầm cho người xem, đặc biệt trong các trường hợp nội dung có thể bị nhầm là hình ảnh thật, sự kiện thật, nhân vật thật hoặc bằng chứng xác thực.\n\nViệc đánh dấu nội dung có sử dụng AI tạo sinh giúp tăng tính minh bạch, hỗ trợ người xem hiểu đúng về nguồn gốc nội dung và hạn chế các hành vi giả mạo hoặc lừa đảo.",
+                    terms_h6: "6. Xác thực ảnh và chứng chỉ xác thực",
+                    terms_p6: "Chức năng xác thực ảnh của hệ thống được sử dụng để ghi nhận và hiển thị kết quả xác thực tại thời điểm kiểm tra. Kết quả xác thực chỉ phản ánh dữ liệu, trạng thái và khả năng xử lý của hệ thống tại thời điểm đó.\n\nNgười dùng không được lợi dụng kết quả xác thực, chứng chỉ xác thực hoặc liên kết xác thực để gây hiểu nhầm, giả mạo, lừa đảo hoặc khẳng định sai lệch về nguồn gốc, tính toàn vẹn hay độ tin cậy tuyệt đối của nội dung.\n\nHệ thống không đảm bảo rằng kết quả xác thực luôn chính xác tuyệt đối trong mọi trường hợp. Kết quả xác thực nên được xem là một nguồn tham khảo hỗ trợ, không phải là kết luận pháp lý hoặc bằng chứng tuyệt đối.",
+                    terms_h7: "7. Xử lý và hiển thị hình ảnh tải lên",
+                    terms_p7: "Khi người dùng tải hình ảnh lên hệ thống để đăng bài, hệ thống có thể xử lý, chuyển đổi hoặc lưu lại hình ảnh dưới một định dạng khác nhằm phục vụ việc hiển thị, tối ưu dung lượng, bảo vệ nội dung, kiểm duyệt hoặc các chức năng liên quan khác.\n\nĐối với hình ảnh trong bài viết, hệ thống không lưu trữ trực tiếp bản hình ảnh gốc do người dùng cung cấp trong cơ sở dữ liệu. Thay vào đó, hệ thống hiển thị và sử dụng phiên bản hình ảnh đã được xử lý. Ngoại lệ có thể áp dụng đối với ảnh đại diện của người dùng, vì đây là hình ảnh được dùng để hiển thị trong hồ sơ cá nhân và các khu vực nhận diện tài khoản.\n\nNgười dùng vẫn chịu trách nhiệm về quyền sử dụng đối với hình ảnh mà mình tải lên, kể cả khi hình ảnh đã được hệ thống xử lý hoặc chuyển đổi định dạng.",
+                    terms_h8: "8. Quyền sử dụng nội dung của hệ thống",
+                    terms_p8: "Người dùng vẫn giữ các quyền liên quan đối với nội dung do mình đăng tải, trong phạm vi pháp luật cho phép. Việc đăng tải nội dung lên hệ thống không đồng nghĩa với việc người dùng chuyển quyền sở hữu nội dung đó cho hệ thống.\n\nTuy nhiên, khi đăng tải nội dung, người dùng cho phép hệ thống lưu trữ, xử lý, chuyển đổi định dạng, hiển thị, phân phối trong phạm vi website, kiểm duyệt, làm mờ, gắn cảnh báo hoặc thực hiện các thao tác kỹ thuật cần thiết để vận hành dịch vụ.\n\nCác quyền sử dụng này chỉ nhằm phục vụ hoạt động của hệ thống, bao gồm hiển thị bài viết, quản lý tài khoản, kiểm duyệt nội dung, xử lý báo cáo, bảo vệ người dùng và duy trì tính ổn định của website.",
+                    terms_h9: "9. Kiểm duyệt, báo cáo và xử lý vi phạm",
+                    terms_p9: "Hệ thống có thể áp dụng các biện pháp kiểm duyệt đối với bài viết, bình luận, tài khoản hoặc các nội dung khác do người dùng tạo ra. Các biện pháp này có thể bao gồm ẩn nội dung, hạn chế hiển thị, làm mờ hình ảnh, khóa chức năng bình luận, gỡ bài viết, cảnh báo người dùng hoặc vô hiệu hóa tài khoản.\n\nNgười dùng có thể báo cáo nội dung hoặc tài khoản mà mình cho rằng vi phạm điều khoản sử dụng, gây hại, giả mạo, xúc phạm, vi phạm bản quyền hoặc không phù hợp với quy định của hệ thống.\n\nViệc xử lý báo cáo sẽ được thực hiện dựa trên thông tin mà hệ thống ghi nhận, nội dung được báo cáo và quá trình xem xét của người quản trị. Trong một số trường hợp, hệ thống có thể từ chối xử lý nếu báo cáo không đủ căn cứ hoặc không vi phạm quy định.",
+                    terms_h10: "10. Quyền riêng tư và dữ liệu cá nhân",
+                    terms_p10: "Hệ thống có thể thu thập và xử lý một số thông tin của người dùng nhằm phục vụ việc tạo tài khoản, đăng nhập, hiển thị hồ sơ, đăng tải bài viết, bình luận, kiểm duyệt và bảo vệ an toàn cho hệ thống. Các thông tin này có thể bao gồm tên hiển thị, tên người dùng, email, ảnh đại diện, bài đăng, bình luận, lịch sử báo cáo, trạng thái đã đủ 18 tuổi hay chưa và các thông tin kỹ thuật cần thiết khác.\n\nThông tin của người dùng được sử dụng nhằm vận hành các chức năng của website, cải thiện trải nghiệm sử dụng, hỗ trợ kiểm duyệt nội dung, xử lý vi phạm và bảo vệ cộng đồng người dùng.\n\nNgười dùng không nên công khai các thông tin nhạy cảm trên hồ sơ, bài viết, bình luận hoặc bất kỳ khu vực nào có thể được người khác xem. Các thông tin nhạy cảm có thể bao gồm số điện thoại, địa chỉ nhà, giấy tờ cá nhân, thông tin tài chính, mật khẩu, thông tin sức khỏe hoặc các dữ liệu riêng tư khác.",
+                    terms_h11: "11. Bảo mật tài khoản và an toàn sử dụng",
+                    terms_p11: "Người dùng có trách nhiệm bảo vệ thông tin đăng nhập và thiết bị cá nhân khi sử dụng hệ thống. Nếu phát hiện tài khoản có dấu hiệu bị truy cập trái phép, người dùng nên nhanh chóng thay đổi mật khẩu hoặc liên hệ với người quản trị để được hỗ trợ.\n\nNgười dùng không được cố tình can thiệp vào hoạt động của hệ thống, khai thác lỗi kỹ thuật, tấn công bảo mật, thu thập dữ liệu trái phép hoặc thực hiện các hành vi gây ảnh hưởng đến tính ổn định, an toàn và công bằng của website.",
+                    terms_h12: "12. Giới hạn trách nhiệm",
+                    terms_p12: "Hệ thống được xây dựng nhằm phục vụ mục đích học tập, nghiên cứu và mô phỏng sản phẩm trong phạm vi đồ án. Vì vậy, một số chức năng có thể chưa đạt mức hoàn chỉnh như các nền tảng thương mại hoặc dịch vụ thực tế.\n\nHệ thống không đảm bảo rằng mọi chức năng luôn hoạt động liên tục, không có lỗi hoặc phù hợp với mọi trường hợp sử dụng. Trong quá trình vận hành, website có thể gặp lỗi kỹ thuật, bảo trì, gián đoạn hoặc thay đổi chức năng.\n\nHệ thống không chịu trách nhiệm đối với các thiệt hại phát sinh từ việc người dùng đăng tải nội dung vi phạm, sử dụng sai mục đích, chia sẻ thông tin cá nhân công khai hoặc dựa hoàn toàn vào kết quả xác thực ảnh mà không có sự kiểm tra bổ sung.",
+                    terms_h13: "13. Thay đổi điều khoản",
+                    terms_p13: "Hệ thống có thể cập nhật, chỉnh sửa hoặc bổ sung các điều khoản sử dụng khi cần thiết nhằm phù hợp với thay đổi về chức năng, quy trình vận hành, yêu cầu bảo mật hoặc định hướng phát triển của website.\n\nKhi có thay đổi quan trọng, hệ thống có thể hiển thị thông báo để người dùng được biết. Việc người dùng tiếp tục sử dụng website sau khi điều khoản được cập nhật được xem là người dùng đồng ý với các nội dung đã thay đổi.",
+                    terms_h14: "14. Liên hệ và hỗ trợ",
+                    terms_p14: "Nếu người dùng có câu hỏi, khiếu nại, yêu cầu hỗ trợ hoặc muốn báo cáo nội dung vi phạm, người dùng có thể liên hệ với người quản trị hệ thống thông qua các kênh hỗ trợ được cung cấp trên website.\n\nHệ thống sẽ tiếp nhận và xem xét các phản hồi trong phạm vi phù hợp với mục đích vận hành, khả năng xử lý và quy định của website.",
+
 
 
                     //Signup Page
@@ -149,6 +194,7 @@ i18n
                     signup_formHelperText_username: "Chỉ dùng chữ thường, số và dấu gạch dưới thôi nha. Không đụng hàng lại càng ngầu!",
                     signup_formLabel_password: "Mật khẩu",
                     signup_formHelperText_password: "Bạn dùng mật khẩu từ 6 ký tự trở lên để mọi thứ an toàn hơn nhé.",
+                    signup_formText_termsAgree: "Bằng việc nhấn đăng ký, đồng nghĩa với việc bạn đã đọc và đồng ý với ",
                     signup_formButton_nextStep: "Tiếp tục",
                     signup_formButton_prevStep: "Quay lại",
                     signup_formButton_signupSubmit: "Đăng ký",
@@ -641,6 +687,7 @@ i18n
                         userDetail_userProfileContentButton_loading: "Đang xử lý... blah",
                         userDetail_userProfileContentButton_unfollow: "Bỏ theo dõi",
                         userDetail_userProfileContentButton_follow: "Theo dõi",
+                        userDetail_userProfileContentButton_seeSavedPost: "Xem các tác phẩm đã lưu",
                         userDetail_postSectionContainerTitle_userAccount: "Thư viện tác phẩm của tôi blah",
                         userDetail_postSectionContainerTitle_otherAccount: "Thư viện tác phẩm của {{displayName}} blah",
                         userDetail_postSectionContainerDesc_totalPost: "Tổng số {{postCount}} tác phẩm blah",
@@ -661,6 +708,9 @@ i18n
                         userDetail_relationshipListModalDesc_noFollower_otherAccount: "Chưa ai theo dõi {{displayName}} cả blah",
                         userDetail_relationshipListModalDesc_noFollowing_userAccount: "Bạn chưa theo dõi ai cả blah",
                         userDetail_relationshipListModalDesc_noFollowing_otherAccount: "{{displayName}} chưa theo dõi ai cả blah",
+                        userDetail_savedPostsModalTitle_personalLibrary: "Thư viện cá nhân blah",
+                        userDetail_savedPostsModalTitle_savedPost: "Bài viết đã lưu blah",
+                        userDetail_savedPostsModalText_noSavedPost: "Bạn chưa lưu gì cả. blah",
 
                         // Handle Prepare Page & Require Login
                         userDetail_preparePageAndRequireLogin_modalTitle_cannotFindUser: "Không tìm thấy người dùng blah",

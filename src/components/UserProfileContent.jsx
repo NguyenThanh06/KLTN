@@ -31,6 +31,7 @@ export default function UserProfileContent({
     onToggleFollow,
     onOpenFollowers,
     onOpenFollowing,
+    onOpenSavedPosts,
 }) {
     const { t, i18n } = useTranslation();
 
@@ -134,7 +135,18 @@ export default function UserProfileContent({
                     </div>
                 )}
 
-                {!isCurrentAccount && (
+                {isCurrentAccount ? (
+                    <div className="flex h-10 w-full justify-center md:justify-start">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="interaction-pop h-10 min-w-44 rounded-full px-7 py-0"
+                            onClick={onOpenSavedPosts}
+                        >
+                            {t(I18N_KEYS.USER_DETAIL.COMMON.userDetail_userProfileContentButton_seeSavedPost)}
+                        </Button>
+                    </div>
+                ) : (
                     <div className="flex h-10 w-full justify-center md:justify-start">
                         <Button
                             type="button"
@@ -146,8 +158,8 @@ export default function UserProfileContent({
                             {isFollowLoading
                                 ? t(I18N_KEYS.USER_DETAIL.COMMON.userDetail_userProfileContentButton_loading)
                                 : isFollowingAccount && isAuthenticated
-                                  ? t(I18N_KEYS.USER_DETAIL.COMMON.userDetail_userProfileContentButton_unfollow)
-                                  : t(I18N_KEYS.USER_DETAIL.COMMON.userDetail_userProfileContentButton_follow)
+                                ? t(I18N_KEYS.USER_DETAIL.COMMON.userDetail_userProfileContentButton_unfollow)
+                                : t(I18N_KEYS.USER_DETAIL.COMMON.userDetail_userProfileContentButton_follow)
                             }
                         </Button>
                     </div>

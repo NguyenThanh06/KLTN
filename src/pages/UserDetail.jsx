@@ -15,6 +15,7 @@ import UserProfileContent from "../components/UserProfileContent";
 import UserActionMenuModal from "../components/UserActionMenuModal";
 import RelationshipListModal from "../components/RelationshipListModal";
 import ReportModal from "../components/ReportModal";
+import SavedPostsModal from "../components/SavedPostsModal";
 
 import { MOCK_USER_DATA_1 } from "../data/User/mockUser1";
 import { MOCK_USER_DATA_2 } from "../data/User/mockUser2";
@@ -24,6 +25,7 @@ import { MOCK_POST_DATA_2 } from "../data/Post/mockPost2";
 
 const POST_PAGE_SIZE = 12;
 const RELATIONSHIP_PAGE_SIZE = 20;
+const SAVED_POST_PAGE_SIZE = 12;
 
 const MOCK_USER_MAP_BY_USERNAME = {
     [MOCK_USER_DATA_1.username]: MOCK_USER_DATA_1,
@@ -103,6 +105,24 @@ const buildMockAccountPosts = (accountID) => {
         };
     });
 };
+const buildMockSavedPosts = () => {
+    const sourcePosts = [MOCK_POST_DATA_1, MOCK_POST_DATA_2];
+
+    return Array.from({ length: 30 }, (_, index) => {
+        const sourcePost = sourcePosts[index % sourcePosts.length];
+        const authorID = index % 2 === 0 ? 1 : 3;
+
+        return {
+            ...sourcePost,
+            postID: `saved-${sourcePost.postID}-${index + 1}`,
+            tacGia: authorID,
+            tieuDe:
+                index < sourcePosts.length
+                    ? sourcePost.tieuDe
+                    : `${sourcePost.tieuDe} · Đã lưu ${index + 1}`,
+        };
+    });
+};
 
 
 
@@ -155,6 +175,13 @@ export default function UserDetail({
     const [relationshipHasMore, setRelationshipHasMore] = useState(false);
     const [isRelationshipLoading, setIsRelationshipLoading] = useState(false);
     const [relationshipFollowLoadingID, setRelationshipFollowLoadingID] = useState(null);
+
+    const [isSavedPostsModalOpen, setIsSavedPostsModalOpen] = useState(false);
+    const [savedPosts, setSavedPosts] = useState([]);
+    const [savedPostPage, setSavedPostPage] = useState(1);
+    const [savedPostHasMore, setSavedPostHasMore] = useState(false);
+    const [isSavedPostInitialLoading, setIsSavedPostInitialLoading] = useState(false);
+    const [isSavedPostLoadingMore, setIsSavedPostLoadingMore] = useState(false);
 
     const isCurrentAccount = Boolean(
         isAuthenticated &&
@@ -209,7 +236,7 @@ export default function UserDetail({
     //------------------- CÁC TODO BACKEND CẦN QUAN TÂM -------------------
     // Các hàm dưới đây là nơi đang mock hoặc sau này sẽ gọi API thật.
 
-    const handleFetchAccountDetail = useCallback(async () => {
+    const handleFetchAccountDetail = useCallback(async () => { //Hàm lấy thông tin account
         // TODO: gọi backend lấy thông tin account theo username.
         // const response = await userApi.getUserDetailByUsername(username);
         // return response.data;
@@ -219,7 +246,7 @@ export default function UserDetail({
         return MOCK_USER_MAP_BY_USERNAME[String(username)] || null;
     }, [username]);
 
-    const handleVerifyBlocking = useCallback(async (targetAccountID) => {
+    const handleVerifyBlocking = useCallback(async (targetAccountID) => { //Hàm ktra chặn
         // TODO: gọi backend kiểm tra user hiện tại và account đang xem có chặn lẫn nhau không.
         // Backend gợi ý nhận:
         // - currentUserID
@@ -235,7 +262,7 @@ export default function UserDetail({
         return false;
     }, [currentUserID]);
 
-    const handleFetchAccountPosts = useCallback(async (targetAccountID) => {
+    const handleFetchAccountPosts = useCallback(async (targetAccountID) => { // Hàm lấy ds post của account
         // TODO: gọi backend lấy danh sách post của account.
         // Backend gợi ý nhận:
         // - accountID
@@ -249,7 +276,7 @@ export default function UserDetail({
         return buildMockAccountPosts(targetAccountID);
     }, []);
 
-    const handleFetchRelationshipPage = useCallback(async ({
+    const handleFetchRelationshipPage = useCallback(async ({ // Hàm lấy ds ng theo dõi/đang theo dõi
         targetAccountID,
         type,
         keyword,
@@ -296,6 +323,36 @@ export default function UserDetail({
         return {
             items: nextItems,
             hasMore: startIndex + RELATIONSHIP_PAGE_SIZE < filteredItems.length,
+        };
+    }, []);
+
+    const handleFetchSavedPosts = useCallback(async ({ page }) => {// Hàm lấy post đã lưu
+        // TODO: gọi backend lấy danh sách post mà user hiện tại đã lưu.
+        // Chức năng này chỉ dành cho user đang xem chính account của họ.
+        //
+        // Backend gợi ý nhận:
+        // - page
+        // - pageSize: SAVED_POST_PAGE_SIZE
+        //
+        // Response gợi ý:
+        // {
+        //   items: [...],
+        //   hasMore: true/false
+        // }
+
+        await Promise.resolve();
+
+        const allSavedPosts = buildMockSavedPosts();
+
+        const startIndex = (page - 1) * SAVED_POST_PAGE_SIZE;
+        const nextItems = allSavedPosts.slice(
+            startIndex,
+            startIndex + SAVED_POST_PAGE_SIZE
+        );
+
+        return {
+            items: nextItems,
+            hasMore: startIndex + SAVED_POST_PAGE_SIZE < allSavedPosts.length,
         };
     }, []);
 
@@ -403,7 +460,7 @@ export default function UserDetail({
         username,
     ]);
 
-    const handleToggleFollowAccount = async () => {
+    const handleToggleFollowAccount = async () => { // Hàm theo dõi/Bỏ theo dõi account
         if (!account) return;
 
         if (!isAuthenticated) {
@@ -450,7 +507,7 @@ export default function UserDetail({
         }
     };
 
-    const handleToggleFollowRelationshipAccount = async (targetAccount) => {
+    const handleToggleFollowRelationshipAccount = async (targetAccount) => { // Hàm theo dõi/Bỏ theo dõi mấy đứa trong ds theo dõi/bỏ theo dõi của th account
         if (!targetAccount) return;
 
         if (!isAuthenticated) {
@@ -538,7 +595,7 @@ export default function UserDetail({
         }
     };
 
-    const handleOpenReportFlow = async () => {
+    const handleOpenReportFlow = async () => { // Hàm ktra đã từng báo cáo account chưa
         if (!account) return;
 
         if (!isAuthenticated) {
@@ -598,7 +655,7 @@ export default function UserDetail({
         }
     };
 
-    const handleSubmitUserReport = async ({ reason, description }) => {
+    const handleSubmitUserReport = async ({ reason, description }) => { //Hàm gửi báo cáo account
         if (!account) return;
 
         try {
@@ -678,7 +735,7 @@ export default function UserDetail({
         }
     };
 
-    const handleBlockAccount = async () => {
+    const handleBlockAccount = async () => { // Hàm chặn account
         if (!account) return;
 
         if (!isAuthenticated) {
@@ -928,6 +985,95 @@ export default function UserDetail({
         navigate(`/user/${targetUsername}`);
     };
 
+    const handleOpenSavedPostsModal = async () => {
+        if (!isCurrentAccount) return;
+
+        setIsSavedPostsModalOpen(true);
+        setSavedPosts([]);
+        setSavedPostPage(1);
+        setSavedPostHasMore(false);
+        setIsSavedPostInitialLoading(true);
+
+        try {
+            const result = await handleFetchSavedPosts({
+                page: 1,
+            });
+
+            setSavedPosts(result.items || []);
+            setSavedPostHasMore(Boolean(result.hasMore));
+        } catch (error) {
+            const errorData = error.response?.data;
+            const result = handleError(errorData);
+
+            if (result && !result.handled) {
+                switch (result.code) {
+                    default:
+                        addHelperError?.({
+                            id: Date.now(),
+                            code: I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError,
+                        });
+                        break;
+                }
+            }
+        } finally {
+            setIsSavedPostInitialLoading(false);
+        }
+    };
+
+    const handleCloseSavedPostsModal = () => {
+        setIsSavedPostsModalOpen(false);
+        setSavedPosts([]);
+        setSavedPostPage(1);
+        setSavedPostHasMore(false);
+        setIsSavedPostInitialLoading(false);
+        setIsSavedPostLoadingMore(false);
+    };
+
+    const handleLoadMoreSavedPosts = async () => {
+        if (
+            !isCurrentAccount ||
+            isSavedPostLoadingMore ||
+            isSavedPostInitialLoading ||
+            !savedPostHasMore
+        ) {
+            return false;
+        }
+
+        const nextPage = savedPostPage + 1;
+
+        setIsSavedPostLoadingMore(true);
+
+        try {
+            const result = await handleFetchSavedPosts({
+                page: nextPage,
+            });
+
+            setSavedPosts((prev) => [...prev, ...(result.items || [])]);
+            setSavedPostHasMore(Boolean(result.hasMore));
+            setSavedPostPage(nextPage);
+
+            return Boolean(result.hasMore);
+        } catch (error) {
+            const errorData = error.response?.data;
+            const result = handleError(errorData);
+
+            if (result && !result.handled) {
+                switch (result.code) {
+                    default:
+                        addHelperError?.({
+                            id: Date.now(),
+                            code: I18N_KEYS.GLOBAL_ERROR.ERROR_unknownError,
+                        });
+                        break;
+                }
+            }
+
+            return false;
+        } finally {
+            setIsSavedPostLoadingMore(false);
+        }
+    };
+
     const handleEditPost = (post) => {
         if (!post?.postID) return;
 
@@ -1003,6 +1149,7 @@ export default function UserDetail({
                             onOpenFollowing={() =>
                                 handleOpenRelationshipModal("following")
                             }
+                            onOpenSavedPosts={handleOpenSavedPostsModal}
                         />
                     </AvatarGradientPanel>
                 </SectionContainer>
@@ -1068,6 +1215,20 @@ export default function UserDetail({
                 onClose={handleCloseRelationshipModal}
                 onNavigateUser={handleNavigateRelationshipUser}
                 onToggleFollow={handleToggleFollowRelationshipAccount}
+            />
+
+            <SavedPostsModal
+                isOpen={isSavedPostsModalOpen}
+                posts={savedPosts}
+                isInitialLoading={isSavedPostInitialLoading}
+                hasMore={savedPostHasMore}
+                isLoadingMore={isSavedPostLoadingMore}
+                isUnder18={isUnder18}
+                isAlertActive={isAlertActive}
+                visitorIP={visitorIP}
+                clearAlert={clearAlert}
+                onLoadMore={handleLoadMoreSavedPosts}
+                onClose={handleCloseSavedPostsModal}
             />
 
             <ReportModal
