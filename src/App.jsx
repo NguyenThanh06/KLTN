@@ -11,6 +11,15 @@ import { useVisitorInfo } from './hooks/useVisitorInfo';
 import DynamicWatermark from './components/DynamicWatermark';
 import CatSentinel from './components/CatSentinel';
 
+import AdminLayout from "./components/admin/AdminLayout.jsx";
+import AdminLogin from "./pages/admin/AdminLogin.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import AdminPostList from "./pages/admin/AdminPostList.jsx";
+import AdminPostDetail from "./pages/admin/AdminPostDetail.jsx";
+import AdminUserList from "./pages/admin/AdminUserList.jsx";
+import AdminUserDetail from "./pages/admin/AdminUserDetail.jsx";
+import AdminStaffList from "./pages/admin/AdminStaffList.jsx";
+import AdminProfile from "./pages/admin/AdminProfile.jsx";
 
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
@@ -26,7 +35,7 @@ function App() {
   const currentAlpha = (isAlertActive || isTabBlurred) ? 0.08 : 0.04; //Quản lý cái độ mờ của thủy ấn động
   const { t, i18n } = useTranslation();
   const mascotRef = useRef(); // Tạo ref để điều khiển MascotHelper
-  const [modalConfig, setModalConfig] = useState({ isOpen:false });
+  const [modalConfig, setModalConfig] = useState({ isOpen: false });
   const [errorStack, setErrorStack] = useState([]);
   const [isHelperFocusing, setIsHelperFocusing] = useState(false);
   const [isUnder18, setIsUnder18] = useState(null);
@@ -34,6 +43,7 @@ function App() {
 
   useEffect(() => {
     const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
+    const isAdminPage = location.pathname.startsWith('/admin');
     const savedAgeStatus = localStorage.getItem('under18');
     const isUnder18Boolean = savedAgeStatus === 'true';
 
@@ -41,7 +51,7 @@ function App() {
 
     // Nếu không phải trang Auth và chưa có thông tin tuổi
     if (!isAuthPage && savedAgeStatus === null) {
-      
+
       // KIỂM TRA: Nếu đang có một modal khác (như báo vô hiệu hóa) đang mở
       // Thì sẽ chờ modal đó đóng xong mới hiện hỏi tuổi, hoặc chèn vào sau.
       if (!modalConfig.isOpen) {
@@ -63,12 +73,12 @@ function App() {
 
   //Hàm đóng cái modal thông báo
   const closeModal = () => setModalConfig(prev => ({ ...prev, isOpen: false }));
-  
+
   // Hàm xóa lỗi khi người dùng click vào bong bóng ở helper
   const clearError = (id) => {
     setErrorStack(prev => prev.filter(err => err.id !== id));
   };
-  
+
   // Hàm xóa toàn bộ lỗi
   const clearAllErrors = () => setErrorStack([]);
 
@@ -81,73 +91,104 @@ function App() {
 
   // Hàm chọn tuổi
   const handleAgeSelection = (under18) => {
-        localStorage.setItem('under18', under18); // Lưu lại: "true" hoặc "false"
-        setIsUnder18(under18);
-        closeModal();
-    };
+    localStorage.setItem('under18', under18); // Lưu lại: "true" hoặc "false"
+    setIsUnder18(under18);
+    closeModal();
+  };
 
   //------------------- Hết hàm ----------------------
 
-  
+
 
   return (
     <AuthProvider>
-        <div className="antialiased">
-            <AnimatePresence mode="wait">
-                <Routes location={location} key={location.pathname}>
-                  <Route path="/login" element={
-                    <Login
-                      setGlobalModal = {setModalConfig}
-                      addHelperError = { (newErr) => setErrorStack(prev => [...prev, newErr])}
-                      setHelperFocusState = {setIsHelperFocusing}
-                      triggerMascotMood={triggerMascotMood}
-                    />} 
-                  />
-                  <Route path="/signup" element={
-                      <Signup
-                        setGlobalModal = {setModalConfig}
-                        addHelperError = { (newErr) => setErrorStack(prev => [...prev, newErr])}
-                        setHelperFocusState = {setIsHelperFocusing}
-                      />
-                  }
-                  />
-                  <Route path="/" element={
-                    <Home
-                      setGlobalModal = {setModalConfig}
-                      addHelperError = { (newErr) => setErrorStack(prev => [...prev, newErr])}
-                      setHelperFocusState = {setIsHelperFocusing}
-                      isUnder18={isUnder18}
-                      visitorIP={visitor.ip} 
-                      isAlertActive={isAlertActive}
-                      isTabBlurred={isTabBlurred}
-                      clearAlert={clearAlert}
-                    />} 
-                  />
-                </Routes>
-            </AnimatePresence>
-            
-            {/*Watermark động toàn trang */}
-            <DynamicWatermark 
-              ip={visitor.ip}
-              alpha = {currentAlpha}
+      <div className="antialiased">
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/login" element={
+              <Login
+                setGlobalModal={setModalConfig}
+                addHelperError={(newErr) => setErrorStack(prev => [...prev, newErr])}
+                setHelperFocusState={setIsHelperFocusing}
+                triggerMascotMood={triggerMascotMood}
+              />}
+            />
+            <Route path="/signup" element={
+              <Signup
+                setGlobalModal={setModalConfig}
+                addHelperError={(newErr) => setErrorStack(prev => [...prev, newErr])}
+                setHelperFocusState={setIsHelperFocusing}
+              />
+            }
+            />
+            <Route path="/" element={
+              <Home
+                setGlobalModal={setModalConfig}
+                addHelperError={(newErr) => setErrorStack(prev => [...prev, newErr])}
+                setHelperFocusState={setIsHelperFocusing}
+                isUnder18={isUnder18}
+                visitorIP={visitor.ip}
+                isAlertActive={isAlertActive}
+                isTabBlurred={isTabBlurred}
+                clearAlert={clearAlert}
+              />}
+            />
+            // Routes dành cho admin
+            <Route
+              path="/admin/login"
+              element={
+                <AdminLogin
+                  setGlobalModal={setModalConfig}
+                  addHelperError={(newErr) => setErrorStack(prev => [...prev, newErr])}
+                  setHelperFocusState={setIsHelperFocusing}
+                />
+              }
             />
 
+            <Route
+              path="/admin"
+              element={
+                <AdminLayout
+                  setGlobalModal={setModalConfig}
+                  addHelperError={(newErr) => setErrorStack(prev => [...prev, newErr])}
+                  setHelperFocusState={setIsHelperFocusing}
+                />
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="posts" element={<AdminPostList />} />
+              <Route path="posts/:postID" element={<AdminPostDetail />} />
+              <Route path="users" element={<AdminUserList />} />
+              <Route path="users/:accountID" element={<AdminUserDetail />} />
+              <Route path="staff" element={<AdminStaffList />} />
+              <Route path="profile" element={<AdminProfile />} />
+            </Route>
 
-            {/* Component chung (như helper với modal thông báo) */}
-            <DynamicModal 
-                key={modalConfig.title}
-                {...modalConfig} 
-                onClose={closeModal}
-            />    
+          </Routes>
+        </AnimatePresence>
 
-            <MascotHelper 
-                ref={mascotRef} // Gán ref vào đây
-                errorStack={errorStack} 
-                onClearError={clearError} 
-                onClearAllErrors={clearAllErrors} // Truyền hàm xóa sạch lỗi
-                isInputFocusing={isHelperFocusing}
-            />
-        </div>
+        {/*Watermark động toàn trang */}
+        <DynamicWatermark
+          ip={visitor.ip}
+          alpha={currentAlpha}
+        />
+
+
+        {/* Component chung (như helper với modal thông báo) */}
+        <DynamicModal
+          key={modalConfig.title}
+          {...modalConfig}
+          onClose={closeModal}
+        />
+
+        <MascotHelper
+          ref={mascotRef} // Gán ref vào đây
+          errorStack={errorStack}
+          onClearError={clearError}
+          onClearAllErrors={clearAllErrors} // Truyền hàm xóa sạch lỗi
+          isInputFocusing={isHelperFocusing}
+        />
+      </div>
     </AuthProvider>
   )
 }
