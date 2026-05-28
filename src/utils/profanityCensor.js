@@ -4,25 +4,20 @@ const escapeRegExp = (text) => {
     return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 };
 
-const getAllBlockedWords = () => {
-    return Object.values(PROFANITY_DICTIONARY)
-        .flat()
-        .filter(Boolean)
-        .map((word) => word.trim())
-        .filter(Boolean);
+const hasCjkLikeCharacter = (text) => {
+    return /[\u3040-\u30ff\u3400-\u9fff\uf900-\ufaff\uac00-\ud7af]/u.test(text);
 };
 
-/*
- * Với tiếng Việt / Anh:
- * Dùng boundary tương đối để tránh censor nhầm từ nằm trong từ dài hơn.
- *
- * Ví dụ:
- * - "bad" bị censor trong "bad!"
- * - nhưng không censor trong "badge"
- *
- * Với Nhật/Hàn, boundary kiểu \b không ổn hoàn toàn,
- * nên nếu dictionary có từ Nhật/Hàn thì vẫn match trực tiếp.
- */
+const getAllBlockedWords = () => {
+    return [...new Set(
+        Object.values(PROFANITY_DICTIONARY)
+            .flat()
+            .filter(Boolean)
+            .map((word) => word.trim())
+            .filter(Boolean)
+    )].sort((a, b) => b.length - a.length);
+};
+
 export const censorProfanityText = (text) => {
     if (!text) {
         return {
@@ -45,14 +40,23 @@ export const censorProfanityText = (text) => {
 
     blockedWords.forEach((word) => {
         const escapedWord = escapeRegExp(word);
+        const shouldMatchDirectly = hasCjkLikeCharacter(word);
 
-        const regex = new RegExp(
-            `(^|[^\\p{L}\\p{N}_])(${escapedWord})(?=$|[^\\p{L}\\p{N}_])`,
-            "giu"
-        );
+        const regex = shouldMatchDirectly
+            ? new RegExp(`(${escapedWord})`, "gu")
+            : new RegExp(
+                `(^|[^\\p{L}\\p{N}_])(${escapedWord})(?=$|[^\\p{L}\\p{N}_])`,
+                "giu"
+            );
 
-        nextText = nextText.replace(regex, (match, prefix) => {
+        nextText = nextText.replace(regex, (...args) => {
             censored = true;
+
+            if (shouldMatchDirectly) {
+                return "***";
+            }
+
+            const prefix = args[1];
             return `${prefix}***`;
         });
     });
