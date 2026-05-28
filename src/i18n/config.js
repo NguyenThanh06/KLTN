@@ -229,7 +229,7 @@ i18n
                     login_handleResetPassword_modalDesc_success_resetPassword: "Tụi mình đã gửi mật khẩu mới đến email của bạn. Dùng chìa khóa mới đó để đăng nhập nhé.",
 
                         // Handle Verify Account
-                    login_handleVerifyAccount_modalTitle_accountUnverified: "Còn một chốt tí ti trước cửa.",
+                    login_handleVerifyAccount_modalTitle_accountUnverified: "Còn một chốt tí ti trước cửa",
                     login_handleVerifyAccount_modalDesc_accountUnverified: "Tài khoản này chưa xác thực email xong. Tụi mình cần gửi một mã xác thực đến email {{email}} trước khi mở cửa đăng nhập nhé.",
                     login_handleVerifyAccount_modalButton_sendVerifyCode: "Gửi mã xác thực",
                     login_handleVerifyAccount_modalTitle_enterVerifyCode: "Mã xác thực tới chưa vậy?",
