@@ -76,7 +76,7 @@ export default function PostCommentPanel({
 
                 {!!comments.length && (
                     <span className="rounded-full bg-bg-shade-50 px-3 py-1 font-ui text-xs font-bold text-text-shade-400">
-                        {comments.length} {t(I18N_KEYS.POST_DETAIL.COMMON.postDetail_postCommentPanelInfo_isShowing)}
+                        {t(I18N_KEYS.POST_DETAIL.COMMON.postDetail_postCommentPanelInfo_isShowing, {count: comments.length})}
                     </span>
                 )}
             </div>
