@@ -4,4 +4,5 @@ export const MOCK_KTEOFILE_DATA_1 = {
     width: "816",
     height: "1456",
     verifyKey: "123",
+    postID: "1",
 };

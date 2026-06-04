@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
+import { saveSearchHistory } from "../utils/searchHistory";
 
 import { FiSearch } from "react-icons/fi";
 
@@ -12,11 +13,15 @@ const HeroSearchSection = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (!searchQuery.trim()) return;
+    const trimmedKeyword = searchQuery.trim();
+    if (!trimmedKeyword) return;
+    
+    saveSearchHistory({
+        keyword: trimmedKeyword,
+        mode: "post",
+    });
 
-    // Chuyển hướng sang trang danh sách kèm query tham số search
-    // encodeURIComponent giúp xử lý các ký tự đặc biệt hoặc tiếng Việt có dấu an toàn
-    navigate(`/post?search=${encodeURIComponent(searchQuery.trim())}`);
+    navigate(`/search?mode=post&keyword=${encodeURIComponent(trimmedKeyword)}&page=1&pageSize=18&postSearchType=all&includeAi=false&sort=newest&submittedAt=${Date.now()}`);
   };
 
   return (
@@ -47,11 +52,13 @@ const HeroSearchSection = () => {
 
               {/* Ô Input to, bo viền mềm mại */}
               <input
-                type="text"
+                type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t(I18N_KEYS.HOME.COMMON.home_heroSectionFormPlaceholder)}
-                className="w-full bg-transparent pl-11 pr-4 py-3.5 text-base font-medium text-main-text placeholder-text-shade-400 focus:outline-none"
+                className="w-full bg-transparent pl-11 pr-4 py-3.5 text-base font-medium text-main-text placeholder-text-shade-400 focus:outline-none
+                          [&::-webkit-search-cancel-button]:appearance-none
+                          [&::-webkit-search-decoration]:appearance-none"
               />
             </div>
           </form>

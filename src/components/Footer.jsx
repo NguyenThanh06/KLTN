@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18N_KEYS } from '../i18n/key';
+import { Link } from 'react-router-dom';
 import { FaGithub, FaFacebook } from "react-icons/fa";
 
 export default function Footer() {
@@ -24,9 +25,20 @@ export default function Footer() {
 
                     {/* Phần 2: Links */}
                     <div className="flex gap-8 text-sm font-medium text-sub-text">
-                        <a href="#" className="hover:text-primary-500 transition-colors">{t(I18N_KEYS.COMMON.common_footerButton_about)}</a>
-                        <a href="#" className="hover:text-primary-500 transition-colors">{t(I18N_KEYS.COMMON.common_footerButton_privacy)}</a>
-                        <a href="#" className="hover:text-primary-500 transition-colors">{t(I18N_KEYS.COMMON.common_footerButton_terms)}</a>
+                        <Link 
+                            to="/about" 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-primary-500 transition-colors">
+                                {t(I18N_KEYS.COMMON.common_footerButton_about)}
+                        </Link>
+                        <Link 
+                            to="/terms" 
+                            target="_blank"
+                            rel="noopener noreferrer" 
+                            className="hover:text-primary-500 transition-colors">
+                                {t(I18N_KEYS.COMMON.common_footerButton_terms)}
+                        </Link>
                     </div>
 
                     {/* Phần 3: Social Icons */}

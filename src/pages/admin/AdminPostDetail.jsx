@@ -43,7 +43,7 @@ const getVisibilityText = (value) => {
 export default function AdminPostDetail() {
     const [commentPage, setCommentPage] = useState(1);
     const [reportPage, setReportPage] = useState(1);
-    const [hanCheHienThiGoc, setHanCheHienThiGoc] = useState(1);
+    const [hanCheHienThiGoc, setHanCheHienThiGoc] = useState(0);
     const [currentFileIndex, setCurrentFileIndex] = useState(0);
     const [commentsData, setCommentsData] = useState({
         content: [],
@@ -392,7 +392,7 @@ export default function AdminPostDetail() {
                             <option value="">Không thay đổi</option>
                             <option
                                 value={String(hanCheHienThiGoc)}
-                                disabled={post.hanCheHienThi !== 99}
+                                disabled={Number(post.hanCheHienThi) !== 99}
                             >
                                 Mở tạm ẩn về {getVisibilityText(Number(hanCheHienThiGoc))}
                             </option>

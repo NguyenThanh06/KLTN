@@ -1,7 +1,19 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AdminPagination from "../../components/admin/AdminPagination.jsx";
 import { adminApi } from "../../api/adminApi.js";
+
+const API_ORIGIN = "http://localhost:8080";
+
+const getFileUrl = (link) => {
+    if (!link) return "";
+
+    if (link.startsWith("http://") || link.startsWith("https://")) {
+        return link;
+    }
+
+    return `${API_ORIGIN}/uploads/posts/${link}`;
+};
 
 const formatDateTime = (value) => {
     if (!value) return "Chưa có";
@@ -20,8 +32,14 @@ const formatDateTime = (value) => {
 };
 
 const getVisibilityText = (hanCheHienThi) => {
-    if (hanCheHienThi === 99) return "Đã tạm ẩn";
-    return "Không tạm ẩn";
+    const numberValue = Number(hanCheHienThi);
+
+    if (numberValue === 0) return "Mọi độ tuổi";
+    if (numberValue === 1) return "Nội dung 18+";
+    if (numberValue === 2) return "Nội dung bạo lực / máu me";
+    if (numberValue === 99) return "Đã tạm ẩn";
+
+    return `Không xác định (${hanCheHienThi})`;
 };
 
 export default function AdminPostList() {
@@ -36,7 +54,7 @@ export default function AdminPostList() {
     const [totalElements, setTotalElements] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
 
-    const fetchPosts = async (targetPage = page) => {
+    const fetchPosts = useCallback(async (targetPage = page) => {
         try {
             setIsLoading(true);
 
@@ -60,11 +78,15 @@ export default function AdminPostList() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [filters.hanCheHienThi, filters.postId, page]);
 
     useEffect(() => {
-        fetchPosts(page);
-    }, [page]);
+        const fetchTimer = window.setTimeout(() => {
+            fetchPosts(page);
+        }, 0);
+
+        return () => window.clearTimeout(fetchTimer);
+    }, [fetchPosts, page]);
 
     const handleSearch = (event) => {
         event.preventDefault();
@@ -113,8 +135,10 @@ export default function AdminPostList() {
                         className="rounded-full bg-main-bg px-5 py-3 outline-none ring-1 ring-main-text/10 focus:ring-primary"
                     >
                         <option value="ALL">Toàn bộ</option>
-                        <option value="HIDDEN">Đã tạm ẩn</option>
-                        <option value="NOT_HIDDEN">Không tạm ẩn</option>
+                        <option value="0">Mọi độ tuổi</option>
+                        <option value="1">Nội dung 18+</option>
+                        <option value="2">Nội dung bạo lực / máu me</option>
+                        <option value="99">Đã tạm ẩn</option>
                     </select>
 
                     <button
@@ -174,6 +198,7 @@ export default function AdminPostList() {
                             {!isLoading &&
                                 posts.map((post) => {
                                     const firstFile = post.files?.[0];
+                                    const firstFileUrl = getFileUrl(firstFile?.link);
 
                                     return (
                                         <tr
@@ -181,11 +206,17 @@ export default function AdminPostList() {
                                             className="border-t border-main-text/10"
                                         >
                                             <td className="px-5 py-4">
-                                                {firstFile?.link ? (
-                                                    <img
-                                                        src={`http://localhost:8080/uploads/posts/${firstFile.link}`}
-                                                        alt={post.tieuDe}
+                                                {firstFileUrl ? (
+                                                    <video
+                                                        src={firstFileUrl}
                                                         className="h-14 w-14 rounded-2xl object-cover"
+                                                        autoPlay
+                                                        muted
+                                                        loop
+                                                        playsInline
+                                                        preload="metadata"
+                                                        controls={false}
+                                                        onContextMenu={(event) => event.preventDefault()}
                                                     />
                                                 ) : (
                                                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-main-bg text-xs text-main-text/50">

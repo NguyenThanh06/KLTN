@@ -1,26 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "../i18n/key";
 import { useAuth } from '../context/AuthContext';
-import NotificationItem from "./NotificationItem";
+import { saveSearchHistory } from "../utils/searchHistory";
 
 
 import { TbPhotoQuestion, TbLogout, TbLogin } from "react-icons/tb";
-import { FaUserCircle, FaPen, FaMoon  } from "react-icons/fa";
-import { GoSun, GoSearch, GoBellFill, GoPlus, GoChevronDown } from "react-icons/go";
+import { FaUserCircle, FaPen, FaMoon } from "react-icons/fa";
+import { GoSun, GoSearch, GoPlus, GoChevronDown, GoGlobe } from "react-icons/go";
+import { HiMenuAlt3 } from "react-icons/hi";
 import Button from "./Button";
 import Input from "./Input";
+import NotificationDropdown from "./NotificationDropdown";
+
+const DEFAULT_AVATAR = "/defaultAvatar/default_avatar_1.svg";
 
 export default function Header({variant="full"}){
     const { isAuthenticated, user, logout } = useAuth();
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
-    const [isDark, setIsDark] = useState(false);
+    const [isDark, setIsDark] = useState(() => {
+        if (typeof window === "undefined") return false;
+
+        return (
+            localStorage.getItem("theme") === "dark" ||
+            document.documentElement.classList.contains("dark")
+        );
+    });
+    useEffect(() => {
+        if (isDark) {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+    }, [isDark]);
     const [showNotifications, setShowNotifications] = useState(false);
     const [isNotificationDropdownExiting, setIsNotificationDropdownExiting] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [isUserMenuExiting, setIsUserMenuExiting] = useState(false);
+    const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+    const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+    const [headerSearchQuery, setheaderSearchQuery] = useState('');
+    const userAvatar = user?.avatar || DEFAULT_AVATAR;
+
+    const handleHeaderSearchSubmit = (e) => {
+        e.preventDefault();
+        const trimmedKeyword = headerSearchQuery.trim();
+        if (!trimmedKeyword) return;
+        
+        saveSearchHistory({
+            keyword: trimmedKeyword,
+            mode: "post",
+        });
+
+        navigate(`/search?mode=post&keyword=${encodeURIComponent(trimmedKeyword)}&page=1&pageSize=18&postSearchType=all&includeAi=false&sort=newest&submittedAt=${Date.now()}`);
+    };
 
     //Xử lý cái logout cho đẹp hơn
     const handleLogout = async () => {
@@ -38,8 +76,11 @@ export default function Header({variant="full"}){
             }, 150); // Khớp với thời gian animation exit
         } else {
             setShowNotifications(true);
-            if(showUserMenu)
+            setShowMobileMenu(false);
+
+            if (showUserMenu) {
                 toggleshowUserMenu();
+            }
         }
     };
     const toggleshowUserMenu = () => {
@@ -51,58 +92,227 @@ export default function Header({variant="full"}){
             }, 150); // Khớp với thời gian animation exit
         } else {
             setShowUserMenu(true);
-            if (showNotifications)
+            setShowMobileMenu(false);
+
+            if (showNotifications) {
                 toggleNotificationDropdown();
+            }
         }
     };
 
 
     // Danh sách ngôn ngữ
     const languages = [
-        { code: 'en', label: 'EN' },
         { code: 'vi', label: 'VI' },
-        { code: 'jp', label: 'JP' },
+        { code: 'en', label: 'EN' },
+        { code: 'ja', label: 'JP' },
         { code: 'es', label: 'ES' }
     ];
     //Đổi ngôn ngữ
+    const currentLanguageIndex = languages.findIndex(
+        (lang) => lang.code === i18n.language
+    );
+
+    const currentLanguage = languages[currentLanguageIndex] || languages[1];
+
+    const changeToNextLanguage = () => {
+        const nextIndex =
+            currentLanguageIndex === -1 || currentLanguageIndex === languages.length - 1
+                ? 0
+                : currentLanguageIndex + 1;
+
+        i18n.changeLanguage(languages[nextIndex].code);
+    };
 
     // Đổi theme
     const toggleTheme = () => {
-        setIsDark(!isDark);
-        if (!isDark) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }
+        setIsDark((prev) => !prev);
+    };
 
     return (
-        <header className="sticky top-0 z-50 w-full px-4 h-16 flex items-center justify-between bg-main-bg/80 backdrop-blur-md">
-            {/* Phần logo bên trái */}
-            <Link to="/" 
-                className="flex items-center gap-2"
-            >
-                <img src="icon.svg" alt="Logo" className=" w-auto h-8"/>
-                {variant === "full" && (
-                    <span className="font-heading font-bold text-xl text-primary hidden md:block">EyesOnly</span>
-                )}
-            </Link>
+        <header className="sticky top-0 z-50 w-full px-3 lg:px-4 py-2 lg:py-0 lg:h-16 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2 bg-main-bg/80 backdrop-blur-md">            {/* Phần logo bên trái */}
+            {/* Đoạn logo đầu + menu ở mobile */}
+            <div className="w-full lg:w-auto flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                    {variant === "full" && (
+                        <div className="relative lg:hidden">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowMobileMenu((prev) => !prev);
+                                    setShowNotifications(false);
+                                    setShowUserMenu(false);
+                                }}
+                                className="w-10 h-10 rounded-full flex items-center justify-center text-main-text hover:bg-bg-shade-100 active:scale-95 transition-all"
+                            >
+                                <HiMenuAlt3 className="text-2xl" />
+                            </button>
 
-            {/* Phần chỉ hiện ở variant full (thanh tìm kiếm, user, nút đăng post đồ rứa) */}
-                {/* Phần ở giữa */}
+                            {showMobileMenu && (
+                                <div className="absolute left-0 top-12 w-[min(17rem,calc(100vw-1.5rem))] bg-main-bg shadow-2xl rounded-2xl overflow-hidden z-50 animate-popup-appear border border-text-shade-200">
+                                    <div className="p-3 flex flex-col gap-1 font-ui text-sm">
+                                        {isAuthenticated && (
+                                            <Link
+                                                to="/post/create"
+                                                onClick={() => setShowMobileMenu(false)}
+                                                className="flex items-center gap-3 px-3 py-2 rounded-full text-main-text hover:bg-bg-shade-100"
+                                            >
+                                                <GoPlus />
+                                                {t(I18N_KEYS.COMMON.common_headerButton_post)}
+                                            </Link>
+                                        )}
+
+                                        <Link
+                                            to="/verify"
+                                            onClick={() => setShowMobileMenu(false)}
+                                            className="flex items-center gap-3 px-3 py-2 rounded-full text-main-text hover:bg-bg-shade-100"
+                                        >
+                                            <TbPhotoQuestion />
+                                            {t(I18N_KEYS.COMMON.common_headerButton_verify)}
+                                        </Link>
+
+                                        <button
+                                            type="button"
+                                            onClick={changeToNextLanguage}
+                                            className="flex items-center gap-3 px-3 py-2 rounded-full text-main-text hover:bg-bg-shade-100 text-left"
+                                        >
+                                            <GoGlobe />
+                                            <span>
+                                                {t(I18N_KEYS.COMMON.common_headerButton_language)} {currentLanguage.label}
+                                            </span>
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            onClick={toggleTheme}
+                                            className="flex items-center gap-3 px-3 py-2 rounded-full text-main-text hover:bg-bg-shade-100 text-left"
+                                        >
+                                            {isDark ? <FaMoon /> : <GoSun />}
+                                            <span>
+                                                {t(I18N_KEYS.COMMON.common_headerButton_theme)} {isDark ? t(I18N_KEYS.COMMON.common_headerButton_themeDark) : t(I18N_KEYS.COMMON.common_headerButton_themeLight)}
+                                            </span>
+                                        </button>
+
+                                        {!isAuthenticated && (
+                                            <Link
+                                                to="/login"
+                                                onClick={() => setShowMobileMenu(false)}
+                                                className="flex items-center gap-3 px-3 py-2 rounded-full text-main-text hover:bg-bg-shade-100"
+                                            >
+                                                <TbLogin />
+                                                {t(I18N_KEYS.COMMON.common_headerButton_login)}
+                                            </Link>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    <Link to="/" className="flex items-center gap-2 shrink-0">
+                        <img src="/icon.svg" alt="Logo" className="w-auto h-8" />
+
+                        {variant === "full" && (
+                            <span className="font-heading font-bold text-xl text-primary hidden md:block">
+                                EyesOnly
+                            </span>
+                        )}
+
+                        {variant === "simple" && (
+                            <span className="font-heading font-bold text-xl text-primary">
+                                EyesOnly
+                            </span>
+                        )}
+                    </Link>
+
+                    
+                </div>
+
+                {variant === "full" && (
+                    <div className="lg:hidden flex items-center gap-2">
+                        {isAuthenticated && (
+                            <div className="relative">
+                                <NotificationDropdown
+                                    isOpen={showNotifications}
+                                    isExiting={isNotificationDropdownExiting}
+                                    onToggle={toggleNotificationDropdown}
+                                />
+                            </div>
+                        )}
+
+                        {isAuthenticated && (
+                            <div
+                                className="relative flex items-center gap-1 cursor-pointer p-1 rounded-full justify-center bg-transparent text-main-text hover:bg-bg-shade-100"
+                                onClick={toggleshowUserMenu}
+                            >
+                                <div className="w-8 h-8 rounded-full bg-brand overflow-hidden transition-all active:scale-95">
+                                    <img src={userAvatar} alt="Avatar" className="h-full w-full object-cover" onError={(event) => { event.currentTarget.src = DEFAULT_AVATAR; }} />
+                                </div>
+
+                                {showUserMenu && (
+                                    <div className={`absolute right-0 top-11 w-[min(12rem,calc(100vw-1.5rem))] bg-main-bg shadow-2xl rounded-2xl overflow-hidden z-50 ${isUserMenuExiting ? 'animate-popup-exit' : 'animate-popup-appear'}`}>
+                                        <Link to={`/user/${user.accountID || user.id || user.userID || user.username}`} className="flex items-start gap-3 py-2 px-4 my-2 bg-main-bg text-main-text cursor-pointer transition-colors">
+                                            <div className="shrink-0 w-10 h-10 bg-primary-200 rounded-full flex items-center justify-center">
+                                                <img src={userAvatar} alt="Avatar" className="h-full w-full object-cover" onError={(event) => { event.currentTarget.src = DEFAULT_AVATAR; }} />
+                                            </div>
+                                            <div className="grow min-w-0">
+                                                <p className="font-bold text-sm">{ user.tenHienThi }</p>
+                                                <p className="text-xs text-sub-text">@{ user.username }</p>
+                                            </div>
+                                        </Link>
+                                        <div className="border-t border-text-shade-200 font-light font-body p-4 flex flex-col gap-2">
+                                            <Link to={`/user/${user.accountID || user.id || user.userID || user.username}`}>
+                                                <span className="flex items-center gap-3 text-main-text">
+                                                    <FaUserCircle strokeWidth={2}/>
+                                                    {t(I18N_KEYS.COMMON.common_headerButton_user)}
+                                                </span>
+                                            </Link>
+                                            <Link to="/profile?edit">
+                                                <span className="flex items-center gap-3 text-main-text">
+                                                    <FaPen strokeWidth={2}/>
+                                                    {t(I18N_KEYS.COMMON.common_headerButton_profile)}
+                                                </span>
+                                            </Link>
+                                            <div onClick={handleLogout}>
+                                                <span className="flex items-center gap-3 text-accent-700">
+                                                    <TbLogout strokeWidth={2.5} className=""/>
+                                                    {t(I18N_KEYS.COMMON.common_headerButton_logout)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+
+            
+                {/* Phần tìm kiếm */}
             {variant === "full" && (
-                <div className=" hidden lg:flex items-center px-4 py-2 w-1/3">
-                    <Input
-                        type="search"
-                        leftIcon={<span className="text-text-shade-200 font-bold text-xl"><GoSearch strokeWidth={1}/></span>}
-                        placeholder={t(I18N_KEYS.COMMON.common_headerPlaceholder_search)}
-                        className="w-full"
-                    />
+                <div className="flex items-center w-full lg:w-1/3 lg:px-4 lg:py-2">
+                    <form 
+                        onSubmit={handleHeaderSearchSubmit}
+                    >
+                        <Input
+                            value={headerSearchQuery}
+                            onChange={(e) => setheaderSearchQuery(e.target.value)}
+                            type="search"
+                            leftIcon={
+                                <span className="text-text-shade-200 font-bold text-xl">
+                                    <GoSearch strokeWidth={1} />
+                                </span>
+                            }
+                            placeholder={t(I18N_KEYS.COMMON.common_headerPlaceholder_search)}
+                            className="w-full"
+                        />
+                    </form>
                 </div>
             )}
 
                 {/* Phần ở bên phải */}
-            <div className="flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-3">
             {variant==="full"&&(
                 <>
                     {/* Nút đăng bài */}
@@ -133,83 +343,11 @@ export default function Header({variant="full"}){
                         <>
                             {/* Nút mở thông báo */}
                                 <div className="relative">
-                                    <div
-                                        variant="none"
-                                        onClick={() => toggleNotificationDropdown()}
-                                        className="w-10 h-10 rounded-full flex items-center justify-center transition-all active:scale-95 bg-transparent text-main-text hover:bg-bg-shade-100"
-                                    >
-                                        <GoBellFill className="text-sub-text text-xl"/>
-                                        <span className="absolute top-2 right-2 w-2 h-2 bg-accent-500 border-2 border-main-bg rounded-full"></span>
-                                    </div>
-                                    {/* Dropdown thông báo */}
-                                    {showNotifications && (
-                                        <div className={`absolute right-0 mt-3 w-80 bg-main-bg shadow-2xl rounded-2xl overflow-hidden z-50
-                                            ${isNotificationDropdownExiting ? 'animate-popup-exit' : 'animate-popup-appear'}`}
-                                        >
-                                            <div className="p-4 border-b border-text-shade-200 flex justify-between items-center">
-                                                <p className="font-bold text-main-text font-ui text-sm">{t(I18N_KEYS.COMMON.common_headerTitle_notifications)}</p>
-                                            </div>
-
-                                            {/* Danh sách thông báo nằm dọc xuống */}
-                                            <div className="max-h-96 overflow-y-auto custom-scrollbar">
-                                                {/* Mock data mẫu */}
-                                                <NotificationItem 
-                                                    type = "theoDoi"       //theoDoi, cmt, cmtRep, baoCao
-                                                    noiDung= "Nguyễn Văn A, Lê B, ..." //Danh sách ng theo dõi, tên 2-3 đứa thôi r 3 chấm
-                                                    thoiDiemThongBao= "12/4/2026" 
-                                                    daDoc= {false}
-                                                    link= "/login"
-                                                />
-                                                <NotificationItem 
-                                                    type = "cmt"       //theoDoi, cmt, cmtRep, baoCao
-                                                    noiDung= "Bức tranh Huế ngày mưa" //tiêu đề Post, cắt gọn lại
-                                                    thoiDiemThongBao= "12/4/2026" 
-                                                    daDoc= {true}
-                                                    link= "/login"
-                                                />
-                                                <NotificationItem 
-                                                    type = "cmtRep"       //theoDoi, cmt, cmtRep, baoCao
-                                                    noiDung= "'Hôm qua tui ăn cục c...'" //'...cơm to dễ sợ luôn' nội dung cmt cắt gọn lại
-                                                    thoiDiemThongBao= "12/4/2026" 
-                                                    daDoc= {false}
-                                                    link= "/login"
-                                                />
-                                                <NotificationItem 
-                                                    type = "baoCao"       //theoDoi, cmt, cmtRep, baoCao
-                                                    noiDung= "Hình vẽ tầm bậy 123" //tiêu đề Post, cắt gọn lại
-                                                    thoiDiemThongBao= "12/4/2026" 
-                                                    daDoc= {true}
-                                                    link= "/login"
-                                                />
-                                                <NotificationItem 
-                                                    type = "baoCao"       //theoDoi, cmt, cmtRep, baoCao
-                                                    noiDung= "Hình vẽ tầm bậy 123" //tiêu đề Post, cắt gọn lại
-                                                    thoiDiemThongBao= "12/4/2026" 
-                                                    daDoc= {true}
-                                                    link= "/login"
-                                                />
-                                                <NotificationItem 
-                                                    type = "baoCao"       //theoDoi, cmt, cmtRep, baoCao
-                                                    noiDung= "Hình vẽ tầm bậy 123" //tiêu đề Post, cắt gọn lại
-                                                    thoiDiemThongBao= "12/4/2026" 
-                                                    daDoc= {true}
-                                                    link= "/login"
-                                                />
-                                                <NotificationItem 
-                                                    type = "baoCao"       //theoDoi, cmt, cmtRep, baoCao
-                                                    noiDung= "Hình vẽ tầm bậy 123" //tiêu đề Post, cắt gọn lại
-                                                    thoiDiemThongBao= "12/4/2026" 
-                                                    daDoc= {true}
-                                                    link= "/login"
-                                                />
-
-                                                {/* Khi không có thông báo */}
-                                                {/* <div className="py-10 text-center text-xs text-main-text">
-                                                    {t(I18N_KEYS.COMMON.common_headerDesc_noNotifications)}
-                                                </div> */}
-                                            </div>
-                                        </div>
-                                    )}
+                                    <NotificationDropdown
+                                        isOpen={showNotifications}
+                                        isExiting={isNotificationDropdownExiting}
+                                        onToggle={toggleNotificationDropdown}
+                                    />
                                 </div>
                                 
 
@@ -218,15 +356,15 @@ export default function Header({variant="full"}){
                                     onClick={() => toggleshowUserMenu()}
                                 >
                                     <div className="w-8 h-8 rounded-full bg-brand overflow-hidden transition-all active:scale-95">
-                                        <img src={ user.avatar } alt="Avatar" />
+                                        <img src={userAvatar} alt="Avatar" className="h-full w-full object-cover" onError={(event) => { event.currentTarget.src = DEFAULT_AVATAR; }} />
                                     </div>
                                     {/* Dropdown User */}
                                     {showUserMenu && (
-                                        <div className={`absolute right-0 top-10 w-48 bg-main-bg shadow-2xl rounded-2xl overflow-hidden z-50 
+                                        <div className={`absolute right-0 top-10 w-[min(12rem,calc(100vw-1.5rem))] bg-main-bg shadow-2xl rounded-2xl overflow-hidden z-50 
                                                     ${isUserMenuExiting ? 'animate-popup-exit' : 'animate-popup-appear'}`}>
-                                            <Link to="/user?id=123" className="flex items-start gap-3 py-2 px-4 my-2 bg-main-bg text-main-text cursor-pointer transition-colors">
+                                            <Link to={`/user/${user.accountID || user.id || user.userID || user.username}`} className="flex items-start gap-3 py-2 px-4 my-2 bg-main-bg text-main-text cursor-pointer transition-colors">
                                                 <div className="shrink-0 w-10 h-10 bg-primary-200 rounded-full flex items-center justify-center">
-                                                    <img src={ user.avatar } alt="Avatar" />
+                                                    <img src={userAvatar} alt="Avatar" className="h-full w-full object-cover" onError={(event) => { event.currentTarget.src = DEFAULT_AVATAR; }} />
                                                 </div>
                                                 <div className="grow min-w-0">
                                                     <p className="font-bold text-sm">{ user.tenHienThi }</p>
@@ -234,13 +372,13 @@ export default function Header({variant="full"}){
                                                 </div>
                                             </Link>
                                             <div className="border-t border-text-shade-200 font-light font-body p-4 flex flex-col gap-2">
-                                                <Link to="/user?id=123">
+                                                <Link to={`/user/${user.accountID || user.id || user.userID || user.username}`}>
                                                     <span className="flex items-center gap-3 text-main-text">
                                                         <FaUserCircle strokeWidth={2}/>
                                                         {t(I18N_KEYS.COMMON.common_headerButton_user)}
                                                     </span>
                                                 </Link>
-                                                <Link to="/profile">
+                                                <Link to="/profile?edit">
                                                     <span className="flex items-center gap-3 text-main-text">
                                                         <FaPen strokeWidth={2}/>
                                                         {t(I18N_KEYS.COMMON.common_headerButton_profile)}
@@ -280,21 +418,35 @@ export default function Header({variant="full"}){
             <div className="flex items-center gap-4 pl-3 ml-2">
                 {/* Dropdown Ngôn ngữ */}
                 <div className="relative group">
-                    <button className="flex items-center gap-1 px-2 py-2 text-sub-text font-ui font-bold text-sm">
-                        <span>{i18n.language?.toUpperCase() || 'VI'}</span>
+                    <button
+                        type="button"
+                        onClick={() => setShowLanguageMenu((prev) => !prev)}
+                        className="flex items-center gap-1 px-2 py-2 text-sub-text font-ui font-bold text-sm"
+                    >
+                        <span>{currentLanguage.label}</span>
                         <GoChevronDown className="text-md" />
                     </button>
-                    {/* List chọn ngôn ngữ hiện khi Hover */}
-                    <div className="absolute right-0 top-full hidden group-hover:block w-20 bg-main-bg shadow-lg border-2 border-primary-200 rounded-2xl overflow-hidden">
-                    {languages.map((lang) => (
-                        <button
-                            key={lang.code}
-                            onClick={() => i18n.changeLanguage(lang.code)}
-                            className="w-full px-4 py-2 text-xs text-main-text hover:bg-primary-200 hover:text-primary-900 transition-colors text-center"
-                        >
-                        {lang.label}
-                        </button>
-                    ))}
+
+                    <div
+                        className={`
+                            absolute right-0 top-full w-20 bg-main-bg shadow-lg border-2 border-primary-200 rounded-2xl overflow-hidden z-50
+                            ${showLanguageMenu ? "block" : "hidden"}
+                            lg:group-hover:block
+                        `}
+                    >
+                        {languages.map((lang) => (
+                            <button
+                                key={lang.code}
+                                type="button"
+                                onClick={() => {
+                                    i18n.changeLanguage(lang.code);
+                                    setShowLanguageMenu(false);
+                                }}
+                                className="w-full px-4 py-2 text-xs text-main-text hover:bg-primary-200 hover:text-primary-900 transition-colors text-center"
+                            >
+                                {lang.label}
+                            </button>
+                        ))}
                     </div>
                 </div>
           

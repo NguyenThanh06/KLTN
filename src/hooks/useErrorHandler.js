@@ -3,23 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { I18N_KEYS } from '../i18n/key';
 
-export const useErrorHandler = (setGlobalModal, addHelperError) => {
+export const useErrorHandler = (setGlobalModal) => {
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const handleError = useCallback((errorResponse) => {
-    const { status, code } = errorResponse;
+    const safeErrorResponse = errorResponse || {};
+    const { status, code } = safeErrorResponse;
 
     // A. XỬ LÝ TOÀN CỤC (Tự làm luôn)
-      // 401: Chưa đăng nhập hoặc token hết hạn.
+      // 401: Chưa đăng nhập hoặc token hết hạn. Hoặc đang xài nửa chừng xong bị khóa thì thành cx trả 401 hế
       if (status === 401) {
         window.location.href = '/login';
-        return { handled: true }; // Báo cho Page là "Tôi lo xong rồi"
+        return { handled: true }; 
       }
 
       // 403: Đã đăng nhập nhưng không có quyền vào chỗ này.
       if (status === 403) {
         //Ni chắc là đẩy về Home + đưa modal thông báo
-        setGlobalModal({
+        setGlobalModal?.({
           isOpen: true,
           type: 'info',
           title: t(I18N_KEYS.GLOBAL_ERROR.ERROR_403_title),
@@ -29,8 +30,16 @@ export const useErrorHandler = (setGlobalModal, addHelperError) => {
         return { handled: true };
       }
 
-      if (status === 500) {
-        setGlobalModal({
+      
+      // 404: Tìm k ra trang
+      if (status === 404) {
+        //Ni chắc là đẩy về 404 thôi
+        navigate("/404", { replace: true });
+        return { handled: true };
+      }
+
+      if (status === 500) { // Server sập
+        setGlobalModal?.({
           isOpen: true,
           type: 'info',
           title: t(I18N_KEYS.GLOBAL_ERROR.ERROR_500_title),
@@ -44,7 +53,7 @@ export const useErrorHandler = (setGlobalModal, addHelperError) => {
       handled: false, 
       code: code,
     };
-  }, [setGlobalModal, addHelperError, t]);
+  }, [navigate, setGlobalModal, t]);
 
   return { handleError };
 };

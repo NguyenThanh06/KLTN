@@ -8,6 +8,7 @@ export const MOCK_POST_DATA_2 = {
     dynamicWM: true,
     tacGia: 1,
     luotXem: 12544,
+    luotThich: 12,
     sanPhamAI: false,
     hanCheHienThi: 0,
     choPhepComment: true,
@@ -16,4 +17,8 @@ export const MOCK_POST_DATA_2 = {
     lstGanThe: ["pokemon", "anhdep"],
     lstKTEOFile: [MOCK_KTEOFILE_DATA_3],
     lstComment: [],
+
+    daThich: false,
+    daLuu: false,
+    daTheoDoiTacGia: false,
 };

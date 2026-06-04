@@ -1,15 +1,13 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { AuthProvider } from "./context/AuthContext.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigationType } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { I18N_KEYS } from "./i18n/key.js";
 
-import { useSecurity } from './hooks/useSecurity';
-import { useVisitorInfo } from './hooks/useVisitorInfo';
-import DynamicWatermark from './components/DynamicWatermark';
-import CatSentinel from './components/CatSentinel';
+import { useSecurity } from "./hooks/useSecurity";
+import { useVisitorInfo } from "./hooks/useVisitorInfo";
+import DynamicWatermark from "./components/DynamicWatermark";
 
 import AdminLayout from "./components/admin/AdminLayout.jsx";
 import AdminLogin from "./pages/admin/AdminLogin.jsx";
@@ -24,133 +22,143 @@ import AdminProfile from "./pages/admin/AdminProfile.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Home from "./pages/Home.jsx";
+import PostCreate from "./pages/PostCreate.jsx";
+import PostDetail from "./pages/PostDetail.jsx";
+import PostEdit from "./pages/PostEdit.jsx";
+import MixedSearch from "./pages/MixedSearch";
+import UserDetail from "./pages/UserDetail.jsx";
+import Profile from "./pages/Profile.jsx";
+import Verify from "./pages/Verify.jsx";
+import VerifyResult from "./pages/VerifyResult.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
+import Terms from "./pages/Terms.jsx";
+import AboutUs from "./pages/AboutUs.jsx";
 
 import MascotHelper from "./components/MascotHelper";
 import DynamicModal from "./components/DynamicModal";
 
 function App() {
   const location = useLocation();
-  const visitor = useVisitorInfo(); // Lấy IP và Path hiện tại
-  const { isAlertActive, isTabBlurred, clearAlert } = useSecurity(); // Quản lý trạng thái báo động
-  const currentAlpha = (isAlertActive || isTabBlurred) ? 0.08 : 0.04; //Quản lý cái độ mờ của thủy ấn động
-  const { t, i18n } = useTranslation();
-  const mascotRef = useRef(); // Tạo ref để điều khiển MascotHelper
+  const navigationType = useNavigationType();
+  const visitor = useVisitorInfo();
+  const { isAlertActive, isTabBlurred, clearAlert } = useSecurity();
+  const currentAlpha = isAlertActive || isTabBlurred ? 0.08 : 0.04;
+  const { t } = useTranslation();
+  const mascotRef = useRef();
   const [modalConfig, setModalConfig] = useState({ isOpen: false });
   const [errorStack, setErrorStack] = useState([]);
   const [isHelperFocusing, setIsHelperFocusing] = useState(false);
-  const [isUnder18, setIsUnder18] = useState(null);
+  const [isUnder18, setIsUnder18] = useState(() => {
+    const savedAgeStatus = localStorage.getItem("under18");
+    return savedAgeStatus === null ? null : savedAgeStatus === "true";
+  });
 
+  const closeModal = useCallback(() => {
+    setModalConfig((prev) => ({ ...prev, isOpen: false }));
+  }, []);
 
-  useEffect(() => {
-    const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
-    const isAdminPage = location.pathname.startsWith('/admin');
-    const savedAgeStatus = localStorage.getItem('under18');
-    const isUnder18Boolean = savedAgeStatus === 'true';
+  const handleAgeSelection = useCallback((under18) => {
+    localStorage.setItem("under18", under18);
+    setIsUnder18(under18);
+    closeModal();
+  }, [closeModal]);
 
-    setIsUnder18(isUnder18Boolean);
-
-    // Nếu không phải trang Auth và chưa có thông tin tuổi
-    if (!isAuthPage && savedAgeStatus === null) {
-
-      // KIỂM TRA: Nếu đang có một modal khác (như báo vô hiệu hóa) đang mở
-      // Thì sẽ chờ modal đó đóng xong mới hiện hỏi tuổi, hoặc chèn vào sau.
-      if (!modalConfig.isOpen) {
-        setModalConfig({
-          isOpen: true,
-          type: 'two-buttons',
-          title: t(I18N_KEYS.COMMON.common_ageStatus_modalTitle),
-          description: t(I18N_KEYS.COMMON.common_ageStatus_modalDesc),
-          primaryBtnText: t(I18N_KEYS.COMMON.common_ageStatus_modalButton_under18),
-          secondaryBtnText: t(I18N_KEYS.COMMON.common_ageStatus_modalButton_above18),
-          onPrimaryAction: () => handleAgeSelection(true),
-          onSecondaryAction: () => handleAgeSelection(false),
-        });
-      }
+  const handleExitComplete = () => {
+    if (navigationType === "POP") {
+      return;
     }
-  }, [location.pathname, modalConfig.isOpen]); // Theo dõi cả isOpen để "xếp hàng"
 
-  //------------- Hàm ----------------------
-
-  //Hàm đóng cái modal thông báo
-  const closeModal = () => setModalConfig(prev => ({ ...prev, isOpen: false }));
-
-  // Hàm xóa lỗi khi người dùng click vào bong bóng ở helper
-  const clearError = (id) => {
-    setErrorStack(prev => prev.filter(err => err.id !== id));
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "auto",
+      });
+    });
   };
 
-  // Hàm xóa toàn bộ lỗi
+  const addHelperError = (newErr) => {
+    setErrorStack((prev) => [...prev, newErr]);
+  };
+
+  const clearError = (id) => {
+    setErrorStack((prev) => prev.filter((err) => err.id !== id));
+  };
+
   const clearAllErrors = () => setErrorStack([]);
 
-  // Hàm để các page con có thể gọi để đổi mood mascot
   const triggerMascotMood = (mood, duration) => {
     if (mascotRef.current) {
       mascotRef.current.setMood(mood, duration);
     }
   };
 
-  // Hàm chọn tuổi
-  const handleAgeSelection = (under18) => {
-    localStorage.setItem('under18', under18); // Lưu lại: "true" hoặc "false"
-    setIsUnder18(under18);
-    closeModal();
+  const commonPageProps = {
+    setGlobalModal: setModalConfig,
+    addHelperError,
+    setHelperFocusState: setIsHelperFocusing,
+    triggerMascotMood,
+    isUnder18,
+    visitorIP: visitor.ip,
+    isAlertActive,
+    clearAlert,
   };
-
-  //------------------- Hết hàm ----------------------
-
-
 
   return (
     <AuthProvider>
       <div className="antialiased">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" onExitComplete={handleExitComplete}>
           <Routes location={location} key={location.pathname}>
-            <Route path="/login" element={
-              <Login
-                setGlobalModal={setModalConfig}
-                addHelperError={(newErr) => setErrorStack(prev => [...prev, newErr])}
-                setHelperFocusState={setIsHelperFocusing}
-                triggerMascotMood={triggerMascotMood}
-              />}
+            <Route
+              path="/login"
+              element={
+                <Login
+                  setGlobalModal={setModalConfig}
+                  addHelperError={addHelperError}
+                  setHelperFocusState={setIsHelperFocusing}
+                  triggerMascotMood={triggerMascotMood}
+                />
+              }
             />
-            <Route path="/signup" element={
-              <Signup
-                setGlobalModal={setModalConfig}
-                addHelperError={(newErr) => setErrorStack(prev => [...prev, newErr])}
-                setHelperFocusState={setIsHelperFocusing}
-              />
-            }
+            <Route
+              path="/signup"
+              element={
+                <Signup
+                  setGlobalModal={setModalConfig}
+                  addHelperError={addHelperError}
+                  setHelperFocusState={setIsHelperFocusing}
+                />
+              }
             />
-            <Route path="/" element={
-              <Home
-                setGlobalModal={setModalConfig}
-                addHelperError={(newErr) => setErrorStack(prev => [...prev, newErr])}
-                setHelperFocusState={setIsHelperFocusing}
-                isUnder18={isUnder18}
-                visitorIP={visitor.ip}
-                isAlertActive={isAlertActive}
-                isTabBlurred={isTabBlurred}
-                clearAlert={clearAlert}
-              />}
+            <Route
+              path="/"
+              element={<Home {...commonPageProps} isTabBlurred={isTabBlurred} />}
             />
-            // Routes dành cho admin
+            <Route path="/post/create" element={<PostCreate {...commonPageProps} />} />
+            <Route path="/post/:postID" element={<PostDetail {...commonPageProps} />} />
+            <Route path="/post/edit/:postID" element={<PostEdit {...commonPageProps} />} />
+            <Route path="/search" element={<MixedSearch {...commonPageProps} />} />
+            <Route path="/user/:username" element={<UserDetail {...commonPageProps} />} />
+            <Route path="/profile" element={<Profile {...commonPageProps} />} />
+            <Route path="/verify" element={<Verify {...commonPageProps} />} />
+            <Route path="/verify/:verifyID" element={<VerifyResult {...commonPageProps} />} />
+
             <Route
               path="/admin/login"
               element={
                 <AdminLogin
                   setGlobalModal={setModalConfig}
-                  addHelperError={(newErr) => setErrorStack(prev => [...prev, newErr])}
+                  addHelperError={addHelperError}
                   setHelperFocusState={setIsHelperFocusing}
                 />
               }
             />
-
             <Route
               path="/admin"
               element={
                 <AdminLayout
                   setGlobalModal={setModalConfig}
-                  addHelperError={(newErr) => setErrorStack(prev => [...prev, newErr])}
+                  addHelperError={addHelperError}
                   setHelperFocusState={setIsHelperFocusing}
                 />
               }
@@ -164,32 +172,37 @@ function App() {
               <Route path="profile" element={<AdminProfile />} />
             </Route>
 
+            <Route
+              path="/404"
+              element={<NotFoundPage setHelperFocusState={setIsHelperFocusing} />}
+            />
+            <Route path="/about" element={<AboutUs setHelperFocusState={setIsHelperFocusing} />} />
+            <Route path="/terms" element={<Terms setHelperFocusState={setIsHelperFocusing} />} />
+            <Route path="*" element={<NotFoundPage setHelperFocusState={setIsHelperFocusing} />} />
           </Routes>
         </AnimatePresence>
 
-        {/*Watermark động toàn trang */}
-        <DynamicWatermark
-          ip={visitor.ip}
-          alpha={currentAlpha}
+        <DynamicWatermark ip={visitor.ip} alpha={currentAlpha} />
+
+        <div
+          className={
+            "fixed inset-0 z-150 bg-main-bg/50 backdrop-blur-md pointer-events-none transition-none will-change-opacity " +
+            (isTabBlurred ? "opacity-100 visible" : "opacity-0 invisible")
+          }
         />
 
-
-        {/* Component chung (như helper với modal thông báo) */}
-        <DynamicModal
-          key={modalConfig.title}
-          {...modalConfig}
-          onClose={closeModal}
-        />
+        <DynamicModal key={modalConfig.title} {...modalConfig} onClose={closeModal} />
 
         <MascotHelper
-          ref={mascotRef} // Gán ref vào đây
+          ref={mascotRef}
           errorStack={errorStack}
           onClearError={clearError}
-          onClearAllErrors={clearAllErrors} // Truyền hàm xóa sạch lỗi
+          onClearAllErrors={clearAllErrors}
           isInputFocusing={isHelperFocusing}
         />
       </div>
     </AuthProvider>
-  )
+  );
 }
+
 export default App;

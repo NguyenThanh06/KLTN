@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Input from './Input';
 import Button from './Button';
@@ -11,6 +10,7 @@ const DynamicModal = ({
     description,
     primaryBtnText,
     primaryBtnType = "button",
+    primaryDisabled = false,
     onPrimaryAction,
     secondaryBtnText,
     onSecondaryAction,
@@ -18,6 +18,7 @@ const DynamicModal = ({
     formMethod = "post",
     inputProps = {},
     inputOtherActionText,
+    inputOtherDisabled = false,
     onInputOtherAction
 }) => {
     const { t } = useTranslation();
@@ -47,7 +48,7 @@ const DynamicModal = ({
                     {/* Nút X tròn ở góc trên phải */}
                     <button 
                         onClick={onClose}
-                        className="absolute -top-3 -right-3 z-50 w-10 h-10 bg-accent border-4 border-accent text-accent-50 rounded-full flex items-center justify-center text-xl font-bold hover:scale-110 transition-transform z-50 shadow-[4px_4px_0px_0px] shadow-accent-700 dark:shadow-accent-300"
+                        className="absolute -top-3 -right-3 z-50 w-10 h-10 bg-accent border-4 border-accent text-accent-50 rounded-full flex items-center justify-center text-xl font-bold hover:scale-110 transition-transform shadow-[4px_4px_0px_0px] shadow-accent-700 dark:shadow-accent-300"
                     >
                         ✕
                     </button>
@@ -67,12 +68,18 @@ const DynamicModal = ({
                                     />
                                     {inputOtherActionText && (
                                         <div className="text-sm flex justify-end">
-                                        <a 
-                                            onClick={onInputOtherAction} 
-                                            className="font-medium font-body text-secondary-800 hover:text-secondary-600 cursor-pointer"
+                                        <button
+                                            type="button"
+                                            disabled={inputOtherDisabled}
+                                            onClick={inputOtherDisabled ? undefined : onInputOtherAction}
+                                            className={`font-medium font-body ${
+                                                inputOtherDisabled
+                                                    ? "cursor-not-allowed text-text-shade-300"
+                                                    : "cursor-pointer text-secondary-800 hover:text-secondary-600"
+                                            }`}
                                         >
                                                 {Array.isArray(inputOtherActionText) ? t(...inputOtherActionText) : t(inputOtherActionText)}
-                                        </a>
+                                        </button>
                                         </div>
                                     )}
                                 </div>
@@ -93,7 +100,8 @@ const DynamicModal = ({
                                     <Button 
                                         type={primaryBtnType === "submit" ? "submit" : "button"}
                                         onClick={primaryBtnType !== "submit" ? onPrimaryAction : undefined}
-                                        className="min-w-37.5"
+                                        disabled={primaryDisabled}
+                                        className="min-w-28"
                                     >
                                         {t(primaryBtnText)}
                                     </Button>

@@ -280,6 +280,26 @@
 }
 
 
+/* Hiệu ứng hop của mấy cái nút nhảy nhảy để người ta chú ý vô chơ không quên hắn */
+@keyframes save-button-hop {
+    0% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-8px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.animate-save-button-hop {
+    animation: save-button-hop 0.35s ease-out 2;
+    will-change: transform;
+}
+
+
 
 
 /* Phần chống leak ảnh FE */
@@ -290,7 +310,7 @@
   }
 }
 
-/* Class bảo mật đặc biệt */
+/* Class bảo mật đặc biệt (à, 2 cái ni chừ không xài nơi tề) */
 .security-blur {
   filter: blur(40px) contrast(150%) brightness(30%);
   transition: filter 0.2s ease-in-out;
@@ -304,3 +324,85 @@
   isolation: isolate;
 }
 /* Hết phần chống leak */
+
+
+/* Hiệu ứng nhỏ cho các nút tương tác trong PostDetail */
+.interaction-pop {
+  transform: translateZ(0);
+  transition:
+    transform 160ms ease,
+    opacity 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.interaction-pop:hover {
+  transform: translateY(-1px);
+}
+
+.interaction-pop:active {
+  transform: scale(0.92);
+}
+
+.interaction-soft-bounce {
+  animation: interactionSoftBounce 320ms ease;
+}
+
+@keyframes interactionSoftBounce {
+  0% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.14);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+/* Chống bôi con mèo với mấy cái hình */
+.no-select,
+.no-select * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.no-select img,
+.no-select svg {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: auto;
+}
+
+
+/* Thủy ấn động riêng cho post */
+@keyframes dynamicWatermarkDrift {
+  0% {
+    transform: translate3d(-28px, -18px, 0) rotate(-18deg);
+  }
+
+  50% {
+    transform: translate3d(18px, 16px, 0) rotate(-18deg);
+  }
+
+  100% {
+    transform: translate3d(-28px, -18px, 0) rotate(-18deg);
+  }
+}
+
+.dynamic-watermark-overlay {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.dynamic-watermark-track {
+  animation: dynamicWatermarkDrift 18s ease-in-out infinite;
+}
