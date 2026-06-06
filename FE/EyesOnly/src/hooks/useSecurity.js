@@ -184,14 +184,14 @@ export const useSecurity = () => {
         }
       }
 
-      // const isDevToolsOrPrint =
-      //   event.key === "F12" ||
-      //   (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) ||
-      //   (event.ctrlKey && ["u", "p", "s"].includes(key));
+      const isDevToolsOrPrint =
+        event.key === "F12" ||
+        (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) ||
+        (event.ctrlKey && ["u", "p", "s"].includes(key));
 
-      // if (isDevToolsOrPrint) {
-      //   protectNow(event, 3500);
-      // }
+      if (isDevToolsOrPrint) {
+        protectNow(event, 3500);
+      }
     };
 
     const handleKeyUp = (event) => {
