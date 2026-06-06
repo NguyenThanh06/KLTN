@@ -1,0 +1,17 @@
+export const MOCK_USER_DATA_1 = {
+    accountID: "1",
+    email: "abc@xyz.com",
+    username: "abc_123",
+    tenHienThi: "Con khỉ tuyệt vời",
+    ngayTaoTaiKhoan: "2026-05-13T14:30:00Z",
+    tieuSu: "Abudakha pít pít ăn sơ mít.",
+    avatar: "/defaultAvatar/default_avatar_4.svg",
+    daVoHieuHoa: true,
+    ngayVoHieuHoa: "2026-05-07T14:30:00Z",
+    ngayDoiTenGanNhat: "2026-05-22T14:30:00Z",
+    biKhoa: false,
+    daXacThuc: false,
+    daTheoDoi: true,
+    soNguoiTheoDoi: 12482,
+    soNguoiDangTheoDoi: 65,
+};

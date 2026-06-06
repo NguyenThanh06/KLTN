@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: EyesOnly
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 300MB
+      file-size-threshold: 2MB
+
+  datasource:
+    url: "jdbc:sqlserver://localhost:1433;databaseName=DoAn_EyesOnly;trustServerCertificate=true"
+    username: sa
+    password: 123
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "levietnguyenthanh06102004@gmail.com"
+    password: "bofi fvnh duup fsco"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+server:
+  tomcat:
+    max-http-form-post-size: 300MB
+    max-swallow-size: -1
+    max-save-post-size: 300MB
+    max-part-count: 30
+    max-part-header-size: 2KB
+app: #mới thêm chứ app: ngày 6/6
+  storage:
+    post-directory: uploads/posts
+  ffmpeg:
+    path: ffmpeg   # nếu Windows có thể là "C:/ffmpeg/bin/ffmpeg.exe"
+
+jwt:
+  signerKey: "d4e9e2cc9c0c9d1851dbff6a97d157c0b72b49ef8a8c1af501538170e121b3d6"
