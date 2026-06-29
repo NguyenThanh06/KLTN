@@ -45,6 +45,9 @@ app: #mới thêm chứ app: ngày 6/6
     post-directory: uploads/posts
   ffmpeg:
     path: ffmpeg   # nếu Windows có thể là "C:/ffmpeg/bin/ffmpeg.exe"
+python:
+  api:
+    url: http://localhost:8000
 
 jwt:
   signerKey: "d4e9e2cc9c0c9d1851dbff6a97d157c0b72b49ef8a8c1af501538170e121b3d6"

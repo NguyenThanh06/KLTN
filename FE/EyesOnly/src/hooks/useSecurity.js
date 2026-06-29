@@ -185,7 +185,7 @@ export const useSecurity = () => {
       }
 
       const isDevToolsOrPrint =
-        event.key === "F12" ||
+        // event.key === "F12" ||
         (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) ||
         (event.ctrlKey && ["u", "p", "s"].includes(key));
 
@@ -273,7 +273,7 @@ export const useSecurity = () => {
     window.addEventListener("keyup", handleKeyUp, { capture: true });
     window.addEventListener("blur", handleWindowBlur);
     window.addEventListener("focus", handleWindowFocus);
-    window.addEventListener("contextmenu", handleContextMenu);
+    // window.addEventListener("contextmenu", handleContextMenu);
 
     return () => {
       window.clearInterval(interval);
@@ -287,7 +287,7 @@ export const useSecurity = () => {
       window.removeEventListener("keyup", handleKeyUp, { capture: true });
       window.removeEventListener("blur", handleWindowBlur);
       window.removeEventListener("focus", handleWindowFocus);
-      window.removeEventListener("contextmenu", handleContextMenu);
+      // window.removeEventListener("contextmenu", handleContextMenu);
 
       if (timeoutRef.current) {
         window.clearTimeout(timeoutRef.current);

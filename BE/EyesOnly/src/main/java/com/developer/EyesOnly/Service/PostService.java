@@ -349,26 +349,6 @@ public class PostService {
             throw new AppException(ErrorCode.POST_PROTECTION_WEIRD_PROP);
         }
 
-        /*
-         * noiseColorMode chỉ được là static hoặc dynamic.
-         */
-        String noiseColorMode = option.getNoiseColorMode();
-
-        if (noiseColorMode == null ||
-                !ALLOWED_NOISE_COLOR_MODES.contains(
-                        noiseColorMode.trim().toLowerCase()
-                )) {
-            throw new AppException(ErrorCode.POST_PROTECTION_WEIRD_PROP);
-        }
-
-        /*
-         * Nếu chọn static thì bắt buộc staticColor phải là mã màu #RRGGBB.
-         */
-        if ("static".equalsIgnoreCase(noiseColorMode)) {
-            if (!isValidHexColor(option.getStaticColor())) {
-                throw new AppException(ErrorCode.POST_PROTECTION_WEIRD_PROP);
-            }
-        }
     }
     /*
      * Kiểm tra mã màu dạng #RRGGBB.
@@ -828,7 +808,8 @@ public class PostService {
         if (auth != null && auth.getPrincipal() instanceof Long) {
             currentUserId = (Long) auth.getPrincipal();
         }
-
+        // đã thêm dòng này ngày 9/6
+        postRepository.increaseViewCount(postId);
         /*
          * Tìm Post.
          */

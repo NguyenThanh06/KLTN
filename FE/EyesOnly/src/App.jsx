@@ -184,12 +184,7 @@ function App() {
 
         <DynamicWatermark ip={visitor.ip} alpha={currentAlpha} />
 
-        <div
-          className={
-            "fixed inset-0 z-150 bg-main-bg/50 backdrop-blur-md pointer-events-none transition-none will-change-opacity " +
-            (isTabBlurred ? "opacity-100 visible" : "opacity-0 invisible")
-          }
-        />
+
 
         <DynamicModal key={modalConfig.title} {...modalConfig} onClose={closeModal} />
 

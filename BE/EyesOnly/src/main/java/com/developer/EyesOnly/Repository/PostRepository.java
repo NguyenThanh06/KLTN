@@ -420,5 +420,13 @@ WHERE p.postID IN :postIds
             @Param("currentUserId") Long currentUserId,
             Pageable pageable
     );
+    //tawng lượt xem
+    @Modifying
+    @Query("""
+    UPDATE Post p
+    SET p.luotXem = COALESCE(p.luotXem, 0) + 1
+    WHERE p.postID = :postId
+""")
+    int increaseViewCount(@Param("postId") Long postId);
 }
 

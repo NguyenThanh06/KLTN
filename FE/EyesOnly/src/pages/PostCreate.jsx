@@ -691,16 +691,13 @@ export default function PostCreate({
 
 
     const normalizeProtectionSettings = (settings = DEFAULT_PROTECTION_SETTINGS) => {
-        const noiseColorMode =
-            settings.noiseColorMode === "static" ? "static" : "dynamic";
+        const noiseMode =
+            settings.noiseMode === "color" ? "color" : "grayscale";
 
         return {
             noiseLevel: Number(settings.noiseLevel ?? 20),
             colorCoverage: Number(settings.colorCoverage ?? 5),
-            noiseColorMode,
-            staticColor: /^#[0-9a-fA-F]{6}$/.test(settings.staticColor || "")
-                ? settings.staticColor
-                : "#888888",
+            noiseMode,
             frameCount: Number(settings.frameCount ?? 12),
             preset: settings.preset || "custom",
         };
@@ -1097,6 +1094,7 @@ export default function PostCreate({
                                     onChange={updateProtectionSettings}
                                     onRefreshPreview={handleRefreshPreview}
                                     isPreviewLoading={isPreviewLoading}
+                                    addHelperError = {addHelperError}
                                 />
 
                                 <ProtectionPreviewCanvas
